@@ -138,6 +138,8 @@ footer{
     <button class="submit" type="submit">Send Query</button>
   </form>
 
+  <p id="queryMessage" style="color:green; font-weight:bold; margin-top:10px;"></p>
+
     <iframe
   width="100%"
   height="315"
@@ -371,15 +373,22 @@ function show(id){
 // Query Form
 queryForm.onsubmit = e => {
   e.preventDefault();
+  
   db.collection("patientQueries").add({
     name: qName.value,
     mobile: qMobile.value,
     message: qMessage.value,
     time: new Date()
   });
-  alert("Query Sent Successfully!");
+
+  // Show confirmation message instead of alert
+  document.getElementById("queryMessage").textContent = 
+    "Thanks for sending your query! Our experts will contact you soon.";
+
+  // Clear the form
   queryForm.reset();
 }
+
 
 // Admin Login
 function login() {
@@ -411,6 +420,7 @@ function login() {
 
 </body>
 </html>
+
 
 
 
