@@ -2,14 +2,17 @@
 <html lang="en">
 <head>
 <title>BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center</title>
-
-<meta name="description" content="Best Ayurvedic, Physiotherapy & Yoga Center in Amritsar. Expert treatment for joint pain, paralysis, diabetes, asthma, liver disease, back pain and stress through Ayurveda, Physiotherapy & Yoga.">
-<meta name="keywords" content="ayurvedic doctor amritsar, physiotherapy center amritsar, yoga therapy amritsar, baba deep singh ayurvedic">
+<meta name="description" content="Best Ayurvedic, Physiotherapy & Yoga Center in Amritsar. Expert treatment for liver disease, arthritis, asthma, kidney & bladder stones, diabetes, paralysis, joint pain, fever and more.">
 <meta name="robots" content="index, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
 
-<!-- SCHEMA -->
+<!-- SEO KEYWORDS -->
+<meta name="keywords" content="ayurvedic doctor amritsar, best ayurvedic doctor in amritsar, ayurvedic clinic amritsar, ayurvedic hospital amritsar, baba deep singh ayurvedic center, baba deep singh physiotherapy, baba deep singh yoga center, ayurvedic treatment amritsar">
+
+<link rel="canonical" href="https://www.yourwebsiteurl.com">
+
+<!-- JSON-LD Schema -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -23,7 +26,13 @@
     "postalCode": "143001",
     "addressCountry": "IN"
   },
-  "telephone": ["6280629868","7015400129"]
+  "telephone": ["6280629868","7015400129"],
+  "email": "drgagan.10@gmail.com",
+  "url": "https://www.yourwebsiteurl.com",
+  "founder": {
+    "@type": "Person",
+    "name": "Dr. Gagandeep Singh, BAMS, PhD"
+  }
 }
 </script>
 
@@ -66,6 +75,7 @@ nav button:hover{background:var(--green);color:white;}
   box-shadow:0 18px 40px rgba(0,0,0,0.08);
 }
 .section h2{color:var(--green);font-size:32px;margin-top:0;}
+.section p{font-size:17px;line-height:1.7;}
 input,textarea{
   width:100%;padding:12px;margin-bottom:15px;
   border-radius:10px;border:1px solid #ccc;
@@ -103,29 +113,23 @@ footer{
 
 <div class="section">
   <h2>About Us</h2>
-
-  <p>
-    BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center provides holistic,
-    natural and modern treatment for chronic pain, lifestyle diseases and
-    physical rehabilitation under expert guidance.
-  </p>
+  <img src="images/bds.jpg" alt="BABA DEEP SINGH Ayurvedic Center Amritsar" style="width:200px;border-radius:10px;display:block;margin:10px auto;">
+  
+  <p>BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center is a holistic healthcare clinic dedicated to natural healing and long-term wellness through experienced doctors and personalized treatment plans.</p>
 
   <h2>Send Your Query</h2>
-
   <form id="queryForm">
     <input id="qName" placeholder="Your Name" required>
     <input id="qMobile" placeholder="Mobile Number" required>
     <textarea id="qMessage" placeholder="Your Query" required></textarea>
     <button class="submit" type="submit">Send Query</button>
   </form>
+  <p id="queryMessage" style="color:green; font-weight:bold; margin-top:10px;"></p>
 
-  <p id="queryMessage" style="color:green;font-weight:bold;"></p>
-
-  <iframe width="100%" height="315"
-    src="https://www.youtube.com/embed/UC_vi0gLeiA"
-    style="border-radius:10px;margin-top:15px;" allowfullscreen></iframe>
-
+  <iframe width="100%" height="315" src="https://www.youtube.com/embed/UC_vi0gLeiA" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:10px; margin-top:15px;"></iframe>
+  <iframe width="100%" height="315" src="https://www.youtube.com/embed/d1HVovve27g" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:10px; margin-top:15px;"></iframe>
 </div>
+
 </div>
 
 <footer>
@@ -148,49 +152,39 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-console.log("Firebase initialized successfully");
-
 // Handle form submission
-document.getElementById('queryForm').addEventListener('submit', async function(e) {
+document.getElementById('queryForm').onsubmit = function(e) {
   e.preventDefault();
   
   const name = document.getElementById('qName').value;
   const mobile = document.getElementById('qMobile').value;
   const message = document.getElementById('qMessage').value;
-  const queryMessage = document.getElementById('queryMessage');
   
-  // Show loading
-  queryMessage.textContent = "Sending your query...";
-  queryMessage.style.color = "blue";
+  // Show sending message
+  document.getElementById("queryMessage").textContent = "Sending your query...";
+  document.getElementById("queryMessage").style.color = "blue";
   
-  try {
-    // Save to Firebase
-    await db.collection("patientQueries").add({
-      name: name,
-      mobile: mobile,
-      message: message,
-      time: new Date(),
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    
-    // Success message
-    queryMessage.textContent = "✅ Thank you! Your query has been submitted successfully. We will contact you soon.";
-    queryMessage.style.color = "green";
-    
-    // Clear form
+  // Save to Firebase
+  db.collection("patientQueries").add({
+    name: name,
+    mobile: mobile,
+    message: message,
+    time: new Date()
+  })
+  .then(() => {
+    document.getElementById("queryMessage").textContent = "✅ Thanks for sending your query! Our experts will contact you soon.";
+    document.getElementById("queryMessage").style.color = "green";
     document.getElementById('queryForm').reset();
-    
-    console.log("Query saved to Firebase:", { name, mobile, message });
-    
-  } catch (error) {
-    console.error("Error saving query:", error);
-    queryMessage.textContent = "❌ Error sending query. Please try again or call us directly.";
-    queryMessage.style.color = "red";
-  }
-});
+  })
+  .catch(error => {
+    document.getElementById("queryMessage").textContent = "❌ Error sending query. Please try again.";
+    document.getElementById("queryMessage").style.color = "red";
+    console.error("Error:", error);
+  });
+};
 </script>
 
-<!-- ✅ TIDIO CHATBOT -->
+<!-- TIDIO CHATBOT -->
 <script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
 
 </body>
