@@ -1,198 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center</title>
-
-<meta name="description" content="Best Ayurvedic, Physiotherapy & Yoga Center in Amritsar. Expert treatment for joint pain, paralysis, diabetes, asthma, liver disease, back pain and stress through Ayurveda, Physiotherapy & Yoga.">
-<meta name="keywords" content="ayurvedic doctor amritsar, physiotherapy center amritsar, yoga therapy amritsar, baba deep singh ayurvedic">
-<meta name="robots" content="index, follow">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="author" content="BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
-
-<!-- SCHEMA -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MedicalBusiness",
-  "name": "BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "48, Diamond Avenue, Majitha Road",
-    "addressLocality": "Amritsar",
-    "addressRegion": "Punjab",
-    "postalCode": "143001",
-    "addressCountry": "IN"
-  },
-  "telephone": ["6280629868","7015400129"]
-}
-</script>
-
+<title>Admin Panel - BDS Center</title>
 <style>
-:root{
-  --green:#1f7a4f;
-  --green-light:#e9f7f0;
-  --green-dark:#134e36;
+* { box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
+body { margin: 0; background: #f5f5f5; }
+.container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+.login-box, .admin-panel { 
+    background: white; padding: 30px; border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px;
 }
-*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
-body{
-  margin:0;
-  background:linear-gradient(135deg,#ecfff6,#ffffff);
-  color:#333;
-}
-header{
-  background:linear-gradient(135deg,#1f7a4f,#2fb17c);
-  color:white;
-  padding:35px 20px;
-  text-align:center;
-}
-header h1{margin:0;font-size:38px;}
-header p{margin-top:10px;font-size:18px;}
-nav{
-  display:flex;justify-content:center;flex-wrap:wrap;
-  gap:15px;background:white;padding:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-}
-nav button{
-  border:none;background:var(--green-light);
-  color:var(--green-dark);
-  padding:12px 26px;border-radius:30px;
-  cursor:pointer;font-size:16px;
-}
-nav button:hover{background:var(--green);color:white;}
-.container{max-width:1100px;margin:45px auto;padding:0 20px;}
-.section{
-  background:white;padding:35px;
-  border-radius:25px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.08);
-}
-.section h2{color:var(--green);font-size:32px;margin-top:0;}
-input,textarea{
-  width:100%;padding:12px;margin-bottom:15px;
-  border-radius:10px;border:1px solid #ccc;
-}
-button.submit{
-  background:var(--green);color:white;
-  padding:14px 30px;border:none;
-  border-radius:30px;cursor:pointer;
-}
-footer{
-  margin-top:70px;background:var(--green-dark);
-  color:white;text-align:center;padding:22px;
-}
+h1 { color: #1f7a4f; text-align: center; }
+input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; }
+button { background: #1f7a4f; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%; }
+button:hover { background: #166342; }
+.query-item { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; background: #f9f9f9; }
+.query-item strong { color: #1f7a4f; }
+.header { background: linear-gradient(135deg, #1f7a4f, #2fb17c); color: white; padding: 20px; text-align: center; }
 </style>
 </head>
 
 <body>
-
-<header>
-  <h1>BABA DEEP SINGH AYURVEDIC, PHYSIOTHERAPY & YOGA CENTRE</h1>
-  <p>48, Diamond Avenue, Majitha Road, Amritsar</p>
-</header>
-
-<nav>
-  <button onclick="location.href='index.html'">About</button>
-  <button onclick="location.href='yoga.html'">Yoga</button>
-  <button onclick="location.href='physiotherapy.html'">Physiotherapy</button>
-  <button onclick="location.href='ayurvedic.html'">Ayurvedic</button>
-  <button onclick="location.href='diet.html'">Diet</button>
-  <button onclick="location.href='contact.html'">Contact</button>
-  <button onclick="location.href='admin.html'">Admin</button>
-</nav>
+<div class="header">
+    <h1>BDS CENTER - ADMIN PANEL</h1>
+</div>
 
 <div class="container">
+    <div id="loginSection" class="login-box">
+        <h2>Admin Login</h2>
+        <input id="adminUser" placeholder="Username" value="admin">
+        <input id="adminPass" type="password" placeholder="Password" value="bds123">
+        <button onclick="login()">Login</button>
+    </div>
 
-<div class="section">
-  <h2>About Us</h2>
-
-  <p>
-    BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center provides holistic,
-    natural and modern treatment for chronic pain, lifestyle diseases and
-    physical rehabilitation under expert guidance.
-  </p>
-
-  <h2>Send Your Query</h2>
-
-  <form id="queryForm">
-    <input id="qName" placeholder="Your Name" required>
-    <input id="qMobile" placeholder="Mobile Number" required>
-    <textarea id="qMessage" placeholder="Your Query" required></textarea>
-    <button class="submit" type="submit">Send Query</button>
-  </form>
-
-  <p id="queryMessage" style="color:green;font-weight:bold;"></p>
-
-  <iframe width="100%" height="315"
-    src="https://www.youtube.com/embed/UC_vi0gLeiA"
-    style="border-radius:10px;margin-top:15px;" allowfullscreen></iframe>
-
+    <div id="adminPanel" class="admin-panel" style="display:none;">
+        <h2>📋 Patient Queries</h2>
+        <div id="queryList">
+            <p>Loading queries...</p>
+        </div>
+        <button onclick="logout()" style="background:#dc3545; margin-top:20px;">Logout</button>
+    </div>
 </div>
-</div>
-
-<footer>
-© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
-</footer>
 
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-// Firebase Configuration - EXACT SAME AS ORIGINAL
+// Firebase Configuration - MUST BE SAME AS INDEX.HTML
 const firebaseConfig = {
-  apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
-  authDomain: "bdss-671d8.firebaseapp.com",
-  projectId: "bdss-671d8"
+    apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
+    authDomain: "bdss-671d8.firebaseapp.com",
+    projectId: "bdss-671d8"
 };
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-console.log("✅ Firebase initialized");
+console.log("✅ Admin Firebase initialized");
 
-// Query form submission - EXACT SAME STRUCTURE AS ORIGINAL
-queryForm.onsubmit = async function(e) {
-  e.preventDefault();
-  
-  try {
-    // Show sending message
-    queryMessage.textContent = "Sending your query...";
-    queryMessage.style.color = "blue";
+// Login function
+window.login = function() {
+    const username = document.getElementById('adminUser').value;
+    const password = document.getElementById('adminPass').value;
     
-    // Get values
-    const name = qName.value;
-    const mobile = qMobile.value;
-    const message = qMessage.value;
+    console.log("Login attempt:", username, password);
     
-    console.log("Submitting query:", { name, mobile, message });
-    
-    // Save to Firebase - EXACT SAME FIELDS AS ORIGINAL
-    await db.collection("patientQueries").add({
-      name: name,
-      mobile: mobile,
-      message: message,
-      time: new Date()  // This is what admin.html expects
-    });
-    
-    // Success message
-    queryMessage.textContent = "✅ Thanks for sending your query! Our experts will contact you soon.";
-    queryMessage.style.color = "green";
-    
-    // Clear form
-    queryForm.reset();
-    
-    console.log("✅ Query saved successfully");
-    
-  } catch (error) {
-    console.error("❌ Error saving query:", error);
-    queryMessage.textContent = "❌ Error sending query. Please try again.";
-    queryMessage.style.color = "red";
-  }
+    if (username === "admin" && password === "bds123") {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        loadQueries();
+    } else {
+        alert("❌ Wrong username or password!");
+    }
 };
-</script>
 
-<!-- ✅ TIDIO CHATBOT -->
-<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
+// Load queries from Firebase
+function loadQueries() {
+    console.log("Loading queries...");
+    
+    const queryList = document.getElementById('queryList');
+    queryList.innerHTML = "<p>Loading queries...</p>";
+    
+    db.collection("patientQueries").orderBy("time", "desc")
+        .get()
+        .then((querySnapshot) => {
+            console.log("Found", querySnapshot.size, "queries");
+            
+            if (querySnapshot.empty) {
+                queryList.innerHTML = "<p>No queries found yet.</p>";
+                return;
+            }
+            
+            let html = '';
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const time = data.time ? new Date(data.time.toDate()).toLocaleString() : 'No time';
+                
+                html += `
+                    <div class="query-item">
+                        <strong>👤 ${data.name || 'No name'}</strong><br>
+                        📱 ${data.mobile || 'No phone'}<br>
+                        💬 ${data.message || 'No message'}<br>
+                        📅 ${time}
+                    </div>
+                `;
+            });
+            
+            queryList.innerHTML = html;
+        })
+        .catch((error) => {
+            console.error("Error loading queries:", error);
+            queryList.innerHTML = `<p style="color:red;">Error loading queries: ${error.message}</p>`;
+        });
+}
+
+// Logout function
+window.logout = function() {
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('loginSection').style.display = 'block';
+    document.getElementById('adminPass').value = '';
+};
+
+// Auto-login if already authenticated (optional)
+// Uncomment if you want auto-login
+// setTimeout(() => {
+//     if (localStorage.getItem('adminLoggedIn') === 'true') {
+//         login();
+//     }
+// }, 500);
+</script>
 
 </body>
 </html>
