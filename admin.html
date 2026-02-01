@@ -88,6 +88,37 @@ function login() {
 
 <!-- Tidio Chatbot -->
 <script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
-
+<script>
+  // Admin login function
+  function login() {
+    const username = document.getElementById('adminUser').value.trim();
+    const password = document.getElementById('adminPass').value.trim();
+    
+    if(username === "admin" && password === "bds123") {
+      document.getElementById('adminPanel').style.display = "block";
+      
+      // Fetch queries from Firebase
+      db.collection("patientQueries").orderBy("time", "desc").onSnapshot(snapshot => {
+        const queryList = document.getElementById('queryList');
+        queryList.innerHTML = "";
+        
+        snapshot.forEach(doc => {
+          const q = doc.data();
+          const div = document.createElement("div");
+          div.className = "card";
+          div.innerHTML = `
+            <b>${q.name}</b><br>
+            Mobile: ${q.mobile}<br>
+            Message: ${q.message}<br>
+            Time: ${new Date(q.time?.toDate()).toLocaleString()}
+          `;
+          queryList.appendChild(div);
+        });
+      });
+    } else {
+      alert("Wrong Login!");
+    }
+  }
+</script>
 </body>
 </html>
