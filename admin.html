@@ -1,117 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Admin Panel - BDS Center</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
-        input { padding: 10px; margin: 5px; width: 200px; }
-        button { padding: 10px 20px; background: #1f7a4f; color: white; border: none; cursor: pointer; }
-        .query { border: 1px solid #ccc; padding: 15px; margin: 10px 0; background: #f9f9f9; }
-    </style>
-</head>
-<body>
-    <h1>Admin Login</h1>
-    <input id="username" placeholder="Username" value="admin">
-    <input id="password" type="password" placeholder="Password" value="bds123">
-    <button onclick="login()">Login</button>
-    
-    <div id="adminPanel" style="display:none; margin-top:30px;">
-        <h2>Patient Queries</h2>
-        <div id="queryList">Loading...</div>
-        <button onclick="clearAll()" style="background:#dc3545;">Clear All Queries</button>
-    </div>
+<title>BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center</title>
 
-    <!-- FIREBASE -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<meta name="description" content="Best Ayurvedic, Physiotherapy & Yoga Center in Amritsar. Expert treatment for joint pain, paralysis, diabetes, asthma, liver disease, back pain and stress through Ayurveda, Physiotherapy & Yoga.">
+<meta name="keywords" content="ayurvedic doctor amritsar, physiotherapy center amritsar, yoga therapy amritsar, baba deep singh ayurvedic">
+<meta name="robots" content="index, follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
+
+<!-- SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "48, Diamond Avenue, Majitha Road",
+    "addressLocality": "Amritsar",
+    "addressRegion": "Punjab",
+    "postalCode": "143001",
+    "addressCountry": "IN"
+  },
+  "telephone": ["6280629868","7015400129"]
+}
+</script>
+
+<style>
+:root{
+  --green:#1f7a4f;
+  --green-light:#e9f7f0;
+  --green-dark:#134e36;
+}
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{
+  margin:0;
+  background:linear-gradient(135deg,#ecfff6,#ffffff);
+  color:#333;
+}
+header{
+  background:linear-gradient(135deg,#1f7a4f,#2fb17c);
+  color:white;
+  padding:35px 20px;
+  text-align:center;
+}
+header h1{margin:0;font-size:38px;}
+header p{margin-top:10px;font-size:18px;}
+nav{
+  display:flex;justify-content:center;flex-wrap:wrap;
+  gap:15px;background:white;padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+nav button{
+  border:none;background:var(--green-light);
+  color:var(--green-dark);
+  padding:12px 26px;border-radius:30px;
+  cursor:pointer;font-size:16px;
+}
+nav button:hover{background:var(--green);color:white;}
+.container{max-width:1100px;margin:45px auto;padding:0 20px;}
+.section{
+  background:white;padding:35px;
+  border-radius:25px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.08);
+}
+.section h2{color:var(--green);font-size:32px;margin-top:0;}
+input,textarea{
+  width:100%;padding:12px;margin-bottom:15px;
+  border-radius:10px;border:1px solid #ccc;
+}
+button.submit{
+  background:var(--green);color:white;
+  padding:14px 30px;border:none;
+  border-radius:30px;cursor:pointer;
+}
+footer{
+  margin-top:70px;background:var(--green-dark);
+  color:white;text-align:center;padding:22px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>BABA DEEP SINGH AYURVEDIC, PHYSIOTHERAPY & YOGA CENTRE</h1>
+  <p>48, Diamond Avenue, Majitha Road, Amritsar</p>
+</header>
+
+<nav>
+  <button onclick="location.href='index.html'">About</button>
+  <button onclick="location.href='yoga.html'">Yoga</button>
+  <button onclick="location.href='physiotherapy.html'">Physiotherapy</button>
+  <button onclick="location.href='ayurvedic.html'">Ayurvedic</button>
+  <button onclick="location.href='diet.html'">Diet</button>
+  <button onclick="location.href='contact.html'">Contact</button>
+  <button onclick="location.href='admin.html'">Admin</button>
+</nav>
+
+<div class="container">
+
+<div class="section">
+  <h2>About Us</h2>
+
+  <p>
+    BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center provides holistic,
+    natural and modern treatment for chronic pain, lifestyle diseases and
+    physical rehabilitation under expert guidance.
+  </p>
+
+  <h2>Send Your Query</h2>
+
+  <form id="queryForm">
+    <input id="qName" placeholder="Your Name" required>
+    <input id="qMobile" placeholder="Mobile Number" required>
+    <textarea id="qMessage" placeholder="Your Query" required></textarea>
+    <button class="submit" type="submit">Send Query</button>
+  </form>
+
+  <p id="queryMessage" style="color:green;font-weight:bold;"></p>
+
+  <iframe width="100%" height="315"
+    src="https://www.youtube.com/embed/UC_vi0gLeiA"
+    style="border-radius:10px;margin-top:15px;" allowfullscreen></iframe>
+
+</div>
+</div>
+
+<footer>
+© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
+</footer>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+// Firebase Configuration - EXACT SAME AS ORIGINAL
+const firebaseConfig = {
+  apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
+  authDomain: "bdss-671d8.firebaseapp.com",
+  projectId: "bdss-671d8"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+console.log("✅ Firebase initialized");
+
+// Query form submission - EXACT SAME STRUCTURE AS ORIGINAL
+queryForm.onsubmit = async function(e) {
+  e.preventDefault();
+  
+  try {
+    // Show sending message
+    queryMessage.textContent = "Sending your query...";
+    queryMessage.style.color = "blue";
     
-    <script>
-        // DEBUG: Check loading
-        console.log("Script loading...");
-        
-        // Your Firebase config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
-            authDomain: "bdss-671d8.firebaseapp.com",
-            projectId: "bdss-671d8"
-        };
-        
-        // Initialize Firebase
-        let db;
-        try {
-            const app = firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            console.log("✅ Firebase initialized successfully");
-        } catch (error) {
-            console.error("❌ Firebase init error:", error);
-        }
-        
-        // Login function
-        window.login = function() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (username === "admin" && password === "bds123") {
-                document.getElementById('adminPanel').style.display = 'block';
-                loadQueries();
-            } else {
-                alert("Invalid credentials!");
-            }
-        };
-        
-        // Load queries from Firebase
-        function loadQueries() {
-            if (!db) {
-                document.getElementById('queryList').innerHTML = "Firebase not initialized";
-                return;
-            }
-            
-            db.collection("patientQueries").orderBy("time", "desc")
-                .get()
-                .then((querySnapshot) => {
-                    let html = '';
-                    
-                    if (querySnapshot.empty) {
-                        html = '<p>No queries found.</p>';
-                    } else {
-                        querySnapshot.forEach((doc) => {
-                            const data = doc.data();
-                            html += `
-                                <div class="query">
-                                    <strong>${data.name || 'No name'}</strong><br>
-                                    Phone: ${data.mobile || data.phone || 'No phone'}<br>
-                                    Message: ${data.message || 'No message'}<br>
-                                    Time: ${data.time ? new Date(data.time.toDate()).toLocaleString() : 'No time'}
-                                </div>
-                            `;
-                        });
-                    }
-                    
-                    document.getElementById('queryList').innerHTML = html;
-                })
-                .catch((error) => {
-                    console.error("Error loading queries:", error);
-                    document.getElementById('queryList').innerHTML = "Error loading queries: " + error.message;
-                });
-        }
-        
-        // Clear all queries
-        window.clearAll = function() {
-            if (confirm("Delete ALL queries? This cannot be undone!")) {
-                db.collection("patientQueries").get().then(snapshot => {
-                    const batch = db.batch();
-                    snapshot.docs.forEach(doc => {
-                        batch.delete(doc.ref);
-                    });
-                    return batch.commit();
-                }).then(() => {
-                    alert("All queries deleted!");
-                    loadQueries();
-                }).catch(error => {
-                    alert("Error: " + error.message);
-                });
-            }
-        };
-    </script>
+    // Get values
+    const name = qName.value;
+    const mobile = qMobile.value;
+    const message = qMessage.value;
+    
+    console.log("Submitting query:", { name, mobile, message });
+    
+    // Save to Firebase - EXACT SAME FIELDS AS ORIGINAL
+    await db.collection("patientQueries").add({
+      name: name,
+      mobile: mobile,
+      message: message,
+      time: new Date()  // This is what admin.html expects
+    });
+    
+    // Success message
+    queryMessage.textContent = "✅ Thanks for sending your query! Our experts will contact you soon.";
+    queryMessage.style.color = "green";
+    
+    // Clear form
+    queryForm.reset();
+    
+    console.log("✅ Query saved successfully");
+    
+  } catch (error) {
+    console.error("❌ Error saving query:", error);
+    queryMessage.textContent = "❌ Error sending query. Please try again.";
+    queryMessage.style.color = "red";
+  }
+};
+</script>
+
+<!-- ✅ TIDIO CHATBOT -->
+<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
+
 </body>
 </html>
