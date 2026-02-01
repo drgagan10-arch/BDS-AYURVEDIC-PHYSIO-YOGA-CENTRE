@@ -162,6 +162,33 @@ queryForm.onsubmit = e => {
 <!-- ✅ TIDIO CHATBOT (NOW INCLUDED) -->
 <script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
 
+  <script>
+  // Handle query form submission
+  document.getElementById('queryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('qName').value;
+    const mobile = document.getElementById('qMobile').value;
+    const message = document.getElementById('qMessage').value;
+    
+    // Save to Firebase
+    db.collection("patientQueries").add({
+      name: name,
+      mobile: mobile,
+      message: message,
+      time: new Date()
+    });
+    
+    // Show success message
+    document.getElementById("queryMessage").textContent = 
+      "Thanks for sending your query! Our experts will contact you soon.";
+    
+    // Clear form
+    this.reset();
+  });
+</script>
+
 </body>
 </html>
+
 
