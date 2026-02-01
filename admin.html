@@ -1,45 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Admin Panel - BDS Center</title>
-<style>
-* { box-sizing: border-box; font-family: "Segoe UI", sans-serif; }
-body { margin: 0; background: #f5f5f5; }
-.container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-.login-box, .admin-panel { 
-    background: white; padding: 30px; border-radius: 15px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px;
-}
-h1 { color: #1f7a4f; text-align: center; }
-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc; }
-button { background: #1f7a4f; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%; }
-button:hover { background: #166342; }
-.query-item { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; background: #f9f9f9; }
-.query-item strong { color: #1f7a4f; }
-.header { background: linear-gradient(135deg, #1f7a4f, #2fb17c); color: white; padding: 20px; text-align: center; }
-</style>
+    <title>Admin - BDS Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            background: #f0f9f4;
+        }
+        .header {
+            background: linear-gradient(135deg, #1f7a4f, #2fb17c);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .login-box, .admin-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 14px;
+            margin: 12px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            background: #1f7a4f;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #166342;
+        }
+        .query-card {
+            background: #f9f9f9;
+            border-left: 4px solid #1f7a4f;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        .logout-btn {
+            background: #dc3545;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+    </style>
 </head>
-
 <body>
+
 <div class="header">
     <h1>BDS CENTER - ADMIN PANEL</h1>
+    <p>Staff Access Only</p>
 </div>
 
 <div class="container">
+    
+    <!-- LOGIN SECTION -->
     <div id="loginSection" class="login-box">
-        <h2>Admin Login</h2>
+        <h2>🔐 Admin Login</h2>
         <input id="adminUser" placeholder="Username" value="admin">
         <input id="adminPass" type="password" placeholder="Password" value="bds123">
         <button onclick="login()">Login</button>
+        <p style="text-align:center; margin-top:15px;">
+            <a href="index.html" style="color:#1f7a4f;">← Back to Home</a>
+        </p>
     </div>
 
-    <div id="adminPanel" class="admin-panel" style="display:none;">
-        <h2>📋 Patient Queries</h2>
-        <div id="queryList">
-            <p>Loading queries...</p>
+    <!-- ADMIN PANEL (Hidden until login) -->
+    <div id="adminPanel" class="admin-content" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>📋 Patient Queries</h2>
+            <button onclick="logout()" class="logout-btn" style="width:auto; padding:10px 20px;">
+                Logout
+            </button>
         </div>
-        <button onclick="logout()" style="background:#dc3545; margin-top:20px;">Logout</button>
+        
+        <div id="queryList">
+            <p>Loading patient queries...</p>
+        </div>
     </div>
+
 </div>
 
 <!-- FIREBASE -->
@@ -47,7 +105,7 @@ button:hover { background: #166342; }
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-// Firebase Configuration - MUST BE SAME AS INDEX.HTML
+// 🔥 FIREBASE CONFIGURATION
 const firebaseConfig = {
     apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
     authDomain: "bdss-671d8.firebaseapp.com",
@@ -58,78 +116,93 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-console.log("✅ Admin Firebase initialized");
+console.log("Admin panel loaded");
 
-// Login function
+// LOGIN FUNCTION
 window.login = function() {
-    const username = document.getElementById('adminUser').value;
-    const password = document.getElementById('adminPass').value;
+    const username = document.getElementById('adminUser').value.trim();
+    const password = document.getElementById('adminPass').value.trim();
     
-    console.log("Login attempt:", username, password);
-    
+    // Simple hardcoded login (you mentioned admin/bds123 works)
     if (username === "admin" && password === "bds123") {
+        // Hide login, show admin panel
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
+        
+        // Load queries
         loadQueries();
     } else {
-        alert("❌ Wrong username or password!");
+        alert("❌ Incorrect username or password!");
     }
 };
 
-// Load queries from Firebase
+// LOAD QUERIES FROM FIREBASE
 function loadQueries() {
-    console.log("Loading queries...");
-    
     const queryList = document.getElementById('queryList');
-    queryList.innerHTML = "<p>Loading queries...</p>";
+    queryList.innerHTML = "<p>⌛ Loading queries...</p>";
     
-    db.collection("patientQueries").orderBy("time", "desc")
-        .get()
+    db.collection("patientQueries").orderBy("time", "desc").get()
         .then((querySnapshot) => {
-            console.log("Found", querySnapshot.size, "queries");
-            
             if (querySnapshot.empty) {
-                queryList.innerHTML = "<p>No queries found yet.</p>";
+                queryList.innerHTML = "<p>No patient queries yet.</p>";
                 return;
             }
             
             let html = '';
+            let count = 0;
+            
             querySnapshot.forEach((doc) => {
+                count++;
                 const data = doc.data();
-                const time = data.time ? new Date(data.time.toDate()).toLocaleString() : 'No time';
+                const time = data.time ? 
+                    new Date(data.time.toDate()).toLocaleString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }) : 'Unknown time';
                 
                 html += `
-                    <div class="query-item">
-                        <strong>👤 ${data.name || 'No name'}</strong><br>
-                        📱 ${data.mobile || 'No phone'}<br>
-                        💬 ${data.message || 'No message'}<br>
-                        📅 ${time}
+                    <div class="query-card">
+                        <h3 style="margin-top:0; color:#1f7a4f;">
+                            👤 ${data.name || 'No Name'}
+                        </h3>
+                        <p><strong>📱 Phone:</strong> ${data.mobile || 'Not provided'}</p>
+                        <p><strong>💬 Query:</strong> ${data.message || 'No message'}</p>
+                        <p><strong>📅 Submitted:</strong> ${time}</p>
                     </div>
                 `;
             });
             
+            // Add count at top
+            html = `<p><strong>Total Queries: ${count}</strong></p>` + html;
             queryList.innerHTML = html;
         })
         .catch((error) => {
             console.error("Error loading queries:", error);
-            queryList.innerHTML = `<p style="color:red;">Error loading queries: ${error.message}</p>`;
+            queryList.innerHTML = `
+                <p style="color:red;">
+                    ❌ Error loading queries: ${error.message}
+                </p>
+                <p>Check Firebase console and internet connection.</p>
+            `;
         });
 }
 
-// Logout function
+// LOGOUT FUNCTION
 window.logout = function() {
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('loginSection').style.display = 'block';
     document.getElementById('adminPass').value = '';
 };
 
-// Auto-login if already authenticated (optional)
-// Uncomment if you want auto-login
-// setTimeout(() => {
-//     if (localStorage.getItem('adminLoggedIn') === 'true') {
-//         login();
-//     }
-// }, 500);
+// Optional: Auto-refresh every 30 seconds
+setInterval(() => {
+    if (document.getElementById('adminPanel').style.display === 'block') {
+        loadQueries();
+    }
+}, 30000);
 </script>
 
 </body>
