@@ -120,5 +120,49 @@ function login() {
     }
   }
 </script>
+<script>
+console.log("=== DEBUG START ===");
+
+// Check if Firebase is loaded
+console.log("Firebase available?", typeof firebase !== 'undefined');
+
+if (typeof firebase !== 'undefined') {
+  console.log("Firebase version:", firebase.SDK_VERSION);
+  
+  // Initialize with YOUR config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0OpYrWQ5Jo",
+    authDomain: "bdss-671d8.firebaseapp.com",
+    projectId: "bdss-671d8"
+  };
+  
+  try {
+    const app = firebase.initializeApp(firebaseConfig);
+    console.log("✅ Firebase initialized");
+    
+    const db = firebase.firestore();
+    console.log("✅ Firestore available");
+    
+    // Test write
+    db.collection("debugTest").add({
+      test: "Testing from admin page",
+      timestamp: new Date().toISOString()
+    }).then(docRef => {
+      console.log("✅ Document written with ID:", docRef.id);
+      alert("Firebase WORKING! Check console for details.");
+    }).catch(error => {
+      console.error("❌ Firestore write error:", error);
+      alert("Firebase ERROR: " + error.message);
+    });
+    
+  } catch (error) {
+    console.error("❌ Firebase init error:", error);
+  }
+} else {
+  console.error("❌ Firebase not loaded. Check script tags.");
+}
+
+console.log("=== DEBUG END ===");
+</script>
 </body>
 </html>
