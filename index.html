@@ -137,59 +137,61 @@ footer{
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
+// Firebase Configuration
 const firebaseConfig = {
-  apiKey:"AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
-  authDomain:"bdss-671d8.firebaseapp.com",
-  projectId:"bdss-671d8"
+  apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
+  authDomain: "bdss-671d8.firebaseapp.com",
+  projectId: "bdss-671d8"
 };
+
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-queryForm.onsubmit = e => {
+console.log("Firebase initialized successfully");
+
+// Handle form submission
+document.getElementById('queryForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  db.collection("patientQueries").add({
-    name: qName.value,
-    mobile: qMobile.value,
-    message: qMessage.value,
-    time: new Date()
-  });
-  queryMessage.textContent =
-    "Thanks! We will contact you soon.";
-  queryForm.reset();
-};
-</script>
-
-<!-- ✅ TIDIO CHATBOT (NOW INCLUDED) -->
-<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
-
- <script>
-  // Handle query form submission
-  document.getElementById('queryForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const name = document.getElementById('qName').value;
-    const mobile = document.getElementById('qMobile').value;
-    const message = document.getElementById('qMessage').value;
-    
+  
+  const name = document.getElementById('qName').value;
+  const mobile = document.getElementById('qMobile').value;
+  const message = document.getElementById('qMessage').value;
+  const queryMessage = document.getElementById('queryMessage');
+  
+  // Show loading
+  queryMessage.textContent = "Sending your query...";
+  queryMessage.style.color = "blue";
+  
+  try {
     // Save to Firebase
-    db.collection("patientQueries").add({
+    await db.collection("patientQueries").add({
       name: name,
       mobile: mobile,
       message: message,
-      time: new Date()
+      time: new Date(),
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
     
-    // Show success message
-    document.getElementById("queryMessage").textContent = 
-      "Thanks for sending your query! Our experts will contact you soon.";
+    // Success message
+    queryMessage.textContent = "✅ Thank you! Your query has been submitted successfully. We will contact you soon.";
+    queryMessage.style.color = "green";
     
     // Clear form
-    this.reset();
-  });
+    document.getElementById('queryForm').reset();
+    
+    console.log("Query saved to Firebase:", { name, mobile, message });
+    
+  } catch (error) {
+    console.error("Error saving query:", error);
+    queryMessage.textContent = "❌ Error sending query. Please try again or call us directly.";
+    queryMessage.style.color = "red";
+  }
+});
 </script>
+
+<!-- ✅ TIDIO CHATBOT -->
+<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
 
 </body>
 </html>
-
-
-
