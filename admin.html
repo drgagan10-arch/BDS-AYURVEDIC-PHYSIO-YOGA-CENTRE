@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center - Admin</title>
+<meta name="description" content="Admin Panel - Manage patient queries for BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
+
+<!-- MASSIVE SEO KEYWORDS (kept same as original) -->
+<meta name="keywords" content="ayurvedic doctor amritsar, best ayurvedic doctor in amritsar, ayurvedic clinic amritsar, ayurvedic hospital amritsar, baba deep singh ayurvedic center, baba deep singh physiotherapy, baba deep singh yoga center, ayurvedic treatment amritsar, natural treatment amritsar, herbal medicine amritsar, ayurvedic medicine amritsar, ayurvedic consultant amritsar, bams doctor amritsar, phd ayurvedic doctor amritsar, physiotherapy center amritsar, best physiotherapist in amritsar, yoga center amritsar, therapeutic yoga amritsar, dietician amritsar, diet and nutrition clinic amritsar">
+
+<link rel="canonical" href="https://www.yourwebsiteurl.com/admin">
+
+<style>
+:root{
+  --green:#1f7a4f;
+  --green-light:#e9f7f0;
+  --green-dark:#134e36;
+}
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{margin:0;background:linear-gradient(135deg,#ecfff6,#ffffff);color:#333;}
+header{background:linear-gradient(135deg,#1f7a4f,#2fb17c);color:white;padding:35px 20px;text-align:center;}
+header h1{margin:0;font-size:38px;}
+header p{margin-top:10px;font-size:18px;}
+.container{max-width:1100px;margin:45px auto;padding:0 20px;}
+input{width:100%;padding:12px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;}
+button.submit{background:var(--green);color:white;padding:14px 30px;border:none;border-radius:30px;cursor:pointer;}
+#adminPanel{margin-top:20px;}
+#queryList .card{padding:15px;background:#e9f7f0;margin-bottom:10px;text-align:left;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Admin Panel - BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center</h1>
+  <p>Manage patient queries securely</p>
+</header>
+
+<div class="container">
+  <h2>Admin Login</h2>
+  <input id="adminUser" placeholder="Username">
+  <input id="adminPass" type="password" placeholder="Password">
+  <button class="submit" onclick="login()">Login</button>
+
+  <div id="adminPanel" style="display:none; margin-top:25px;">
+    <h2>Patient Queries</h2>
+    <div id="queryList"></div>
+  </div>
+</div>
+
+<footer style="margin-top:70px;background:var(--green-dark);color:white;text-align:center;padding:22px;">
+© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
+</footer>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey:"AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
+  authDomain:"bdss-671d8.firebaseapp.com",
+  projectId:"bdss-671d8"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function login() {
+  const username = adminUser.value.trim();
+  const password = adminPass.value.trim();
+  if(username==="admin" && password==="bds123"){
+    adminPanel.style.display="block";
+    db.collection("patientQueries").orderBy("time","desc").onSnapshot(snapshot=>{
+      queryList.innerHTML="";
+      snapshot.forEach(doc=>{
+        const q = doc.data();
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `<b>${q.name}</b><br>${q.mobile}<br>${q.message}`;
+        queryList.appendChild(div);
+      });
+    });
+  } else {
+    alert("Wrong Login!");
+  }
+}
+</script>
+
+<!-- Tidio Chatbot -->
+<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
+
+</body>
+</html>
