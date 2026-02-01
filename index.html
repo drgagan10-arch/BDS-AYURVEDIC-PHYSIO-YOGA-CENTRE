@@ -3,14 +3,11 @@
 <head>
 <title>BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center</title>
 
-<meta name="description" content="Best Ayurvedic, Physiotherapy & Yoga Center in Amritsar. Expert treatment for liver disease, arthritis, asthma, kidney & bladder stones, diabetes, paralysis, joint pain, fever and more.">
+<meta name="description" content="Best Ayurvedic, Physiotherapy & Yoga Center in Amritsar. Expert treatment for joint pain, paralysis, diabetes, asthma, liver disease, back pain and stress through Ayurveda, Physiotherapy & Yoga.">
+<meta name="keywords" content="ayurvedic doctor amritsar, physiotherapy center amritsar, yoga therapy amritsar, baba deep singh ayurvedic">
 <meta name="robots" content="index, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
-
-<meta name="keywords" content="ayurvedic doctor amritsar, physiotherapy center amritsar, yoga therapy amritsar, baba deep singh ayurvedic">
-
-<link rel="canonical" href="https://www.yourwebsiteurl.com/">
 
 <!-- SCHEMA -->
 <script type="application/ld+json">
@@ -55,13 +52,13 @@ nav{
   gap:15px;background:white;padding:18px;
   box-shadow:0 6px 18px rgba(0,0,0,0.08);
 }
-nav a button{
+nav button{
   border:none;background:var(--green-light);
   color:var(--green-dark);
   padding:12px 26px;border-radius:30px;
   cursor:pointer;font-size:16px;
 }
-nav a button:hover{background:var(--green);color:white;}
+nav button:hover{background:var(--green);color:white;}
 .container{max-width:1100px;margin:45px auto;padding:0 20px;}
 .section{
   background:white;padding:35px;
@@ -93,28 +90,24 @@ footer{
 </header>
 
 <nav>
-  <a href="index.html"><button>About</button></a>
-  <a href="yoga.html"><button>Yoga</button></a>
-  <a href="physiotherapy.html"><button>Physiotherapy</button></a>
-  <a href="ayurvedic.html"><button>Ayurvedic</button></a>
-  <a href="diet.html"><button>Diet & Nutrition</button></a>
-  <a href="contact.html"><button>Contact</button></a>
-  <a href="admin.html"><button>Admin</button></a>
+  <button onclick="location.href='index.html'">About</button>
+  <button onclick="location.href='yoga.html'">Yoga</button>
+  <button onclick="location.href='physio.html'">Physiotherapy</button>
+  <button onclick="location.href='ayurvedic.html'">Ayurvedic</button>
+  <button onclick="location.href='diet.html'">Diet</button>
+  <button onclick="location.href='contact.html'">Contact</button>
+  <button onclick="location.href='admin.html'">Admin</button>
 </nav>
 
 <div class="container">
 
-<!-- ABOUT SECTION -->
 <div class="section">
   <h2>About Us</h2>
 
-  <img src="images/bds.jpg" alt="BABA DEEP SINGH Ayurvedic Center Amritsar"
-       style="width:200px;border-radius:10px;display:block;margin:10px auto;">
-
   <p>
-    BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center is a holistic healthcare
-    clinic dedicated to natural healing and long-term wellness through experienced
-    doctors and personalized treatment plans.
+    BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center provides holistic,
+    natural and modern treatment for chronic pain, lifestyle diseases and
+    physical rehabilitation under expert guidance.
   </p>
 
   <h2>Send Your Query</h2>
@@ -130,10 +123,6 @@ footer{
 
   <iframe width="100%" height="315"
     src="https://www.youtube.com/embed/UC_vi0gLeiA"
-    style="border-radius:10px;margin-top:15px;" allowfullscreen></iframe>
-
-  <iframe width="100%" height="315"
-    src="https://www.youtube.com/embed/d1HVovve27g"
     style="border-radius:10px;margin-top:15px;" allowfullscreen></iframe>
 
 </div>
@@ -165,11 +154,12 @@ queryForm.onsubmit = e => {
     time: new Date()
   });
   queryMessage.textContent =
-    "Thanks for sending your query! Our experts will contact you soon.";
+    "Thanks! We will contact you soon.";
   queryForm.reset();
 };
 </script>
 
+<!-- ✅ TIDIO CHATBOT (NOW INCLUDED) -->
 <script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
 
 </body>
