@@ -1,168 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center - Admin</title>
-<meta name="description" content="Admin Panel - Manage patient queries for BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
-<meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="author" content="BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center">
-
-<!-- MASSIVE SEO KEYWORDS (kept same as original) -->
-<meta name="keywords" content="ayurvedic doctor amritsar, best ayurvedic doctor in amritsar, ayurvedic clinic amritsar, ayurvedic hospital amritsar, baba deep singh ayurvedic center, baba deep singh physiotherapy, baba deep singh yoga center, ayurvedic treatment amritsar, natural treatment amritsar, herbal medicine amritsar, ayurvedic medicine amritsar, ayurvedic consultant amritsar, bams doctor amritsar, phd ayurvedic doctor amritsar, physiotherapy center amritsar, best physiotherapist in amritsar, yoga center amritsar, therapeutic yoga amritsar, dietician amritsar, diet and nutrition clinic amritsar">
-
-<link rel="canonical" href="https://www.yourwebsiteurl.com/admin">
-
-<style>
-:root{
-  --green:#1f7a4f;
-  --green-light:#e9f7f0;
-  --green-dark:#134e36;
-}
-*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
-body{margin:0;background:linear-gradient(135deg,#ecfff6,#ffffff);color:#333;}
-header{background:linear-gradient(135deg,#1f7a4f,#2fb17c);color:white;padding:35px 20px;text-align:center;}
-header h1{margin:0;font-size:38px;}
-header p{margin-top:10px;font-size:18px;}
-.container{max-width:1100px;margin:45px auto;padding:0 20px;}
-input{width:100%;padding:12px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;}
-button.submit{background:var(--green);color:white;padding:14px 30px;border:none;border-radius:30px;cursor:pointer;}
-#adminPanel{margin-top:20px;}
-#queryList .card{padding:15px;background:#e9f7f0;margin-bottom:10px;text-align:left;}
-</style>
+    <title>Admin Panel - BDS Center</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        input { padding: 10px; margin: 5px; width: 200px; }
+        button { padding: 10px 20px; background: #1f7a4f; color: white; border: none; cursor: pointer; }
+        .query { border: 1px solid #ccc; padding: 15px; margin: 10px 0; background: #f9f9f9; }
+    </style>
 </head>
 <body>
-
-<header>
-  <h1>Admin Panel - BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center</h1>
-  <p>Manage patient queries securely</p>
-</header>
-
-<div class="container">
-  <h2>Admin Login</h2>
-  <input id="adminUser" placeholder="Username">
-  <input id="adminPass" type="password" placeholder="Password">
-  <button class="submit" onclick="login()">Login</button>
-
-  <div id="adminPanel" style="display:none; margin-top:25px;">
-    <h2>Patient Queries</h2>
-    <div id="queryList"></div>
-  </div>
-</div>
-
-<footer style="margin-top:70px;background:var(--green-dark);color:white;text-align:center;padding:22px;">
-© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
-</footer>
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey:"AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
-  authDomain:"bdss-671d8.firebaseapp.com",
-  projectId:"bdss-671d8"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-function login() {
-  const username = adminUser.value.trim();
-  const password = adminPass.value.trim();
-  if(username==="admin" && password==="bds123"){
-    adminPanel.style.display="block";
-    db.collection("patientQueries").orderBy("time","desc").onSnapshot(snapshot=>{
-      queryList.innerHTML="";
-      snapshot.forEach(doc=>{
-        const q = doc.data();
-        const div = document.createElement("div");
-        div.className = "card";
-        div.innerHTML = `<b>${q.name}</b><br>${q.mobile}<br>${q.message}`;
-        queryList.appendChild(div);
-      });
-    });
-  } else {
-    alert("Wrong Login!");
-  }
-}
-</script>
-
-<!-- Tidio Chatbot -->
-<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async></script>
-<script>
-  // Admin login function
-  function login() {
-    const username = document.getElementById('adminUser').value.trim();
-    const password = document.getElementById('adminPass').value.trim();
+    <h1>Admin Login</h1>
+    <input id="username" placeholder="Username" value="admin">
+    <input id="password" type="password" placeholder="Password" value="bds123">
+    <button onclick="login()">Login</button>
     
-    if(username === "admin" && password === "bds123") {
-      document.getElementById('adminPanel').style.display = "block";
-      
-      // Fetch queries from Firebase
-      db.collection("patientQueries").orderBy("time", "desc").onSnapshot(snapshot => {
-        const queryList = document.getElementById('queryList');
-        queryList.innerHTML = "";
+    <div id="adminPanel" style="display:none; margin-top:30px;">
+        <h2>Patient Queries</h2>
+        <div id="queryList">Loading...</div>
+        <button onclick="clearAll()" style="background:#dc3545;">Clear All Queries</button>
+    </div>
+
+    <!-- FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // DEBUG: Check loading
+        console.log("Script loading...");
         
-        snapshot.forEach(doc => {
-          const q = doc.data();
-          const div = document.createElement("div");
-          div.className = "card";
-          div.innerHTML = `
-            <b>${q.name}</b><br>
-            Mobile: ${q.mobile}<br>
-            Message: ${q.message}<br>
-            Time: ${new Date(q.time?.toDate()).toLocaleString()}
-          `;
-          queryList.appendChild(div);
-        });
-      });
-    } else {
-      alert("Wrong Login!");
-    }
-  }
-</script>
-<script>
-console.log("=== DEBUG START ===");
-
-// Check if Firebase is loaded
-console.log("Firebase available?", typeof firebase !== 'undefined');
-
-if (typeof firebase !== 'undefined') {
-  console.log("Firebase version:", firebase.SDK_VERSION);
-  
-  // Initialize with YOUR config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0OpYrWQ5Jo",
-    authDomain: "bdss-671d8.firebaseapp.com",
-    projectId: "bdss-671d8"
-  };
-  
-  try {
-    const app = firebase.initializeApp(firebaseConfig);
-    console.log("✅ Firebase initialized");
-    
-    const db = firebase.firestore();
-    console.log("✅ Firestore available");
-    
-    // Test write
-    db.collection("debugTest").add({
-      test: "Testing from admin page",
-      timestamp: new Date().toISOString()
-    }).then(docRef => {
-      console.log("✅ Document written with ID:", docRef.id);
-      alert("Firebase WORKING! Check console for details.");
-    }).catch(error => {
-      console.error("❌ Firestore write error:", error);
-      alert("Firebase ERROR: " + error.message);
-    });
-    
-  } catch (error) {
-    console.error("❌ Firebase init error:", error);
-  }
-} else {
-  console.error("❌ Firebase not loaded. Check script tags.");
-}
-
-console.log("=== DEBUG END ===");
-</script>
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
+            authDomain: "bdss-671d8.firebaseapp.com",
+            projectId: "bdss-671d8"
+        };
+        
+        // Initialize Firebase
+        let db;
+        try {
+            const app = firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log("✅ Firebase initialized successfully");
+        } catch (error) {
+            console.error("❌ Firebase init error:", error);
+        }
+        
+        // Login function
+        window.login = function() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === "admin" && password === "bds123") {
+                document.getElementById('adminPanel').style.display = 'block';
+                loadQueries();
+            } else {
+                alert("Invalid credentials!");
+            }
+        };
+        
+        // Load queries from Firebase
+        function loadQueries() {
+            if (!db) {
+                document.getElementById('queryList').innerHTML = "Firebase not initialized";
+                return;
+            }
+            
+            db.collection("patientQueries").orderBy("time", "desc")
+                .get()
+                .then((querySnapshot) => {
+                    let html = '';
+                    
+                    if (querySnapshot.empty) {
+                        html = '<p>No queries found.</p>';
+                    } else {
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            html += `
+                                <div class="query">
+                                    <strong>${data.name || 'No name'}</strong><br>
+                                    Phone: ${data.mobile || data.phone || 'No phone'}<br>
+                                    Message: ${data.message || 'No message'}<br>
+                                    Time: ${data.time ? new Date(data.time.toDate()).toLocaleString() : 'No time'}
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    document.getElementById('queryList').innerHTML = html;
+                })
+                .catch((error) => {
+                    console.error("Error loading queries:", error);
+                    document.getElementById('queryList').innerHTML = "Error loading queries: " + error.message;
+                });
+        }
+        
+        // Clear all queries
+        window.clearAll = function() {
+            if (confirm("Delete ALL queries? This cannot be undone!")) {
+                db.collection("patientQueries").get().then(snapshot => {
+                    const batch = db.batch();
+                    snapshot.docs.forEach(doc => {
+                        batch.delete(doc.ref);
+                    });
+                    return batch.commit();
+                }).then(() => {
+                    alert("All queries deleted!");
+                    loadQueries();
+                }).catch(error => {
+                    alert("Error: " + error.message);
+                });
+            }
+        };
+    </script>
 </body>
 </html>
