@@ -109,6 +109,56 @@ footer{
 <footer>
 © 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
 </footer>
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+<script>
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
+  authDomain: "bdss-671d8.firebaseapp.com",
+  projectId: "bdss-671d8"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Handle form submission
+document.getElementById('queryForm').onsubmit = function(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('qName').value;
+  const mobile = document.getElementById('qMobile').value;
+  const message = document.getElementById('qMessage').value;
+  
+  // Show sending message
+  document.getElementById("queryMessage").textContent = "Sending your query...";
+  document.getElementById("queryMessage").style.color = "blue";
+  
+  // Save to Firebase
+  db.collection("patientQueries").add({
+    name: name,
+    mobile: mobile,
+    message: message,
+    time: new Date()
+  })
+  .then(() => {
+    document.getElementById("queryMessage").textContent = "✅ Thanks for sending your query! Our experts will contact you soon.";
+    document.getElementById("queryMessage").style.color = "green";
+    document.getElementById('queryForm').reset();
+  })
+  .catch(error => {
+    document.getElementById("queryMessage").textContent = "❌ Error sending query. Please try again.";
+    document.getElementById("queryMessage").style.color = "red";
+    console.error("Error:", error);
+  });
+};
+</script>
+
+<!-- TIDIO CHATBOT -->
+<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async>
+</script>
 </body>
 </html>
