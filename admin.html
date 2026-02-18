@@ -1,82 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Admin Panel - BDS Center</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 *{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
 body{background:#f0f9f4;color:#333;}
-
-.header{
-  background:linear-gradient(135deg,#1f7a4f,#2fb17c);
-  color:white;
-  padding:25px 20px;
-  text-align:center;
-}
-
+.header{background:linear-gradient(135deg,#1f7a4f,#2fb17c);color:white;padding:25px 20px;text-align:center;}
 .container{max-width:1000px;margin:30px auto;padding:0 20px;}
-
-.login-box,.admin-content{
-  background:white;
-  padding:30px;
-  border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-  margin-bottom:30px;
-}
-
+.login-box,.admin-content{background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);margin-bottom:30px;}
 h2{color:#1f7a4f;margin-bottom:20px;}
-
-input{
-  width:100%;
-  padding:14px;
-  margin:12px 0;
-  border:1px solid #ddd;
-  border-radius:8px;
-  font-size:16px;
-}
-
-button{
-  background:#1f7a4f;
-  color:white;
-  border:none;
-  padding:12px 20px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:15px;
-  margin-top:10px;
-}
-
+input{width:100%;padding:14px;margin:12px 0;border:1px solid #ddd;border-radius:8px;font-size:16px;}
+button{background:#1f7a4f;color:white;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-size:15px;margin-top:10px;}
 button:hover{background:#166342;}
-
 .logout-btn{background:#dc3545;}
 .logout-btn:hover{background:#c82333;}
-
-.delete-btn{
-  background:red;
-  margin-top:10px;
-}
-
-.query-card{
-  background:#f9f9f9;
-  border-left:4px solid #1f7a4f;
-  padding:20px;
-  margin:15px 0;
-  border-radius:8px;
-}
-
-.back-link{
-  display:block;
-  text-align:center;
-  margin-top:15px;
-  color:#1f7a4f;
-  text-decoration:none;
-}
-
+.delete-btn{background:red;margin-top:10px;}
+.tab-buttons{display:flex;gap:10px;margin-bottom:20px;}
+.tab-buttons button{flex:1;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.query-card{background:#f9f9f9;border-left:4px solid #1f7a4f;padding:20px;margin:15px 0;border-radius:8px;}
+.back-link{display:block;text-align:center;margin-top:15px;color:#1f7a4f;text-decoration:none;}
 .back-link:hover{text-decoration:underline;}
+.stars{color:#f5b50a;}
 </style>
 </head>
-
 <body>
 
 <div class="header">
@@ -98,101 +48,138 @@ button:hover{background:#166342;}
   <!-- ADMIN PANEL -->
   <div id="adminPanel" class="admin-content" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <h2>📋 Patient Queries</h2>
+      <h2>📋 Admin Dashboard</h2>
       <button onclick="logout()" class="logout-btn">Logout</button>
     </div>
 
-    <div id="queryList">
-      <p>Loading queries...</p>
+    <!-- Tabs -->
+    <div class="tab-buttons">
+      <button onclick="openTab('queriesTab')">Patient Queries</button>
+      <button onclick="openTab('reviewsTab')">Reviews</button>
     </div>
+
+    <!-- Patient Queries -->
+    <div id="queriesTab" class="tab-content">
+      <div id="queryList"><p>Loading queries...</p></div>
+    </div>
+
+    <!-- Reviews -->
+    <div id="reviewsTab" class="tab-content">
+      <div id="reviewList"><p>Loading reviews...</p></div>
+    </div>
+
   </div>
 
 </div>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
   projectId: "bdss-671d8"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// 🔐 LOGIN
+// LOGIN
 function login(){
-  const username=document.getElementById('adminUser').value.trim();
-  const password=document.getElementById('adminPass').value.trim();
-
+  const username = document.getElementById('adminUser').value.trim();
+  const password = document.getElementById('adminPass').value.trim();
   if(username==="admin" && password==="bds123"){
     document.getElementById('loginSection').style.display="none";
     document.getElementById('adminPanel').style.display="block";
+    openTab('queriesTab');
     loadQueriesRealtime();
-  }else{
+    loadReviewsRealtime();
+  } else {
     alert("Incorrect username or password!");
   }
 }
 
-// ✅ REALTIME QUERY LOADER
+// LOGOUT
+function logout(){
+  document.getElementById('adminPanel').style.display="none";
+  document.getElementById('loginSection').style.display="block";
+  document.getElementById('adminPass').value="";
+}
+
+// TABS
+function openTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+}
+
+// LOAD QUERIES
 function loadQueriesRealtime(){
-  const queryList=document.getElementById('queryList');
+  const queryList = document.getElementById('queryList');
   queryList.innerHTML="<p>⌛ Loading queries...</p>";
-
-  db.collection("patientQueries")
-    .orderBy("time","desc")
+  db.collection("patientQueries").orderBy("time","desc")
     .onSnapshot(snapshot=>{
-      if(snapshot.empty){
-        queryList.innerHTML="<p>No patient queries yet.</p>";
-        return;
-      }
-
-      let html='';
-      let count=0;
-
+      if(snapshot.empty){ queryList.innerHTML="<p>No patient queries yet.</p>"; return; }
+      let html=`<p><strong>Total Queries: ${snapshot.size}</strong></p>`;
       snapshot.forEach(doc=>{
-        count++;
         const data=doc.data();
-        const time=data.time ?
-          new Date(data.time.toDate()).toLocaleString() :
-          "Unknown time";
-
+        const time=data.time ? new Date(data.time.toDate()).toLocaleString() : "Unknown";
         html+=`
           <div class="query-card">
-            <h3>👤 ${data.name || 'No Name'}</h3>
-            <p><strong>📱 Phone:</strong> ${data.mobile || 'Not provided'}</p>
-            <p><strong>💬 Query:</strong> ${data.message || 'No message'}</p>
+            <h3>👤 ${data.name||'No Name'}</h3>
+            <p><strong>📱 Phone:</strong> ${data.mobile||'Not provided'}</p>
+            <p><strong>💬 Query:</strong> ${data.message||'No message'}</p>
             <p><strong>📅 Submitted:</strong> ${time}</p>
-            <button class="delete-btn" onclick="deleteQuery('${doc.id}')">
-              Delete
-            </button>
+            <button class="delete-btn" onclick="deleteQuery('${doc.id}')">Delete</button>
           </div>
         `;
       });
-
-      queryList.innerHTML=`<p><strong>Total Queries: ${count}</strong></p>`+html;
+      queryList.innerHTML=html;
     },error=>{
       queryList.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;
     });
 }
 
-// 🗑 DELETE QUERY
+// DELETE QUERY
 function deleteQuery(id){
   if(confirm("Delete this query?")){
     db.collection("patientQueries").doc(id).delete();
   }
 }
 
-// 🚪 LOGOUT
-function logout(){
-  document.getElementById('adminPanel').style.display="none";
-  document.getElementById('loginSection').style.display="block";
-  document.getElementById('adminPass').value="";
+// LOAD REVIEWS
+function loadReviewsRealtime(){
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML="<p>⌛ Loading reviews...</p>";
+  db.collection("reviews").orderBy("time","desc")
+    .onSnapshot(snapshot=>{
+      if(snapshot.empty){ reviewList.innerHTML="<p>No reviews yet.</p>"; return; }
+      let html=`<p><strong>Total Reviews: ${snapshot.size}</strong></p>`;
+      snapshot.forEach(doc=>{
+        const data=doc.data();
+        const time=data.time ? new Date(data.time.toDate()).toLocaleString() : "Unknown";
+        html+=`
+          <div class="query-card">
+            <h3>👤 ${data.name||'No Name'}</h3>
+            <div class="stars">${'★'.repeat(data.rating)}${'☆'.repeat(5-data.rating)}</div>
+            <p>${data.review||'No review text'}</p>
+            <p><strong>📅 Submitted:</strong> ${time}</p>
+            <button class="delete-btn" onclick="deleteReview('${doc.id}')">Delete</button>
+          </div>
+        `;
+      });
+      reviewList.innerHTML=html;
+    },error=>{
+      reviewList.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;
+    });
+}
+
+// DELETE REVIEW
+function deleteReview(id){
+  if(confirm("Delete this review?")){
+    db.collection("reviews").doc(id).delete();
+  }
 }
 </script>
-
 </body>
 </html>
