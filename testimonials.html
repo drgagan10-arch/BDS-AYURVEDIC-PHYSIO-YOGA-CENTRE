@@ -1,194 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>BABA DEEP SINGH - Testimonials</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Read testimonials from patients of BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Center in Amritsar.">
-  <meta name="keywords" content="BABA DEEP SINGH testimonials, ayurvedic center reviews, physiotherapy reviews, yoga therapy reviews">
-  <meta name="author" content="BABA DEEP SINGH Testimonials">
+<meta charset="UTF-8">
+<title>BABA DEEP SINGH - Testimonials</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root{
-      --green:#1f7a4f;
-      --green-light:#e9f7f0;
-      --green-dark:#134e36;
-    }
-    *{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
-    body{
-      margin:0;
-      background:linear-gradient(135deg,#ecfff6,#ffffff);
-      color:#333;
-    }
-    header{
-      background:linear-gradient(135deg,var(--green),#2fb17c);
-      color:white;
-      padding:35px 20px;
-      text-align:center;
-    }
-    header h1{margin:0;font-size:38px;}
-    header p{margin-top:10px;font-size:18px;}
-    nav{
-      display:flex;justify-content:center;flex-wrap:wrap;
-      gap:15px;background:white;padding:18px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    }
-    nav button{
-      border:none;background:var(--green-light);
-      color:var(--green-dark);
-      padding:12px 26px;border-radius:30px;
-      cursor:pointer;font-size:16px;
-    }
-    nav button:hover{background:var(--green);color:white;}
-    .container{max-width:1100px;margin:45px auto;padding:0 20px;}
-    .section{
-      background:white;padding:35px;
-      border-radius:25px;
-      box-shadow:0 18px 40px rgba(0,0,0,0.08);
-      margin-bottom:30px;
-    }
-    .section h2{color:var(--green);font-size:32px;margin-top:0;text-align:center;}
-    .testimonial-grid{
-      display:flex;
-      flex-wrap:wrap;
-      gap:20px;
-      justify-content:center;
-      margin-top:20px;
-    }
-    .testimonial-card{
-      flex:1 1 300px;
-      background:#f3fff7;
-      padding:25px;
-      border-radius:20px;
-      box-shadow:0 12px 28px rgba(0,0,0,0.06);
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
-    .testimonial-card p{margin:0 0 10px;}
-    .testimonial-card .author{
-      font-weight:bold;
-      margin-top:10px;
-      text-align:right;
-      color:var(--green-dark);
-    }
-    .stars{
-      color:#f1c40f;
-      margin-bottom:10px;
-    }
-    footer{
-      margin-top:70px;background:var(--green-dark);
-      color:white;text-align:center;padding:22px;
-    }
-  </style>
+<style>
+:root{
+  --green:#1f7a4f;
+  --green-light:#e9f7f0;
+  --green-dark:#134e36;
+}
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{
+  margin:0;
+  background:linear-gradient(135deg,#ecfff6,#ffffff);
+  color:#333;
+}
+header{
+  background:linear-gradient(135deg,var(--green),#2fb17c);
+  color:white;
+  padding:35px 20px;
+  text-align:center;
+}
+nav{
+  display:flex;justify-content:center;flex-wrap:wrap;
+  gap:15px;background:white;padding:18px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+nav button{
+  border:none;background:var(--green-light);
+  color:var(--green-dark);
+  padding:12px 26px;border-radius:30px;
+  cursor:pointer;font-size:16px;
+}
+nav button:hover{background:var(--green);color:white;}
+.container{max-width:1100px;margin:45px auto;padding:0 20px;}
+.section{
+  background:white;padding:35px;
+  border-radius:25px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.08);
+  margin-bottom:30px;
+}
+.video-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  justify-content:center;
+}
+.video-grid iframe{
+  border-radius:15px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+.review-card{
+  background:#f3fff7;
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+.review-card strong{
+  color:var(--green-dark);
+}
+form input, form textarea{
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+form button{
+  background:var(--green);
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:20px;
+  cursor:pointer;
+}
+form button:hover{
+  background:var(--green-dark);
+}
+footer{
+  margin-top:50px;
+  background:var(--green-dark);
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+</style>
 </head>
+
 <body>
 
 <header>
   <h1>BABA DEEP SINGH</h1>
-  <p>Ayurvedic, Physiotherapy & Yoga Center - Testimonials</p>
+  <p>Video Testimonials & Patient Reviews</p>
 </header>
 
 <nav>
   <button onclick="location.href='index.html'">Home</button>
   <button onclick="location.href='about-doctor.html'">About Doctor</button>
-  <button onclick="location.href='yoga.html'">Yoga</button>
-  <button onclick="location.href='physiotherapy.html'">Physiotherapy</button>
-  <button onclick="location.href='ayurvedic.html'">Ayurvedic</button>
-  <button onclick="location.href='diet.html'">Diet</button>
   <button onclick="location.href='gallery.html'">Gallery</button>
-  <button onclick="location.href='testimonials.html'">Testimonials</button>
   <button onclick="location.href='contact.html'">Contact</button>
 </nav>
 
 <div class="container">
 
-  <div class="section">
-    <h2>What Our Patients Say</h2>
-    <div class="testimonial-grid">
+<!-- VIDEO TESTIMONIALS -->
+<div class="section">
+<h2 style="text-align:center;">Patient Video Testimonials</h2>
 
-      <div class="testimonial-card">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"Dr. Gagandeep Singh and team have been amazing. My back pain improved significantly after physiotherapy sessions. Highly recommend!"</p>
-        <div class="author">- John D.</div>
-      </div>
+<div class="video-grid">
 
-      <div class="testimonial-card">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"Ayurvedic treatment combined with yoga therapy boosted my energy and overall wellness. Truly life-changing!"</p>
-        <div class="author">- Priya S.</div>
-      </div>
+<iframe width="300" height="500"
+src="https://www.youtube.com/embed/d1HVovve27g?start=78"
+frameborder="0" allowfullscreen></iframe>
 
-      <div class="testimonial-card">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"Professional, caring, and effective treatments. The staff is wonderful and the results are real."</p>
-        <div class="author">- Ahmed K.</div>
-      </div>
+<iframe width="300" height="500"
+src="https://www.youtube.com/embed/UC_vi0gLeiA?start=89"
+frameborder="0" allowfullscreen></iframe>
 
-      <div class="testimonial-card">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"I was struggling with joint pain and after visiting BDS Center, I feel much better. Thank you to the amazing team!"</p>
-        <div class="author">- Simran P.</div>
-      </div>
+<iframe width="300" height="500"
+src="https://www.youtube.com/embed/dM7MDBiO2Bo?start=49"
+frameborder="0" allowfullscreen></iframe>
 
-    </div>
-  </div>
+</div>
+</div>
+
+<!-- ADD REVIEW FORM -->
+<div class="section">
+<h2 style="text-align:center;">Add Your Review</h2>
+
+<form id="reviewForm">
+<input type="text" id="name" placeholder="Your Name" required>
+<textarea id="review" placeholder="Write your review..." rows="4" required></textarea>
+<button type="submit">Submit Review</button>
+</form>
+
+<p id="msg" style="text-align:center;font-weight:bold;"></p>
+</div>
+
+<!-- DISPLAY REVIEWS -->
+<div class="section">
+<h2 style="text-align:center;">Patient Reviews</h2>
+<div id="reviewsContainer"></div>
+</div>
 
 </div>
 
 <footer>
-  © 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
+© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
 </footer>
+
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
   projectId: "bdss-671d8"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Handle form submission
-document.getElementById('queryForm').onsubmit = function(e) {
+// Submit Review
+document.getElementById("reviewForm").onsubmit = function(e){
   e.preventDefault();
-  
-  const name = document.getElementById('qName').value;
-  const mobile = document.getElementById('qMobile').value;
-  const message = document.getElementById('qMessage').value;
-  
-  // Show sending message
-  document.getElementById("queryMessage").textContent = "Sending your query...";
-  document.getElementById("queryMessage").style.color = "blue";
-  
-  // Save to Firebase
-  db.collection("patientQueries").add({
-    name: name,
-    mobile: mobile,
-    message: message,
-    time: new Date()
-  })
-  .then(() => {
-    document.getElementById("queryMessage").textContent = "✅ Thanks for sending your query! Our experts will contact you soon.";
-    document.getElementById("queryMessage").style.color = "green";
-    document.getElementById('queryForm').reset();
-  })
-  .catch(error => {
-    document.getElementById("queryMessage").textContent = "❌ Error sending query. Please try again.";
-    document.getElementById("queryMessage").style.color = "red";
-    console.error("Error:", error);
+
+  const name = document.getElementById("name").value;
+  const review = document.getElementById("review").value;
+
+  db.collection("reviews").add({
+    name:name,
+    review:review,
+    time:new Date()
+  }).then(()=>{
+    document.getElementById("msg").innerHTML="✅ Thank you! Your review has been submitted.";
+    document.getElementById("msg").style.color="green";
+    document.getElementById("reviewForm").reset();
+  }).catch(()=>{
+    document.getElementById("msg").innerHTML="❌ Error submitting review. Please try again.";
+    document.getElementById("msg").style.color="red";
   });
 };
+
+// Load Reviews (No Delete Button Here)
+db.collection("reviews").orderBy("time","desc")
+.onSnapshot(snapshot=>{
+  const container = document.getElementById("reviewsContainer");
+  container.innerHTML="";
+  snapshot.forEach(doc=>{
+    const data = doc.data();
+    container.innerHTML += `
+      <div class="review-card">
+        <strong>${data.name}</strong>
+        <p>${data.review}</p>
+      </div>
+    `;
+  });
+});
 </script>
 
-<!-- TIDIO CHATBOT -->
-<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async>
-</script>
 </body>
 </html>
