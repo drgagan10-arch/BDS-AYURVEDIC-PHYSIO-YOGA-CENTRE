@@ -89,11 +89,6 @@ footer{margin-top:50px;background:var(--green-dark);color:white;text-align:cente
 <footer>
 © 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
 </footer>
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
@@ -108,7 +103,6 @@ footer{margin-top:50px;background:var(--green-dark);color:white;text-align:cente
     measurementId: "G-TT82FRZE8M"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
@@ -163,6 +157,5 @@ footer{margin-top:50px;background:var(--green-dark);color:white;text-align:cente
     });
   });
 </script>
-
 </body>
 </html>
