@@ -3,62 +3,77 @@
 <head>
 <title>Admin Panel - BDS Center</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-* { box-sizing: border-box; font-family: "Segoe UI", sans-serif; margin: 0; padding: 0; }
-body { background: #f0f9f4; color: #333; }
-.header {
-  background: linear-gradient(135deg, #1f7a4f, #2fb17c);
-  color: white;
-  padding: 25px 20px;
-  text-align: center;
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
+body{background:#f0f9f4;color:#333;}
+
+.header{
+  background:linear-gradient(135deg,#1f7a4f,#2fb17c);
+  color:white;
+  padding:25px 20px;
+  text-align:center;
 }
-.header h1 { margin: 0; font-size: 28px; }
-.container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
-.login-box, .admin-content {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  margin-bottom: 30px;
+
+.container{max-width:1000px;margin:30px auto;padding:0 20px;}
+
+.login-box,.admin-content{
+  background:white;
+  padding:30px;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  margin-bottom:30px;
 }
-h2 { color: #1f7a4f; margin-bottom: 20px; }
-input {
-  width: 100%;
-  padding: 14px;
-  margin: 12px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
+
+h2{color:#1f7a4f;margin-bottom:20px;}
+
+input{
+  width:100%;
+  padding:14px;
+  margin:12px 0;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:16px;
 }
-button {
-  background: #1f7a4f;
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  width: 100%;
-  margin-top: 10px;
+
+button{
+  background:#1f7a4f;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:15px;
+  margin-top:10px;
 }
-button:hover { background: #166342; }
-.query-card {
-  background: #f9f9f9;
-  border-left: 4px solid #1f7a4f;
-  padding: 20px;
-  margin: 15px 0;
-  border-radius: 8px;
+
+button:hover{background:#166342;}
+
+.logout-btn{background:#dc3545;}
+.logout-btn:hover{background:#c82333;}
+
+.delete-btn{
+  background:red;
+  margin-top:10px;
 }
-.logout-btn { background: #dc3545; }
-.logout-btn:hover { background: #c82333; }
-.back-link { 
-  display: block; 
-  text-align: center; 
-  margin-top: 15px; 
-  color: #1f7a4f; 
-  text-decoration: none;
+
+.query-card{
+  background:#f9f9f9;
+  border-left:4px solid #1f7a4f;
+  padding:20px;
+  margin:15px 0;
+  border-radius:8px;
 }
-.back-link:hover { text-decoration: underline; }
+
+.back-link{
+  display:block;
+  text-align:center;
+  margin-top:15px;
+  color:#1f7a4f;
+  text-decoration:none;
+}
+
+.back-link:hover{text-decoration:underline;}
 </style>
 </head>
 
@@ -70,27 +85,25 @@ button:hover { background: #166342; }
 </div>
 
 <div class="container">
-  
-  <!-- LOGIN SECTION -->
+
+  <!-- LOGIN -->
   <div id="loginSection" class="login-box">
     <h2>🔐 Admin Login</h2>
-    <input id="adminUser" placeholder="Username" value="admin">
-    <input id="adminPass" type="password" placeholder="Password" value="bds123">
+    <input id="adminUser" placeholder="Username">
+    <input id="adminPass" type="password" placeholder="Password">
     <button onclick="login()">Login</button>
     <a href="index.html" class="back-link">← Back to Home</a>
   </div>
 
   <!-- ADMIN PANEL -->
   <div id="adminPanel" class="admin-content" style="display:none;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
       <h2>📋 Patient Queries</h2>
-      <button onclick="logout()" class="logout-btn" style="width:auto; padding:10px 20px;">
-        Logout
-      </button>
+      <button onclick="logout()" class="logout-btn">Logout</button>
     </div>
-    
+
     <div id="queryList">
-      <p>Loading patient queries...</p>
+      <p>Loading queries...</p>
     </div>
   </div>
 
@@ -101,98 +114,84 @@ button:hover { background: #166342; }
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-// 🔥 FIREBASE CONFIGURATION (SAME AS INDEX.HTML)
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
   projectId: "bdss-671d8"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-console.log("✅ Admin panel loaded");
+// 🔐 LOGIN
+function login(){
+  const username=document.getElementById('adminUser').value.trim();
+  const password=document.getElementById('adminPass').value.trim();
 
-// LOGIN FUNCTION
-window.login = function() {
-  const username = document.getElementById('adminUser').value.trim();
-  const password = document.getElementById('adminPass').value.trim();
-  
-  if (username === "admin" && password === "bds123") {
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    loadQueries();
-  } else {
-    alert("❌ Incorrect username or password!");
+  if(username==="admin" && password==="bds123"){
+    document.getElementById('loginSection').style.display="none";
+    document.getElementById('adminPanel').style.display="block";
+    loadQueriesRealtime();
+  }else{
+    alert("Incorrect username or password!");
   }
-};
+}
 
-// LOAD QUERIES FROM FIREBASE
-function loadQueries() {
-  const queryList = document.getElementById('queryList');
-  queryList.innerHTML = "<p>⌛ Loading queries...</p>";
-  
-  db.collection("patientQueries").orderBy("time", "desc").get()
-    .then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        queryList.innerHTML = "<p>No patient queries yet.</p>";
+// ✅ REALTIME QUERY LOADER
+function loadQueriesRealtime(){
+  const queryList=document.getElementById('queryList');
+  queryList.innerHTML="<p>⌛ Loading queries...</p>";
+
+  db.collection("patientQueries")
+    .orderBy("time","desc")
+    .onSnapshot(snapshot=>{
+      if(snapshot.empty){
+        queryList.innerHTML="<p>No patient queries yet.</p>";
         return;
       }
-      
-      let html = '';
-      let count = 0;
-      
-      querySnapshot.forEach((doc) => {
+
+      let html='';
+      let count=0;
+
+      snapshot.forEach(doc=>{
         count++;
-        const data = doc.data();
-        const time = data.time ? 
-          new Date(data.time.toDate()).toLocaleString('en-IN', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          }) : 'Unknown time';
-        
-        html += `
+        const data=doc.data();
+        const time=data.time ?
+          new Date(data.time.toDate()).toLocaleString() :
+          "Unknown time";
+
+        html+=`
           <div class="query-card">
-            <h3 style="margin-top:0; color:#1f7a4f;">
-              👤 ${data.name || 'No Name'}
-            </h3>
+            <h3>👤 ${data.name || 'No Name'}</h3>
             <p><strong>📱 Phone:</strong> ${data.mobile || 'Not provided'}</p>
             <p><strong>💬 Query:</strong> ${data.message || 'No message'}</p>
             <p><strong>📅 Submitted:</strong> ${time}</p>
+            <button class="delete-btn" onclick="deleteQuery('${doc.id}')">
+              Delete
+            </button>
           </div>
         `;
       });
-      
-      queryList.innerHTML = `<p><strong>Total Queries: ${count}</strong></p>` + html;
-    })
-    .catch((error) => {
-      console.error("Error loading queries:", error);
-      queryList.innerHTML = `
-        <p style="color:red;">
-          ❌ Error loading queries: ${error.message}
-        </p>
-        <p>Check Firebase console and internet connection.</p>
-      `;
+
+      queryList.innerHTML=`<p><strong>Total Queries: ${count}</strong></p>`+html;
+    },error=>{
+      queryList.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;
     });
 }
 
-// LOGOUT FUNCTION
-window.logout = function() {
-  document.getElementById('adminPanel').style.display = 'none';
-  document.getElementById('loginSection').style.display = 'block';
-  document.getElementById('adminPass').value = '';
-};
-
-// Auto-refresh every 30 seconds
-setInterval(() => {
-  if (document.getElementById('adminPanel').style.display === 'block') {
-    loadQueries();
+// 🗑 DELETE QUERY
+function deleteQuery(id){
+  if(confirm("Delete this query?")){
+    db.collection("patientQueries").doc(id).delete();
   }
-}, 30000);
+}
+
+// 🚪 LOGOUT
+function logout(){
+  document.getElementById('adminPanel').style.display="none";
+  document.getElementById('loginSection').style.display="block";
+  document.getElementById('adminPass').value="";
+}
 </script>
 
 </body>
