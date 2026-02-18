@@ -24,6 +24,37 @@ form button{background:var(--green);color:white;border:none;padding:10px 20px;bo
 footer{margin-top:50px;background:var(--green-dark);color:white;text-align:center;padding:20px;}
 @media(max-width:768px){.video-grid iframe{width:100%;height:300px;}}
 
+/* Star Rating Styling */
+.star-rating {
+  font-size: 32px;
+  color: #ccc;
+  cursor: pointer;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.star-rating span {
+  transition: transform 0.2s, color 0.2s;
+  display: inline-block;
+}
+.star-rating span:hover,
+.star-rating span.hover,
+.star-rating span.selected {
+  color: #f5b50a;
+  transform: scale(1.3);
+}
+
+/* Animated Review Cards */
+.review-card {
+  background: #f3fff7;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
 </style>
 </head>
 <body>
@@ -62,15 +93,14 @@ footer{margin-top:50px;background:var(--green-dark);color:white;text-align:cente
 <form id="reviewForm">
 <input type="text" id="name" placeholder="Your Name" required>
 <textarea id="review" placeholder="Write your review..." required></textarea>
-<label for="rating">Rating:</label>
-<select id="rating" required>
-  <option value="">Select Stars</option>
-  <option value="5">5 ★★★★★</option>
-  <option value="4">4 ★★★★☆</option>
-  <option value="3">3 ★★★☆☆</option>
-  <option value="2">2 ★★☆☆☆</option>
-  <option value="1">1 ★☆☆☆☆</option>
-</select>
+<label>Rating:</label>
+<div id="starRating" class="star-rating">
+  <span data-value="1">☆</span>
+  <span data-value="2">☆</span>
+  <span data-value="3">☆</span>
+  <span data-value="4">☆</span>
+  <span data-value="5">☆</span>
+</div>
 <button type="submit">Submit Review</button>
 </form>
 <p id="msg"></p>
@@ -106,32 +136,64 @@ const db = firebase.firestore();
 const form = document.getElementById("reviewForm");
 const msg = document.getElementById("msg");
 const reviewsContainer = document.getElementById("reviewsContainer");
+const starElements = document.querySelectorAll("#starRating span");
+let selectedRating = 0;
 
+// Star hover and click
+starElements.forEach(star => {
+  star.addEventListener("mouseover", () => {
+    const val = parseInt(star.getAttribute("data-value"));
+    highlightStars(val);
+  });
+  star.addEventListener("mouseout", () => {
+    highlightStars(selectedRating);
+  });
+  star.addEventListener("click", () => {
+    selectedRating = parseInt(star.getAttribute("data-value"));
+    highlightStars(selectedRating);
+  });
+});
+
+function highlightStars(rating){
+  starElements.forEach(star => {
+    const val = parseInt(star.getAttribute("data-value"));
+    if(val <= rating){
+      star.classList.add("selected");
+    } else {
+      star.classList.remove("selected");
+    }
+  });
+}
+
+// Submit review
 form.addEventListener("submit", async function(e){
   e.preventDefault();
   const name = document.getElementById("name").value.trim();
   const review = document.getElementById("review").value.trim();
-  const rating = parseInt(document.getElementById("rating").value);
 
-  if(!name || !review || !rating){
-    msg.textContent="❌ Please fill all fields"; return;
+  if(!name || !review || selectedRating === 0){
+    msg.textContent="❌ Please fill all fields and select a rating!";
+    return;
   }
 
   try{
     await db.collection("reviews").add({
       name,
       review,
-      rating,
+      rating: selectedRating,
       time: new Date()
     });
     msg.textContent="✅ Review Submitted!";
     form.reset();
-  }catch(err){
+    selectedRating = 0;
+    highlightStars(0);
+  } catch(err){
     console.error(err);
     msg.textContent="❌ Error submitting review!";
   }
 });
 
+// Realtime display
 db.collection("reviews").orderBy("time","desc")
 .onSnapshot(snapshot=>{
   reviewsContainer.innerHTML="";
