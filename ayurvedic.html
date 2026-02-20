@@ -74,18 +74,20 @@ footer{
 </header>
 
 <style>
+<style>
 /* ===== NAVBAR STYLE ===== */
 
 .navbar {
-  background-color: #2AA06E;   /* lighter medical green */
+  background-color: #2AA06E;
   padding: 12px 40px;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
+  justify-content: center;   /* Centers nav items horizontally */
+  align-items: center;       /* Centers vertically */
   gap: 25px;
-  align-items: center;
   margin: 0;
   padding: 0;
 }
@@ -104,7 +106,7 @@ footer{
 }
 
 .nav-links a:hover {
-  background-color: #2e7d32;
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 5px;
 }
 
@@ -113,9 +115,9 @@ footer{
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;          /* remove gap problem */
+  top: 100%;
   left: 0;
-  background-color: #1b5e20;   /* same green */
+  background-color: #2AA06E;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -129,10 +131,10 @@ footer{
 }
 
 .dropdown-menu li a:hover {
-  background-color: #2e7d32;
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Important: keep hover active */
+/* Show dropdown on hover */
 .dropdown:hover .dropdown-menu {
   display: block;
 }
@@ -140,7 +142,6 @@ footer{
 
 <nav class="navbar">
   <ul class="nav-links">
-    
     <li><a href="index.html">About</a></li>
 
     <li class="dropdown">
@@ -157,7 +158,6 @@ footer{
     <li><a href="gallery.html">Gallery</a></li>
     <li><a href="testimonials.html">Testimonials</a></li>
     <li><a href="contact.html">Contact</a></li>
-
   </ul>
 </nav>
 <div class="container">
