@@ -21,18 +21,7 @@ header{
 }
 header h1{margin:0;font-size:38px;}
 header p{margin-top:10px;font-size:18px;}
-nav{
-  display:flex;justify-content:center;flex-wrap:wrap;
-  gap:15px;background:white;padding:18px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-}
-nav button{
-  border:none;background:var(--green-light);
-  color:var(--green-dark);
-  padding:12px 26px;border-radius:30px;
-  cursor:pointer;font-size:16px;
-}
-nav button:hover{background:var(--green);color:white;}
+
 .container{max-width:1100px;margin:45px auto;padding:0 20px;}
 .section{
   background:white;padding:35px;
@@ -69,17 +58,91 @@ footer{
   <p>Our Clinic, Treatments & Sessions at BDS Center, Amritsar</p>
 </header>
 
-<nav>
-  <button onclick="location.href='index.html'">About</button>
-  <button onclick="location.href='yoga.html'">Yoga</button>
-  <button onclick="location.href='physiotherapy.html'">Physiotherapy</button>
-  <button onclick="location.href='ayurvedic.html'">Ayurvedic</button>
-  <button onclick="location.href='diet.html'">Diet & Nutrition</button>
-  <button onclick="location.href='contact.html'">Contact</button>
-  <button onclick="location.href='admin.html'">Admin</button>
-  <button onclick="location.href='about-doctor.html'">About Doctors</button>
-  <button onclick="location.href='testimonials.html'">Testimonials</button>
-  <button onclick="location.href='direction.html'">Directions</button>
+<style>
+/* ===== NAVBAR STYLE ===== */
+
+.navbar {
+  background-color: #2AA06E;
+  padding: 12px 40px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;   /* Centers nav items horizontally */
+  align-items: center;       /* Centers vertically */
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  padding: 10px 14px;
+  display: block;
+  transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+}
+
+/* ===== DROPDOWN ===== */
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2AA06E;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 180px;
+  border-radius: 6px;
+}
+
+.dropdown-menu li a {
+  padding: 10px 15px;
+  color: white;
+}
+
+.dropdown-menu li a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+</style>
+
+<nav class="navbar">
+  <ul class="nav-links">
+    <li><a href="index.html">About</a></li>
+
+    <li class="dropdown">
+      <a href="#">Services ▼</a>
+      <ul class="dropdown-menu">
+        <li><a href="yoga.html">Yoga</a></li>
+        <li><a href="physiotherapy.html">Physiotherapy</a></li>
+        <li><a href="ayurvedic.html">Ayurvedic</a></li>
+        <li><a href="diet.html">Diet</a></li>
+      </ul>
+    </li>
+
+    <li><a href="about-doctor.html">Doctors</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="testimonials.html">Testimonials</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
 </nav>
 
 <div class="container">
