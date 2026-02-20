@@ -103,7 +103,7 @@ footer{
 /* ===== NAVBAR STYLE ===== */
 
 .navbar {
-  background-color: #2e7d32;
+  background-color: #1b5e20;   /* darker medical green */
   padding: 12px 40px;
 }
 
@@ -124,40 +124,41 @@ footer{
   text-decoration: none;
   color: white;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 10px 14px;
+  display: block;
   transition: 0.3s ease;
 }
 
 .nav-links a:hover {
-  background-color: white;
-  color: #2e7d32;
+  background-color: #2e7d32;
   border-radius: 5px;
 }
 
-/* Dropdown Menu */
+/* ===== DROPDOWN ===== */
+
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 35px;
+  top: 100%;          /* remove gap problem */
   left: 0;
-  background: white;
+  background-color: #1b5e20;   /* same green */
   list-style: none;
-  padding: 10px 0;
-  width: 180px;
+  padding: 0;
+  margin: 0;
+  min-width: 180px;
   border-radius: 6px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
 .dropdown-menu li a {
-  display: block;
   padding: 10px 15px;
-  color: #2e7d32;
+  color: white;
 }
 
 .dropdown-menu li a:hover {
-  background: #f2f2f2;
+  background-color: #2e7d32;
 }
 
+/* Important: keep hover active */
 .dropdown:hover .dropdown-menu {
   display: block;
 }
@@ -185,7 +186,6 @@ footer{
 
   </ul>
 </nav>
-
 <div class="container">
 
 <div class="section">
@@ -294,6 +294,7 @@ background:#134e36;
 </style>
 </body>
 </html>
+
 
 
 
