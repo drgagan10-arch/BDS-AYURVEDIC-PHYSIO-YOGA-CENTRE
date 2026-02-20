@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BABA DEEP SINGH - Testimonials</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{--green:#1f7a4f;--green-light:#e9f7f0;--green-dark:#134e36;}
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{margin:0;background:linear-gradient(135deg,#ecfff6,#ffffff);color:#333;}
+header{background:linear-gradient(135deg,var(--green),#2fb17c);color:white;padding:35px 20px;text-align:center;}
+header h1{margin:0;font-size:38px;}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:15px;background:white;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+nav button{border:none;background:var(--green-light);color:var(--green-dark);padding:12px 20px;border-radius:30px;cursor:pointer;font-size:16px;}
+nav button:hover{background:var(--green);color:white;}
+.container{max-width:1100px;margin:45px auto;padding:0 20px;}
+.section{background:white;padding:35px;border-radius:25px;box-shadow:0 18px 40px rgba(0,0,0,0.08);margin-bottom:30px;}
+.section h2{color:var(--green);font-size:32px;margin-top:0;text-align:center;}
+.video-grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;}
+.review-card{background:#f3fff7;padding:20px;border-radius:15px;margin-bottom:15px;}
+.review-card .stars{color:#f5b50a;margin-bottom:5px;}
+form input, form textarea{width:100%;padding:10px;margin-bottom:10px;}
+form button{background:var(--green);color:white;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;}
+footer{margin-top:50px;background:var(--green-dark);color:white;text-align:center;padding:20px;}
+@media(max-width:768px){.video-grid iframe{width:100%;height:300px;}}
+.star-rating{font-size:30px;cursor:pointer;}
+.star-rating span{color:#ccc;transition:0.3s;}
+.star-rating span.selected{color:#f5b50a;}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>BABA DEEP SINGH</h1>
+<p>Video Testimonials & Patient Reviews</p>
+</header>
+
+<nav>
+<button onclick="location.href='index.html'">Home</button>
+<button onclick="location.href='yoga.html'">Yoga</button>
+<button onclick="location.href='physiotherapy.html'">Physiotherapy</button>
+<button onclick="location.href='ayurvedic.html'">Ayurvedic</button>
+<button onclick="location.href='diet.html'">Diet</button>
+<button onclick="location.href='contact.html'">Contact</button>
+<button onclick="location.href='admin.html'">Admin</button>
+<button onclick="location.href='about-doctor.html'">About Doctors</button>
+<button onclick="location.href='gallery.html'">Gallery</button>
+<button onclick="location.href='testimonials.html'">Testimonials</button>
+</nav>
+
+<div class="container">
+
+<!-- Video Section -->
+<div class="section">
+<h2>Patient Video Testimonials</h2>
+<div class="video-grid">
+<iframe width="300" height="500" src="https://www.youtube.com/embed/d1HVovve27g?start=78" frameborder="0" allowfullscreen></iframe>
+<iframe width="300" height="500" src="https://www.youtube.com/embed/UC_vi0gLeiA?start=89&end=135" frameborder="0" allowfullscreen></iframe>
+<iframe width="300" height="500" src="https://www.youtube.com/embed/dM7MDBiO2Bo?start=49&end=72" frameborder="0" allowfullscreen></iframe>
+</div>
+</div>
+
+<!-- Review Form -->
+<div class="section">
+<h2>Add Your Review</h2>
+<form id="reviewForm">
+<input type="text" id="name" placeholder="Your Name" required>
+<textarea id="review" placeholder="Write your review..." required></textarea>
+
+<label>Rating:</label>
+<div id="starRating" class="star-rating">
+<span data-value="1">★</span>
+<span data-value="2">★</span>
+<span data-value="3">★</span>
+<span data-value="4">★</span>
+<span data-value="5">★</span>
+</div>
+
+<button type="submit">Submit Review</button>
+</form>
+<p id="msg"></p>
+</div>
+
+<!-- Reviews Display -->
+<div class="section">
+<h2>Patient Reviews</h2>
+<div id="reviewsContainer">Loading reviews...</div>
+</div>
+
+<!-- 🌍 Directions Section -->
+<div class="section" style="background:linear-gradient(135deg,#f3fff7,#ffffff);">
+<h2>📍 Visit Us – Get Directions</h2>
+
+<div style="display:flex;flex-wrap:wrap;gap:30px;align-items:center;justify-content:center;">
+
+<div style="flex:1;min-width:280px;background:white;padding:30px;border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,0.08);">
+<h3 style="color:#1f7a4f;margin-top:0;">Baba Deep Singh Ji Ayurvedic, Physiotherapy & Yoga Centre</h3>
+
+<p style="font-size:16px;line-height:1.6;">
+📍 Punjab, India<br><br>
+📞 +91 XXXXX XXXXX
+</p>
+
+<a href="https://www.google.com/maps/dir/?api=1&destination=31.667654639850785,74.89851645000002"
+target="_blank"
+style="display:inline-block;background:#1f7a4f;color:white;padding:12px 20px;border-radius:30px;text-decoration:none;">
+🧭 Get Directions
+</a>
+</div>
+
+<div style="flex:1;min-width:300px;border-radius:25px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.1);">
+<iframe 
+src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3395.7647746090333!2d74.89594187547544!3d31.667654639850785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391963872fedf5b5%3A0x6aa780bdba26539d!2sBaba%20Deep%20Singh%20Ji%20Ayurvedic%2C%20Physiotherapy%20And%20Yoga%20Centre!5e0!3m2!1sen!2sin!4v1771583794846!5m2!1sen!2sin"
+width="100%" 
+height="400" 
+style="border:0;"
+allowfullscreen=""
+loading="lazy">
+</iframe>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+apiKey: "YOUR_API_KEY",
+authDomain: "bdss-671d8.firebaseapp.com",
+projectId: "bdss-671d8",
+storageBucket: "bdss-671d8.appspot.com",
+messagingSenderId: "1030406362686",
+appId: "1:1030406362686:web:218d15301199e3e651e36f"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let selectedRating = 0;
+const stars = document.querySelectorAll("#starRating span");
+
+stars.forEach(star=>{
+star.addEventListener("click",()=>{
+selectedRating = star.dataset.value;
+stars.forEach(s=>s.classList.remove("selected"));
+for(let i=0;i<selectedRating;i++){
+stars[i].classList.add("selected");
+}
+});
+});
+
+const form=document.getElementById("reviewForm");
+const msg=document.getElementById("msg");
+const container=document.getElementById("reviewsContainer");
+
+form.addEventListener("submit",async(e)=>{
+e.preventDefault();
+const name=document.getElementById("name").value;
+const review=document.getElementById("review").value;
+if(!selectedRating){msg.textContent="Select rating";return;}
+
+await db.collection("reviews").add({
+name,review,rating:Number(selectedRating),time:new Date()
+});
+msg.textContent="Review Submitted!";
+form.reset();
+stars.forEach(s=>s.classList.remove("selected"));
+});
+
+db.collection("reviews").orderBy("time","desc")
+.onSnapshot(snapshot=>{
+container.innerHTML="";
+snapshot.forEach(doc=>{
+const d=doc.data();
+container.innerHTML+=`
+<div class="review-card">
+<strong>${d.name}</strong>
+<div class="stars">${"★".repeat(d.rating)}${"☆".repeat(5-d.rating)}</div>
+<p>${d.review}</p>
+</div>`;
+});
+});
+</script>
+
+</body>
+</html>
