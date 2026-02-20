@@ -99,18 +99,91 @@ footer{
   <p>48, Diamond Avenue, Majitha Road, Amritsar</p>
 </header>
 
-<nav>
-  <button onclick="location.href='index.html'">About</button>
-  <button onclick="location.href='yoga.html'">Yoga</button>
-  <button onclick="location.href='physiotherapy.html'">Physiotherapy</button>
-  <button onclick="location.href='ayurvedic.html'">Ayurvedic</button>
-  <button onclick="location.href='diet.html'">Diet</button>
-  <button onclick="location.href='contact.html'">Contact</button>
-  <button onclick="location.href='admin.html'">Admin</button>
-  <button onclick="location.href='about-doctor.html'">About Doctors</button>
-  <button onclick="location.href='gallery.html'">Gallery</button>
-  <button onclick="location.href='testimonials.html'">Testimonials</button>
-  <button onclick="location.href='direction.html'">Directions</button>
+<style>
+/* ===== NAVBAR STYLE ===== */
+
+.navbar {
+  background-color: #2e7d32;
+  padding: 12px 40px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: white;
+  color: #2e7d32;
+  border-radius: 5px;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 35px;
+  left: 0;
+  background: white;
+  list-style: none;
+  padding: 10px 0;
+  width: 180px;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 10px 15px;
+  color: #2e7d32;
+}
+
+.dropdown-menu li a:hover {
+  background: #f2f2f2;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+</style>
+
+<nav class="navbar">
+  <ul class="nav-links">
+    
+    <li><a href="index.html">About</a></li>
+
+    <li class="dropdown">
+      <a href="#">Services ▼</a>
+      <ul class="dropdown-menu">
+        <li><a href="yoga.html">Yoga</a></li>
+        <li><a href="physiotherapy.html">Physiotherapy</a></li>
+        <li><a href="ayurvedic.html">Ayurvedic</a></li>
+        <li><a href="diet.html">Diet</a></li>
+      </ul>
+    </li>
+
+    <li><a href="about-doctor.html">Doctors</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="testimonials.html">Testimonials</a></li>
+    <li><a href="contact.html">Contact</a></li>
+
+  </ul>
 </nav>
 
 <div class="container">
@@ -221,6 +294,7 @@ background:#134e36;
 </style>
 </body>
 </html>
+
 
 
 
