@@ -53,20 +53,37 @@ footer{margin-top:70px;background:var(--green-dark);color:white;text-align:cente
 
 <style>
 /* ===== NAVBAR STYLE ===== */
-
 .navbar {
   background-color: #2AA06E;
   padding: 12px 40px;
+  position: relative;
 }
 
+/* Hamburger button for mobile */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  width: 30px;
+}
+
+.hamburger div {
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+}
+
+/* Nav links */
 .nav-links {
   list-style: none;
   display: flex;
-  justify-content: center;   /* Centers nav items horizontally */
-  align-items: center;       /* Centers vertically */
+  justify-content: center;
+  align-items: center;
   gap: 25px;
   margin: 0;
   padding: 0;
+  transition: max-height 0.3s ease;
 }
 
 .nav-links li {
@@ -88,7 +105,6 @@ footer{margin-top:70px;background:var(--green-dark);color:white;text-align:cente
 }
 
 /* ===== DROPDOWN ===== */
-
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -111,18 +127,57 @@ footer{margin-top:70px;background:var(--green-dark);color:white;text-align:cente
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Show dropdown on hover */
 .dropdown:hover .dropdown-menu {
   display: block;
+}
+
+/* ===== MOBILE STYLES ===== */
+@media screen and (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  .nav-links {
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    width: 100%;
+    background-color: #2AA06E;
+    gap: 0;
+  }
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+  .nav-links li a {
+    padding: 12px 0;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: none; /* Disable hover on mobile */
+  }
+  .dropdown-menu {
+    position: static;
+    border-radius: 0;
+  }
+  .dropdown.active .dropdown-menu {
+    display: block;
+  }
+  .nav-links.show {
+    max-height: 1000px; /* Large enough to show all links */
+  }
 }
 </style>
 
 <nav class="navbar">
-  <ul class="nav-links">
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <ul class="nav-links" id="navLinks">
     <li><a href="index.html">About</a></li>
 
     <li class="dropdown">
-      <a href="#">Services ▼</a>
+      <a href="javascript:void(0)" onclick="toggleDropdown(event)">Services ▼</a>
       <ul class="dropdown-menu">
         <li><a href="yoga.html">Yoga</a></li>
         <li><a href="physiotherapy.html">Physiotherapy</a></li>
@@ -135,9 +190,26 @@ footer{margin-top:70px;background:var(--green-dark);color:white;text-align:cente
     <li><a href="gallery.html">Gallery</a></li>
     <li><a href="testimonials.html">Testimonials</a></li>
     <li><a href="contact.html">Contact</a></li>
-     <li><a href="direction.html">Directions</a></li>
+    <li><a href="direction.html">Directions</a></li>
   </ul>
 </nav>
+
+<script>
+// Toggle mobile menu
+function toggleMenu() {
+  const nav = document.getElementById('navLinks');
+  nav.classList.toggle('show');
+}
+
+// Toggle dropdown menu on mobile
+function toggleDropdown(event) {
+  if (window.innerWidth <= 768) {
+    event.preventDefault();
+    const dropdown = event.currentTarget.parentElement;
+    dropdown.classList.toggle('active');
+  }
+}
+</script>
 
 <div class="container">
 
