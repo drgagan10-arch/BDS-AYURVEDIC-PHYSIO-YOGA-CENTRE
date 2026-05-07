@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Physiotherapy Equipment | BDS Ayurvedic Physio & Yoga Centre</title>
+  <!-- Font Awesome Icons (Free CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background-color: #f9fafb;
+      color: #1e2a3e;
+      line-height: 1.5;
+    }
+
+    /* ===== NAVBAR STYLES (matches your existing site) ===== */
+    .navbar {
+      background-color: #2AA06E;
+      padding: 12px 40px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    /* Logo / brand area (optional, but consistent) */
+    .logo-area {
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+    .logo-area span {
+      font-weight: normal;
+      font-size: 0.9rem;
+    }
+
+    /* Hamburger button for mobile */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+      width: 30px;
+    }
+    .hamburger div {
+      height: 3px;
+      background-color: white;
+      border-radius: 2px;
+      transition: 0.2s;
+    }
+
+    /* Nav links */
+    .nav-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      margin: 0;
+      padding: 0;
+      transition: max-height 0.3s ease;
+    }
+    .nav-links li {
+      position: relative;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      padding: 10px 14px;
+      display: block;
+      transition: 0.3s ease;
+      font-size: 1rem;
+    }
+    .nav-links a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 5px;
+    }
+
+    /* Dropdown */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #2AA06E;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      min-width: 180px;
+      border-radius: 6px;
+      z-index: 100;
+    }
+    .dropdown-menu li a {
+      padding: 10px 15px;
+      color: white;
+    }
+    .dropdown-menu li a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    /* Mobile styles */
+    @media screen and (max-width: 768px) {
+      .navbar {
+        padding: 12px 20px;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .nav-links {
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        width: 100%;
+        background-color: #2AA06E;
+        gap: 0;
+        margin-top: 12px;
+      }
+      .nav-links li {
+        width: 100%;
+        text-align: center;
+      }
+      .nav-links li a {
+        padding: 12px 0;
+      }
+      .dropdown:hover .dropdown-menu {
+        display: none; /* Disable hover on mobile */
+      }
+      .dropdown-menu {
+        position: static;
+        border-radius: 0;
+        background-color: #1e7a52;
+      }
+      .dropdown.active .dropdown-menu {
+        display: block;
+      }
+      .nav-links.show {
+        max-height: 1000px;
+      }
+    }
+
+    /* ===== PAGE CONTAINER & HEADER ===== */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .page-header h1 {
+      font-size: 2.4rem;
+      color: #1f5e3a;
+      margin-bottom: 12px;
+    }
+    .page-header p {
+      font-size: 1.2rem;
+      color: #2c3e50;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Equipment grid */
+    .equipment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 50px 0;
+    }
+    .equipment-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .equipment-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+    }
+    .card-img {
+      background-color: #eef2f0;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #2AA06E;
+      transition: 0.2s;
+    }
+    .card-content {
+      padding: 20px 20px 24px;
+    }
+    .card-content h3 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1f2e3a;
+    }
+    .card-content p {
+      color: #4a5b6e;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .equip-badge {
+      display: inline-block;
+      background: #e6f4ea;
+      color: #2c6e49;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-bottom: 12px;
+    }
+
+    /* CTA Section */
+    .equipment-cta {
+      background: linear-gradient(135deg, #1f5e3a 0%, #2AA06E 100%);
+      border-radius: 32px;
+      padding: 48px 32px;
+      text-align: center;
+      margin-top: 40px;
+      color: white;
+    }
+    .equipment-cta h2 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .equipment-cta p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 24px;
+      opacity: 0.9;
+    }
+    .btn-buy {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background-color: #FFB347;
+      color: #1e2a3e;
+      font-weight: bold;
+      font-size: 1.2rem;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-buy i {
+      font-size: 1.3rem;
+    }
+    .btn-buy:hover {
+      background-color: #ffa01e;
+      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Section description intro */
+    .intro-text {
+      text-align: center;
+      background: #eef4f0;
+      padding: 20px 24px;
+      border-radius: 48px;
+      margin: 30px 0 20px;
+      font-size: 1.05rem;
+      color: #1e4d2e;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      background-color: #eef2ef;
+      color: #2c5a42;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 24px 16px;
+      }
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+      .btn-buy {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR (exactly matching your design + dropdown) ===== -->
+  <nav class="navbar">
+    <div class="logo-area">
+      BDS Ayurvedic Physio & Yoga
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">About</a></li>
+      <li class="dropdown">
+        <a href="javascript:void(0)" onclick="toggleDropdown(event)">Services ▼</a>
+        <ul class="dropdown-menu">
+          <li><a href="yoga.html">Yoga</a></li>
+          <li><a href="physiotherapy.html">Physiotherapy</a></li>
+          <li><a href="ayurvedic.html">Ayurvedic</a></li>
+          <li><a href="diet.html">Diet</a></li>
+        </ul>
+      </li>
+      <li><a href="about-doctor.html">Doctors</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="testimonials.html">Testimonials</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="direction.html">Directions</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+      <!-- Page Title & Description -->
+      <div class="page-header">
+        <h1>⚡ Advanced Physiotherapy Equipment</h1>
+        <p>State‑of‑the‑art technology for faster recovery, pain relief & rehabilitation</p>
+      </div>
+      
+      <div class="intro-text">
+        <i class="fas fa-hand-holding-heart" style="margin-right: 8px;"></i> 
+        At BDS Ayurvedic Physio & Yoga Centre, we use world‑class physiotherapy machines and tools to treat orthopedic conditions, sports injuries, neurological issues, and chronic pain. Our integrated approach blends evidence‑based electrotherapy, therapeutic exercise, and modern rehabilitation devices.
+      </div>
+
+      <!-- Equipment Grid (6 essential devices) -->
+      <div class="equipment-grid">
+        
+        <!-- Card 1 -->
+        <div class="equipment-card">
+          <div class="card-img">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="card-content">
+            <span class="equip-badge">Electrotherapy</span>
+            <h3>TENS & NMES</h3>
+            <p>Transcutaneous Electrical Nerve Stimulation blocks pain signals, while Neuromuscular Electrical Stimulation re‑educates muscles, reduces spasms, and improves local blood flow.</p>
+          </div>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="equipment-card">
+          <div class="card-img">
+            <i class="fas fa-waveform"></i>
+          </div>
+          <div class="card-content">
+            <span class="equip-badge">Deep Healing</span>
+            <h3>Therapeutic Ultrasound</h3>
+            <p>High‑frequency sound waves penetrate deep into tissues, accelerating soft tissue healing, reducing inflammation, and relieving chronic tendonitis.</p>
+          </div>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="equipment-card">
+          <div class="card-img">
+            <i class="fas fa-dumbbell"></i>
+          </div>
+          <div class="card-content">
+            <span class="equip-badge">Strength & Gait</span>
+            <h3>Parallel Bars & Treadmill</h3>
+            <p>Medical‑grade parallel bars for balance training, plus antigravity treadmill for stroke recovery, gait retraining and post‑surgical ambulation.</p>
+          </div>
+        </div>
+        
+        <!-- Card 4 -->
+        <div class="equipment-card">
+          <div class="card-img">
+            <i class="fas fa-hand-sparkles"></i>
+          </div>
+          <div class="card-content">
+            <span class="equip-badge>Shockwave Therapy</span>
+            <h3>Radial Shockwave</h3>
+            <p>Highly effective for plantar fasciitis, tennis elbow, calcific tendinitis and chronic muscle trigger points — stimulates tissue regeneration and pain relief.</p>
+          </div>
+        </div>
+        
+        <!-- Card 5 -->
+        <div class="equipment-card">
+          <div class="card-img">
+            <i class="fas fa-bicycle"></i>
+          </div>
+          <div class="card-content">
+            <span class="equip-badge">Cardio Rehab</span>
+            <h3>Motorized Cycle Ergometer</h3>
+            <p>Passive + active leg exercise bike to improve joint mobility, prevent muscle atrophy, and enhance cardiovascular endurance for bedridden or weak patients.</p>
+          </div>
+        </div>
+        
+        <!-- Card 6 -->
+        <div class="equipment-card">
+          <div class="card-img">
+            <i class="fas fa-temperature-high"></i>
+          </div>
+          <div class="card-content">
+            <span class="equip-badge">Thermal Modality</span>
+            <h3>Shortwave Diathermy (SWD)</h3>
+            <p>Deep heating of soft tissues increases extensibility, reduces joint stiffness, and soothes chronic back pain, osteoarthritis and muscle spasms.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional paragraph (your requested custom lines) -->
+      <div style="background: #ffffff; border-left: 6px solid #2AA06E; padding: 20px 28px; border-radius: 20px; margin: 30px 0 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+        <p style="font-size: 1rem; line-height: 1.6;"><strong>✔️ Why our physiotherapy equipment stands out:</strong> Every machine – from interferential therapy (IFT) units to cervical traction devices – is regularly calibrated and used under expert supervision. We blend traditional hands‑on therapy with modern medical technology to restore function, reduce pain, and improve quality of life. Dr. Kirti (Physiotherapy Specialist) customizes protocols using tools like the shoulder pulley, foam rollers, and balance boards to achieve optimal outcomes.</p>
+        <p style="margin-top: 14px;"><i class="fas fa-check-circle" style="color:#2AA06E;"></i> Conditions treated: Cervical & Lumbar Spondylosis, Knee Osteoarthritis, Paralysis rehabilitation, Sports Injuries, Post‑fracture stiffness, and more.</p>
+      </div>
+
+      <!-- Call to Action Button (redirects to Market Hub) -->
+      <div class="equipment-cta">
+        <h2>🛒 Own premium physiotherapy products at home</h2>
+        <p>Shop TENS units, resistance bands, foam rollers, heating pads & rehabilitation aids.</p>
+        <a href="https://drgagan10-arch.github.io/Market-Hub/" class="btn-buy" target="_blank" rel="noopener noreferrer">
+          <i class="fas fa-shopping-cart"></i> Buy Physiotherapy Products Now
+        </a>
+        <p style="margin-top: 20px; font-size: 0.85rem; opacity:0.8;">✓ Trusted brands ✓ Fast delivery ✓ Expert recommended</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 BABA DEEP SINGH Ayurvedic, Physiotherapy & Yoga Centre, Amritsar. Holistic healing since decades — Your wellness journey begins here.</p>
+  </footer>
+
+  <script>
+    // Toggle mobile menu
+    function toggleMenu() {
+      const nav = document.getElementById('navLinks');
+      nav.classList.toggle('show');
+    }
+
+    // Toggle dropdown menu on mobile (touch-friendly)
+    function toggleDropdown(event) {
+      if (window.innerWidth <= 768) {
+        event.preventDefault();
+        const dropdown = event.currentTarget.parentElement;
+        dropdown.classList.toggle('active');
+      }
+    }
+
+    // Optional: close mobile menu when clicking on a link (better UX)
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        if(window.innerWidth <= 768) {
+          document.getElementById('navLinks').classList.remove('show');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
