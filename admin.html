@@ -29,6 +29,8 @@ button:hover{background:#166342;}
 .stars{color:#f5b50a;}
 .image-preview{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
 .image-preview img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd;}
+.success-msg{color:green;background:#e0f2e9;padding:12px;border-radius:8px;margin-top:15px;text-align:center;}
+.error-msg{color:red;background:#ffe6e6;padding:12px;border-radius:8px;margin-top:15px;text-align:center;}
 </style>
 </head>
 <body>
@@ -73,10 +75,10 @@ button:hover{background:#166342;}
       <div id="reviewList"><p>Loading reviews...</p></div>
     </div>
 
-    <!-- Add Patient Tab (multiple images) -->
+    <!-- Add Patient Tab – images as Base64 (no Storage) -->
     <div id="patientsTab" class="tab-content">
       <h3>➕ Add New Patient Record</h3>
-      <p>Fill all details. Registration Number will be used by patient to view their record. You can select multiple images.</p>
+      <p>Registration Number is unique ID. Patient will use it to view their record. You can select multiple images (they will be stored in Firestore as Base64).</p>
       <div style="display:flex; gap:15px; flex-wrap:wrap;">
         <div style="flex:1;">
           <label>Registration Number *</label>
@@ -95,7 +97,7 @@ button:hover{background:#166342;}
           <input type="text" id="patPackage" placeholder="e.g., 7-day Panchakarma">
           <label>Diseases / Short Notes</label>
           <textarea id="patDiseaseNotes" rows="3" placeholder="Medical history, diagnosis..."></textarea>
-          <label>Upload Multiple Images (CTRL+click to select several)</label>
+          <label>Upload Multiple Images (JPEG/PNG, max 500KB each recommended)</label>
           <input type="file" id="patPhotos" accept="image/*" multiple>
           <div id="imagePreview" class="image-preview"></div>
           <button id="savePatientBtn">💾 Save Patient Record</button>
@@ -108,21 +110,18 @@ button:hover{background:#166342;}
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
-
+<!-- No storage SDK needed -->
 <script>
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
-  projectId: "bdss-671d8",
-  storageBucket: "bdss-671d8.appspot.com"
+  projectId: "bdss-671d8"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const storage = firebase.storage();
 
-// Image preview on file selection
+// Image preview (Base64 will be generated on save)
 document.getElementById('patPhotos').addEventListener('change', function(e) {
   const preview = document.getElementById('imagePreview');
   preview.innerHTML = '';
@@ -138,11 +137,24 @@ document.getElementById('patPhotos').addEventListener('change', function(e) {
   });
 });
 
-// LOGIN (original)
+// Helper: convert files to Base64 array
+async function filesToBase64(files) {
+  const promises = Array.from(files).map(file => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+  });
+  return await Promise.all(promises);
+}
+
+// LOGIN
 function login(){
   const username = document.getElementById('adminUser').value.trim();
   const password = document.getElementById('adminPass').value.trim();
-  if(username==="admin" && password==="123"){
+  if(username==="admin" && password==="bds123"){
     document.getElementById('loginSection').style.display="none";
     document.getElementById('adminPanel').style.display="block";
     openTab('queriesTab');
@@ -164,7 +176,7 @@ function openTab(tabId){
   document.getElementById(tabId).classList.add('active');
 }
 
-// LOAD QUERIES (original)
+// QUERIES (original)
 function loadQueriesRealtime(){
   const queryList = document.getElementById('queryList');
   queryList.innerHTML="<p>⌛ Loading queries...</p>";
@@ -197,7 +209,7 @@ function deleteQuery(id){
   }
 }
 
-// LOAD REVIEWS (original)
+// REVIEWS (original)
 function loadReviewsRealtime(){
   const reviewList = document.getElementById('reviewList');
   reviewList.innerHTML="<p>⌛ Loading reviews...</p>";
@@ -230,11 +242,14 @@ function deleteReview(id){
   }
 }
 
-// ADD PATIENT with multiple images
+// ADD PATIENT with Base64 images (no storage)
 async function savePatientToFirestore() {
+  const msgDiv = document.getElementById('adminPatientMsg');
+  msgDiv.innerHTML = '<div class="success-msg">⏳ Saving patient record...</div>';
+  
   const regNo = document.getElementById('regNo').value.trim();
   if(!regNo) {
-    document.getElementById('adminPatientMsg').innerHTML = '<div style="color:red;">❌ Registration Number is required</div>';
+    msgDiv.innerHTML = '<div class="error-msg">❌ Registration Number is required</div>';
     return;
   }
   const name = document.getElementById('patName').value;
@@ -245,28 +260,26 @@ async function savePatientToFirestore() {
   const diseaseNotes = document.getElementById('patDiseaseNotes').value;
   const files = document.getElementById('patPhotos').files;
   
-  let photoURLs = [];
+  let imagesBase64 = [];
   if(files.length > 0) {
-    const uploadPromises = Array.from(files).map(async (file, index) => {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${regNo}_${Date.now()}_${index}.${fileExt}`;
-      const storageRef = storage.ref(`patient_photos/${fileName}`);
-      await storageRef.put(file);
-      return await storageRef.getDownloadURL();
-    });
-    photoURLs = await Promise.all(uploadPromises);
+    try {
+      imagesBase64 = await filesToBase64(files);
+    } catch(err) {
+      msgDiv.innerHTML = `<div class="error-msg">❌ Error reading images: ${err.message}</div>`;
+      return;
+    }
   }
   
   const patientData = {
     name, age, sex, problem, package: packageVal, diseaseNotes,
-    photoURLs: photoURLs,  // array of image URLs
+    images: imagesBase64,  // array of Base64 strings
     lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
   };
   
   try {
     await db.collection("patients").doc(regNo).set(patientData, { merge: true });
-    document.getElementById('adminPatientMsg').innerHTML = `<div style="color:green;">✅ Patient ${regNo} saved with ${photoURLs.length} image(s)!</div>`;
-    // Clear form
+    msgDiv.innerHTML = `<div class="success-msg">✅ Patient ${regNo} saved successfully with ${imagesBase64.length} image(s)!</div>`;
+    // Clear form (keep regNo for next entry? clear all)
     document.getElementById('patName').value = '';
     document.getElementById('patAge').value = '';
     document.getElementById('patSex').value = 'Male';
@@ -275,9 +288,14 @@ async function savePatientToFirestore() {
     document.getElementById('patDiseaseNotes').value = '';
     document.getElementById('patPhotos').value = '';
     document.getElementById('imagePreview').innerHTML = '';
-    setTimeout(()=> document.getElementById('adminPatientMsg').innerHTML = '', 3000);
+    document.getElementById('regNo').value = ''; // clear regNo too for new entry
+    // Auto clear success message after 5 seconds
+    setTimeout(() => {
+      if(msgDiv.innerHTML.includes('successfully')) msgDiv.innerHTML = '';
+    }, 5000);
   } catch(err) {
-    document.getElementById('adminPatientMsg').innerHTML = `<div style="color:red;">❌ Error: ${err.message}</div>`;
+    console.error("Firestore error:", err);
+    msgDiv.innerHTML = `<div class="error-msg">❌ Firestore Error: ${err.message}</div>`;
   }
 }
 
