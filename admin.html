@@ -11,13 +11,15 @@ body{background:#f0f9f4;color:#333;}
 .container{max-width:1000px;margin:30px auto;padding:0 20px;}
 .login-box,.admin-content{background:white;padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);margin-bottom:30px;}
 h2{color:#1f7a4f;margin-bottom:20px;}
-input{width:100%;padding:14px;margin:12px 0;border:1px solid #ddd;border-radius:8px;font-size:16px;}
+h3{color:#1f7a4f;margin:15px 0 10px;}
+input, textarea, select{width:100%;padding:14px;margin:12px 0;border:1px solid #ddd;border-radius:8px;font-size:16px;font-family:inherit;}
+textarea{resize:vertical;}
 button{background:#1f7a4f;color:white;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-size:15px;margin-top:10px;}
 button:hover{background:#166342;}
 .logout-btn{background:#dc3545;}
 .logout-btn:hover{background:#c82333;}
 .delete-btn{background:red;margin-top:10px;}
-.tab-buttons{display:flex;gap:10px;margin-bottom:20px;}
+.tab-buttons{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
 .tab-buttons button{flex:1;}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
@@ -36,7 +38,7 @@ button:hover{background:#166342;}
 
 <div class="container">
 
-  <!-- LOGIN -->
+  <!-- LOGIN SECTION -->
   <div id="loginSection" class="login-box">
     <h2>🔐 Admin Login</h2>
     <input id="adminUser" placeholder="Username">
@@ -56,36 +58,68 @@ button:hover{background:#166342;}
     <div class="tab-buttons">
       <button onclick="openTab('queriesTab')">Patient Queries</button>
       <button onclick="openTab('reviewsTab')">Reviews</button>
+      <button onclick="openTab('patientsTab')">Add Patient</button>
     </div>
 
-    <!-- Patient Queries -->
+    <!-- Patient Queries Tab (original) -->
     <div id="queriesTab" class="tab-content">
       <div id="queryList"><p>Loading queries...</p></div>
     </div>
 
-    <!-- Reviews -->
+    <!-- Reviews Tab (original) -->
     <div id="reviewsTab" class="tab-content">
       <div id="reviewList"><p>Loading reviews...</p></div>
     </div>
 
+    <!-- Add Patient Tab (no search, no edit) -->
+    <div id="patientsTab" class="tab-content">
+      <h3>➕ Add New Patient Record</h3>
+      <p>Fill all details. Registration Number will be used by patient to view their record.</p>
+      <div style="display:flex; gap:15px; flex-wrap:wrap;">
+        <div style="flex:1;">
+          <label>Registration Number *</label>
+          <input type="text" id="regNo" placeholder="e.g., BDS123">
+          <label>Full Name</label>
+          <input type="text" id="patName">
+          <label>Age</label>
+          <input type="number" id="patAge">
+          <label>Sex</label>
+          <select id="patSex"><option>Male</option><option>Female</option><option>Other</option></select>
+          <label>Problem (Chief complaint)</label>
+          <textarea id="patProblem" rows="2"></textarea>
+        </div>
+        <div style="flex:1;">
+          <label>Package</label>
+          <input type="text" id="patPackage" placeholder="e.g., 7-day Panchakarma">
+          <label>Diseases / Short Notes</label>
+          <textarea id="patDiseaseNotes" rows="3" placeholder="Medical history, diagnosis..."></textarea>
+          <label>Upload Photo</label>
+          <input type="file" id="patPhoto" accept="image/*">
+          <button id="savePatientBtn">💾 Save Patient Record</button>
+          <div id="adminPatientMsg"></div>
+        </div>
+      </div>
+    </div>
   </div>
-
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
 <script>
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
-  projectId: "bdss-671d8"
+  projectId: "bdss-671d8",
+  storageBucket: "bdss-671d8.appspot.com"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storage = firebase.storage();
 
-// LOGIN
+// LOGIN (original)
 function login(){
   const username = document.getElementById('adminUser').value.trim();
   const password = document.getElementById('adminPass').value.trim();
@@ -100,20 +134,18 @@ function login(){
   }
 }
 
-// LOGOUT
 function logout(){
   document.getElementById('adminPanel').style.display="none";
   document.getElementById('loginSection').style.display="block";
   document.getElementById('adminPass').value="";
 }
 
-// TABS
 function openTab(tabId){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
 }
 
-// LOAD QUERIES
+// LOAD QUERIES (original)
 function loadQueriesRealtime(){
   const queryList = document.getElementById('queryList');
   queryList.innerHTML="<p>⌛ Loading queries...</p>";
@@ -140,14 +172,13 @@ function loadQueriesRealtime(){
     });
 }
 
-// DELETE QUERY
 function deleteQuery(id){
   if(confirm("Delete this query?")){
     db.collection("patientQueries").doc(id).delete();
   }
 }
 
-// LOAD REVIEWS
+// LOAD REVIEWS (original)
 function loadReviewsRealtime(){
   const reviewList = document.getElementById('reviewList');
   reviewList.innerHTML="<p>⌛ Loading reviews...</p>";
@@ -174,12 +205,58 @@ function loadReviewsRealtime(){
     });
 }
 
-// DELETE REVIEW
 function deleteReview(id){
   if(confirm("Delete this review?")){
     db.collection("reviews").doc(id).delete();
   }
 }
+
+// ADD PATIENT (Admin only, no search)
+async function savePatientToFirestore() {
+  const regNo = document.getElementById('regNo').value.trim();
+  if(!regNo) {
+    document.getElementById('adminPatientMsg').innerHTML = '<div style="color:red;">❌ Registration Number is required</div>';
+    return;
+  }
+  const name = document.getElementById('patName').value;
+  const age = document.getElementById('patAge').value;
+  const sex = document.getElementById('patSex').value;
+  const problem = document.getElementById('patProblem').value;
+  const packageVal = document.getElementById('patPackage').value;
+  const diseaseNotes = document.getElementById('patDiseaseNotes').value;
+  const file = document.getElementById('patPhoto').files[0];
+  
+  let photoURL = null;
+  if(file) {
+    const storageRef = storage.ref(`patient_photos/${regNo}_${Date.now()}`);
+    const uploadTask = await storageRef.put(file);
+    photoURL = await uploadTask.ref.getDownloadURL();
+  }
+  
+  const patientData = {
+    name, age, sex, problem, package: packageVal, diseaseNotes,
+    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if(photoURL) patientData.photoURL = photoURL;
+  
+  try {
+    await db.collection("patients").doc(regNo).set(patientData, { merge: true });
+    document.getElementById('adminPatientMsg').innerHTML = `<div style="color:green;">✅ Patient ${regNo} saved successfully!</div>`;
+    // Clear form but keep regNo? Let's clear all except regNo maybe
+    document.getElementById('patName').value = '';
+    document.getElementById('patAge').value = '';
+    document.getElementById('patSex').value = 'Male';
+    document.getElementById('patProblem').value = '';
+    document.getElementById('patPackage').value = '';
+    document.getElementById('patDiseaseNotes').value = '';
+    document.getElementById('patPhoto').value = '';
+    setTimeout(()=> document.getElementById('adminPatientMsg').innerHTML = '', 3000);
+  } catch(err) {
+    document.getElementById('adminPatientMsg').innerHTML = `<div style="color:red;">❌ Error: ${err.message}</div>`;
+  }
+}
+
+document.getElementById('savePatientBtn').addEventListener('click', savePatientToFirestore);
 </script>
 </body>
 </html>
