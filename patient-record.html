@@ -8,14 +8,12 @@
 *{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
 body{background:#f0f9f4;color:#333;}
 
-/* ===== NAVBAR STYLE ===== */
+/* ===== NAVBAR STYLE (same as provided) ===== */
 .navbar {
   background-color: #2AA06E;
   padding: 12px 40px;
   position: relative;
 }
-
-/* Hamburger button for mobile */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -23,14 +21,11 @@ body{background:#f0f9f4;color:#333;}
   gap: 5px;
   width: 30px;
 }
-
 .hamburger div {
   height: 3px;
   background-color: white;
   border-radius: 2px;
 }
-
-/* Nav links */
 .nav-links {
   list-style: none;
   display: flex;
@@ -41,11 +36,9 @@ body{background:#f0f9f4;color:#333;}
   padding: 0;
   transition: max-height 0.3s ease;
 }
-
 .nav-links li {
   position: relative;
 }
-
 .nav-links a {
   text-decoration: none;
   color: white;
@@ -54,13 +47,10 @@ body{background:#f0f9f4;color:#333;}
   display: block;
   transition: 0.3s ease;
 }
-
 .nav-links a:hover {
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 5px;
 }
-
-/* ===== DROPDOWN ===== */
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -73,21 +63,16 @@ body{background:#f0f9f4;color:#333;}
   min-width: 180px;
   border-radius: 6px;
 }
-
 .dropdown-menu li a {
   padding: 10px 15px;
   color: white;
 }
-
 .dropdown-menu li a:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
-
 .dropdown:hover .dropdown-menu {
   display: block;
 }
-
-/* ===== MOBILE STYLES ===== */
 @media screen and (max-width: 768px) {
   .hamburger {
     display: flex;
@@ -108,7 +93,7 @@ body{background:#f0f9f4;color:#333;}
     padding: 12px 0;
   }
   .dropdown:hover .dropdown-menu {
-    display: none; /* Disable hover on mobile */
+    display: none;
   }
   .dropdown-menu {
     position: static;
@@ -118,11 +103,10 @@ body{background:#f0f9f4;color:#333;}
     display: block;
   }
   .nav-links.show {
-    max-height: 1000px; /* Large enough to show all links */
+    max-height: 1000px;
   }
 }
-
-/* Container and card styles (existing) */
+/* Patient record styles */
 .container{max-width:800px;margin:30px auto;padding:0 20px;}
 .card{background:white;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.05);padding:2rem;margin-bottom:2rem;}
 h2{color:#1f7a4f;margin-bottom:20px;}
@@ -130,15 +114,20 @@ input{width:100%;padding:14px;margin:12px 0;border:1px solid #ddd;border-radius:
 button{background:#1f7a4f;color:white;border:none;padding:12px 25px;border-radius:8px;cursor:pointer;font-size:16px;}
 button:hover{background:#166342;}
 .patient-detail{background:#f9fff9;border-radius:15px;padding:20px;border:1px solid #c8e0d4;margin-top:20px;}
-.patient-detail img{max-width:200px;border-radius:15px;margin-top:10px;}
+.image-gallery{display:flex;flex-wrap:wrap;gap:12px;margin-top:15px;}
+.image-gallery img{width:150px;height:150px;object-fit:cover;border-radius:12px;border:1px solid #ddd;cursor:pointer;transition:0.2s;}
+.image-gallery img:hover{transform:scale(1.03);}
 .back-link{display:block;text-align:center;margin-top:20px;color:#1f7a4f;text-decoration:none;}
 .back-link:hover{text-decoration:underline;}
 footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-top:2rem;}
+/* Modal for full-size image */
+.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.9);justify-content:center;align-items:center;}
+.modal img{max-width:90%;max-height:90%;border-radius:10px;}
+.modal-close{position:absolute;top:20px;right:35px;color:white;font-size:40px;font-weight:bold;cursor:pointer;}
 </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR (exactly as provided) ===== -->
 <nav class="navbar">
   <div class="hamburger" onclick="toggleMenu()">
     <div></div>
@@ -147,7 +136,6 @@ footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-to
   </div>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">About</a></li>
-
     <li class="dropdown">
       <a href="javascript:void(0)" onclick="toggleDropdown(event)">Services ▼</a>
       <ul class="dropdown-menu">
@@ -157,7 +145,6 @@ footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-to
         <li><a href="diet.html">Diet</a></li>
       </ul>
     </li>
-
     <li><a href="about-doctor.html">Doctors</a></li>
     <li><a href="equipment.html">Physiotherapy Equipment</a></li>
     <li><a href="testimonials.html">Testimonials</a></li>
@@ -167,7 +154,6 @@ footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-to
   </ul>
 </nav>
 
-<!-- Main content (no extra header, just the record lookup card) -->
 <div class="container">
   <div class="card">
     <h2>🔍 View Your Health Details</h2>
@@ -183,11 +169,16 @@ footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-to
   <p>© 2025 BDS Ayurvedic Physio Yoga Centre | Healing since 2010</p>
 </footer>
 
+<!-- Modal for full-size image -->
+<div id="imageModal" class="modal">
+  <span class="modal-close" onclick="closeModal()">&times;</span>
+  <img id="modalImg" src="">
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
-// Firebase config (same as yours)
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
@@ -196,7 +187,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Patient record lookup
+function openModal(imgSrc) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImg');
+  modal.style.display = 'flex';
+  modalImg.src = imgSrc;
+}
+function closeModal() {
+  document.getElementById('imageModal').style.display = 'none';
+}
+// Click outside modal closes it
+window.onclick = function(event) {
+  const modal = document.getElementById('imageModal');
+  if (event.target === modal) closeModal();
+}
+
 document.getElementById('viewBtn').addEventListener('click', async () => {
   const regNo = document.getElementById('regNo').value.trim();
   const resultDiv = document.getElementById('result');
@@ -209,8 +214,16 @@ document.getElementById('viewBtn').addEventListener('click', async () => {
     const docSnap = await db.collection("patients").doc(regNo).get();
     if(docSnap.exists) {
       const data = docSnap.data();
-      let photoHtml = '';
-      if(data.photoURL) photoHtml = `<img src="${data.photoURL}" alt="Patient Photo"><br>`;
+      let galleryHtml = '';
+      if(data.photoURLs && data.photoURLs.length > 0) {
+        galleryHtml = '<div class="image-gallery">';
+        data.photoURLs.forEach(url => {
+          galleryHtml += `<img src="${url}" alt="Patient photo" onclick="openModal('${url}')">`;
+        });
+        galleryHtml += '</div>';
+      } else if(data.photoURL) { // fallback for old single-image records
+        galleryHtml = `<div class="image-gallery"><img src="${data.photoURL}" alt="Patient photo" onclick="openModal('${data.photoURL}')"></div>`;
+      }
       resultDiv.innerHTML = `
         <div class="patient-detail">
           <div style="display:flex; flex-wrap:wrap; gap:20px;">
@@ -223,8 +236,8 @@ document.getElementById('viewBtn').addEventListener('click', async () => {
               <p><strong>📦 Package:</strong> ${data.package || 'N/A'}</p>
               <p><strong>📝 Diseases / Notes:</strong><br> ${(data.diseaseNotes || 'N/A').replace(/\n/g,'<br>')}</p>
             </div>
-            <div style="flex:1; text-align:center;">
-              ${photoHtml}
+            <div style="flex:1;">
+              ${galleryHtml}
             </div>
           </div>
         </div>
@@ -236,17 +249,15 @@ document.getElementById('viewBtn').addEventListener('click', async () => {
     resultDiv.innerHTML = `<div style="color:red;">⚠️ Error: ${error.message}</div>`;
   }
 });
-// Enter key support
 document.getElementById('regNo').addEventListener('keypress', (e) => {
   if(e.key === 'Enter') document.getElementById('viewBtn').click();
 });
 
-// ===== NAVBAR SCRIPTS (as provided) =====
+// Navbar functions
 function toggleMenu() {
   const nav = document.getElementById('navLinks');
   nav.classList.toggle('show');
 }
-
 function toggleDropdown(event) {
   if (window.innerWidth <= 768) {
     event.preventDefault();
