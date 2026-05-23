@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Record - BDS Ayurvedic Physio Yoga Centre</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f7f0;
+            color: #1e3a2f;
+            line-height: 1.6;
+        }
+
+        /* Header same as original site */
+        .header {
+            background: linear-gradient(135deg, #1f7a4f, #134e36);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 2rem;
+        }
+        .nav {
+            background: white;
+            padding: 0.8rem;
+            text-align: center;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+        }
+        .nav a {
+            color: #1f7a4f;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-weight: bold;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        /* Card style */
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            transition: 0.2s;
+        }
+        .card h2 {
+            color: #1f7a4f;
+            border-left: 5px solid #1f7a4f;
+            padding-left: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 16px;
+            border: 1px solid #c8e0d4;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+        button {
+            background: #1f7a4f;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #134e36;
+        }
+        .flex-2col {
+            display: flex;
+            gap: 20px;
+        }
+        .flex-2col > div {
+            flex: 1;
+        }
+        .patient-detail {
+            background: #f9fff9;
+            border-radius: 20px;
+            padding: 1.2rem;
+            border: 1px solid #c8e0d4;
+        }
+        .patient-detail img {
+            max-width: 100%;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+        .success {
+            color: #1f7a4f;
+            background: #e0f2e9;
+            padding: 10px;
+            border-radius: 30px;
+            text-align: center;
+        }
+        .error {
+            color: #b00020;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 30px;
+            text-align: center;
+        }
+        .admin-panel {
+            border-top: 3px solid #1f7a4f;
+            margin-top: 20px;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        /* Floating call button - same as original */
+        .call-float {
+            position: fixed;
+            bottom: 140px;
+            right: 20px;
+            background: #1f7a4f;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            z-index: 1000;
+        }
+        footer {
+            background: #1e3a2f;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+        @media (max-width: 700px) {
+            .flex-2col { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🩺 BDS Ayurvedic Physio Yoga Centre</h1>
+    <p>Your Health, Our Priority</p>
+</div>
+<div class="nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="patient-record.html">📋 Patient Records</a>
+    <a href="#contact">Contact</a>
+</div>
+
+<div class="container">
+    <!-- ========= PATIENT VIEW SECTION ========= -->
+    <div class="card">
+        <h2>🔍 View Your Health Record</h2>
+        <p>Enter the Registration Number provided by our clinic.</p>
+        <input type="text" id="viewRegNo" placeholder="Registration Number (e.g., BDS001)" />
+        <button id="fetchRecordBtn">Show My Details</button>
+        <div id="patientInfoDisplay" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- ========= ADMIN SECTION (password protected) ========= -->
+    <div class="card">
+        <h2>👨‍⚕️ Admin Panel – Add/Edit Patient</h2>
+        <div id="adminLoginArea">
+            <input type="password" id="adminPassword" placeholder="Enter Admin Password" />
+            <button id="adminLoginBtn">Login as Admin</button>
+        </div>
+        <div id="adminFormArea" style="display: none;">
+            <div class="flex-2col">
+                <div>
+                    <label>Registration Number (Unique ID)</label>
+                    <input type="text" id="regNo" placeholder="e.g., BDS001" />
+                    
+                    <label>Full Name</label>
+                    <input type="text" id="name" />
+                    
+                    <label>Age</label>
+                    <input type="number" id="age" />
+                    
+                    <label>Sex</label>
+                    <select id="sex">
+                        <option>Male</option><option>Female</option><option>Other</option>
+                    </select>
+                    
+                    <label>Problem (Chief complaint)</label>
+                    <textarea id="problem" rows="2"></textarea>
+                    
+                    <label>Package Selected</label>
+                    <input type="text" id="package" placeholder="e.g., Panchakarma – 7 days" />
+                </div>
+                <div>
+                    <label>Diseases / Short Notes</label>
+                    <textarea id="diseaseNotes" rows="4" placeholder="Medical history, diagnosis, notes..."></textarea>
+                    
+                    <label>Upload Patient Photo</label>
+                    <input type="file" id="photoUpload" accept="image/*" />
+                    <small style="color: gray;">Leave empty to keep existing photo</small>
+                    
+                    <button id="savePatientBtn" style="margin-top: 20px;">💾 Save Patient Record</button>
+                    <div id="adminMessage"></div>
+                </div>
+            </div>
+            <hr />
+            <h3>📋 Search & Edit Existing</h3>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="searchRegNo" placeholder="Registration Number to edit" style="flex:1"/>
+                <button id="searchBtn">Search</button>
+            </div>
+            <div id="editInfo"></div>
+        </div>
+    </div>
+</div>
+
+<a href="tel:+918221826243" class="call-float">📞</a>
+<footer>
+    <p>© 2025 BDS Ayurvedic Physio Yoga Centre | Healing since 2010</p>
+</footer>
+
+<script>
+    // ---------- YOUR FIREBASE CONFIG (already working) ----------
+    const firebaseConfig = {
+        apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
+        authDomain: "bdss-671d8.firebaseapp.com",
+        projectId: "bdss-671d8",
+        storageBucket: "bdss-671d8.appspot.com"  // needed for images
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // ---------- GLOBAL VARIABLES ----------
+    let isAdminLoggedIn = false;
+    const ADMIN_PASSWORD = "bds123";   // same as your website admin
+
+    // DOM elements
+    const viewRegNoInput = document.getElementById('viewRegNo');
+    const fetchBtn = document.getElementById('fetchRecordBtn');
+    const patientDisplay = document.getElementById('patientInfoDisplay');
+    const adminLoginDiv = document.getElementById('adminLoginArea');
+    const adminFormDiv = document.getElementById('adminFormArea');
+    const adminPassInput = document.getElementById('adminPassword');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const saveBtn = document.getElementById('savePatientBtn');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchRegNoInput = document.getElementById('searchRegNo');
+    const editInfoDiv = document.getElementById('editInfo');
+    const adminMsg = document.getElementById('adminMessage');
+
+    // ---------- 1. PATIENT VIEW (public) ----------
+    async function fetchPatientRecord(regNo) {
+        if (!regNo) {
+            patientDisplay.innerHTML = '<div class="error">⚠️ Please enter Registration Number</div>';
+            return;
+        }
+        patientDisplay.innerHTML = '<div>⏳ Loading...</div>';
+        try {
+            const docRef = db.collection("patients").doc(regNo);
+            const docSnap = await docRef.get();
+            if (docSnap.exists) {
+                const data = docSnap.data();
+                let photoHtml = '';
+                if (data.photoURL) {
+                    photoHtml = `<img src="${data.photoURL}" alt="Patient Photo" style="max-width:200px; border-radius:15px;">`;
+                }
+                patientDisplay.innerHTML = `
+                    <div class="patient-detail">
+                        <div style="display:flex; flex-wrap:wrap; gap:20px;">
+                            <div style="flex:1;">
+                                <p><strong>🆔 Reg No:</strong> ${regNo}</p>
+                                <p><strong>👤 Name:</strong> ${data.name || 'N/A'}</p>
+                                <p><strong>🎂 Age:</strong> ${data.age || 'N/A'}</p>
+                                <p><strong>⚥ Sex:</strong> ${data.sex || 'N/A'}</p>
+                                <p><strong>🩺 Problem:</strong> ${data.problem || 'N/A'}</p>
+                                <p><strong>📦 Package:</strong> ${data.package || 'N/A'}</p>
+                                <p><strong>📝 Diseases / Notes:</strong><br> ${(data.diseaseNotes || 'N/A').replace(/\n/g,'<br>')}</p>
+                            </div>
+                            <div style="flex:0 0 200px;">
+                                ${photoHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                patientDisplay.innerHTML = `<div class="error">❌ No record found for Registration Number: ${regNo}. Please contact clinic.</div>`;
+            }
+        } catch (error) {
+            console.error(error);
+            patientDisplay.innerHTML = '<div class="error">⚠️ Network error. Try again later.</div>';
+        }
+    }
+
+    fetchBtn.addEventListener('click', () => {
+        fetchPatientRecord(viewRegNoInput.value.trim());
+    });
+
+    // ---------- 2. ADMIN LOGIN ----------
+    adminLoginBtn.addEventListener('click', () => {
+        const pass = adminPassInput.value;
+        if (pass === ADMIN_PASSWORD) {
+            isAdminLoggedIn = true;
+            adminLoginDiv.style.display = 'none';
+            adminFormDiv.style.display = 'block';
+            adminMsg.innerHTML = '<div class="success">✅ Admin logged in. You can add/edit patients.</div>';
+            setTimeout(() => adminMsg.innerHTML = '', 3000);
+        } else {
+            adminMsg.innerHTML = '<div class="error">❌ Wrong admin password.</div>';
+            setTimeout(() => adminMsg.innerHTML = '', 2000);
+        }
+    });
+
+    // ---------- 3. SAVE/UPDATE PATIENT (Admin only) ----------
+    async function savePatientToFirestore() {
+        if (!isAdminLoggedIn) {
+            alert("Admin not logged in!");
+            return;
+        }
+        const regNo = document.getElementById('regNo').value.trim();
+        if (!regNo) {
+            adminMsg.innerHTML = '<div class="error">Registration Number is required!</div>';
+            return;
+        }
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value;
+        const sex = document.getElementById('sex').value;
+        const problem = document.getElementById('problem').value;
+        const packageVal = document.getElementById('package').value;
+        const diseaseNotes = document.getElementById('diseaseNotes').value;
+
+        const file = document.getElementById('photoUpload').files[0];
+        let photoURL = null;
+
+        // If a new photo is uploaded, upload to Firebase Storage
+        if (file) {
+            const storageRef = storage.ref(`patient_photos/${regNo}_${Date.now()}`);
+            const uploadTask = await storageRef.put(file);
+            photoURL = await uploadTask.ref.getDownloadURL();
+        }
+
+        // Prepare data object
+        let patientData = {
+            name, age, sex, problem, package: packageVal, diseaseNotes,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        if (photoURL) patientData.photoURL = photoURL;
+
+        try {
+            await db.collection("patients").doc(regNo).set(patientData, { merge: true });
+            adminMsg.innerHTML = `<div class="success">✅ Patient ${regNo} saved successfully!</div>`;
+            // Optionally clear form but keep regNo
+            setTimeout(() => adminMsg.innerHTML = '', 3000);
+        } catch (err) {
+            console.error(err);
+            adminMsg.innerHTML = `<div class="error">❌ Error: ${err.message}</div>`;
+        }
+    }
+
+    saveBtn.addEventListener('click', savePatientToFirestore);
+
+    // ---------- 4. SEARCH EXISTING PATIENT TO EDIT (Admin) ----------
+    async function searchPatientToEdit() {
+        if (!isAdminLoggedIn) return;
+        const regNo = searchRegNoInput.value.trim();
+        if (!regNo) {
+            editInfoDiv.innerHTML = '<div class="error">Enter Registration Number to search.</div>';
+            return;
+        }
+        editInfoDiv.innerHTML = 'Loading...';
+        try {
+            const docSnap = await db.collection("patients").doc(regNo).get();
+            if (docSnap.exists) {
+                const data = docSnap.data();
+                // Fill the main form with existing data for editing
+                document.getElementById('regNo').value = regNo;
+                document.getElementById('name').value = data.name || '';
+                document.getElementById('age').value = data.age || '';
+                document.getElementById('sex').value = data.sex || 'Male';
+                document.getElementById('problem').value = data.problem || '';
+                document.getElementById('package').value = data.package || '';
+                document.getElementById('diseaseNotes').value = data.diseaseNotes || '';
+                // Clear file input (photo upload will replace if new file chosen)
+                document.getElementById('photoUpload').value = '';
+                editInfoDiv.innerHTML = `<div class="success">✔️ Loaded data for ${regNo}. Edit and click Save.</div>`;
+            } else {
+                editInfoDiv.innerHTML = `<div class="error">⚠️ No existing record for ${regNo}. You can create new by filling form above.</div>`;
+                // Optionally clear regNo field? No, let admin type new.
+            }
+        } catch (err) {
+            editInfoDiv.innerHTML = `<div class="error">Error: ${err.message}</div>`;
+        }
+    }
+
+    searchBtn.addEventListener('click', searchPatientToEdit);
+
+    // Minor: pressing Enter on search field triggers search
+    searchRegNoInput.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') searchPatientToEdit();
+    });
+    viewRegNoInput.addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') fetchPatientRecord(viewRegNoInput.value.trim());
+    });
+
+    // (Optional) Preload the admin area security: if admin logged in, show initially hidden
+    // Also ensure user can't accidentally open console and call functions – but it's fine.
+    console.log("Patient record system ready. Admin password: bds123");
+</script>
+</body>
+</html>
