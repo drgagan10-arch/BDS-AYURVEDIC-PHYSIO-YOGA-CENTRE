@@ -27,6 +27,8 @@ button:hover{background:#166342;}
 .back-link{display:block;text-align:center;margin-top:15px;color:#1f7a4f;text-decoration:none;}
 .back-link:hover{text-decoration:underline;}
 .stars{color:#f5b50a;}
+.image-preview{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.image-preview img{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #ddd;}
 </style>
 </head>
 <body>
@@ -71,10 +73,10 @@ button:hover{background:#166342;}
       <div id="reviewList"><p>Loading reviews...</p></div>
     </div>
 
-    <!-- Add Patient Tab (no search, no edit) -->
+    <!-- Add Patient Tab (multiple images) -->
     <div id="patientsTab" class="tab-content">
       <h3>➕ Add New Patient Record</h3>
-      <p>Fill all details. Registration Number will be used by patient to view their record.</p>
+      <p>Fill all details. Registration Number will be used by patient to view their record. You can select multiple images.</p>
       <div style="display:flex; gap:15px; flex-wrap:wrap;">
         <div style="flex:1;">
           <label>Registration Number *</label>
@@ -93,8 +95,9 @@ button:hover{background:#166342;}
           <input type="text" id="patPackage" placeholder="e.g., 7-day Panchakarma">
           <label>Diseases / Short Notes</label>
           <textarea id="patDiseaseNotes" rows="3" placeholder="Medical history, diagnosis..."></textarea>
-          <label>Upload Photo</label>
-          <input type="file" id="patPhoto" accept="image/*">
+          <label>Upload Multiple Images (CTRL+click to select several)</label>
+          <input type="file" id="patPhotos" accept="image/*" multiple>
+          <div id="imagePreview" class="image-preview"></div>
           <button id="savePatientBtn">💾 Save Patient Record</button>
           <div id="adminPatientMsg"></div>
         </div>
@@ -119,11 +122,27 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
 
+// Image preview on file selection
+document.getElementById('patPhotos').addEventListener('change', function(e) {
+  const preview = document.getElementById('imagePreview');
+  preview.innerHTML = '';
+  const files = Array.from(e.target.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const img = document.createElement('img');
+      img.src = ev.target.result;
+      preview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
 // LOGIN (original)
 function login(){
   const username = document.getElementById('adminUser').value.trim();
   const password = document.getElementById('adminPass').value.trim();
-  if(username==="admin" && password==="bds123"){
+  if(username==="admin" && password==="123"){
     document.getElementById('loginSection').style.display="none";
     document.getElementById('adminPanel').style.display="block";
     openTab('queriesTab');
@@ -211,7 +230,7 @@ function deleteReview(id){
   }
 }
 
-// ADD PATIENT (Admin only, no search)
+// ADD PATIENT with multiple images
 async function savePatientToFirestore() {
   const regNo = document.getElementById('regNo').value.trim();
   if(!regNo) {
@@ -224,32 +243,38 @@ async function savePatientToFirestore() {
   const problem = document.getElementById('patProblem').value;
   const packageVal = document.getElementById('patPackage').value;
   const diseaseNotes = document.getElementById('patDiseaseNotes').value;
-  const file = document.getElementById('patPhoto').files[0];
+  const files = document.getElementById('patPhotos').files;
   
-  let photoURL = null;
-  if(file) {
-    const storageRef = storage.ref(`patient_photos/${regNo}_${Date.now()}`);
-    const uploadTask = await storageRef.put(file);
-    photoURL = await uploadTask.ref.getDownloadURL();
+  let photoURLs = [];
+  if(files.length > 0) {
+    const uploadPromises = Array.from(files).map(async (file, index) => {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${regNo}_${Date.now()}_${index}.${fileExt}`;
+      const storageRef = storage.ref(`patient_photos/${fileName}`);
+      await storageRef.put(file);
+      return await storageRef.getDownloadURL();
+    });
+    photoURLs = await Promise.all(uploadPromises);
   }
   
   const patientData = {
     name, age, sex, problem, package: packageVal, diseaseNotes,
+    photoURLs: photoURLs,  // array of image URLs
     lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
   };
-  if(photoURL) patientData.photoURL = photoURL;
   
   try {
     await db.collection("patients").doc(regNo).set(patientData, { merge: true });
-    document.getElementById('adminPatientMsg').innerHTML = `<div style="color:green;">✅ Patient ${regNo} saved successfully!</div>`;
-    // Clear form but keep regNo? Let's clear all except regNo maybe
+    document.getElementById('adminPatientMsg').innerHTML = `<div style="color:green;">✅ Patient ${regNo} saved with ${photoURLs.length} image(s)!</div>`;
+    // Clear form
     document.getElementById('patName').value = '';
     document.getElementById('patAge').value = '';
     document.getElementById('patSex').value = 'Male';
     document.getElementById('patProblem').value = '';
     document.getElementById('patPackage').value = '';
     document.getElementById('patDiseaseNotes').value = '';
-    document.getElementById('patPhoto').value = '';
+    document.getElementById('patPhotos').value = '';
+    document.getElementById('imagePreview').innerHTML = '';
     setTimeout(()=> document.getElementById('adminPatientMsg').innerHTML = '', 3000);
   } catch(err) {
     document.getElementById('adminPatientMsg').innerHTML = `<div style="color:red;">❌ Error: ${err.message}</div>`;
