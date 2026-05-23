@@ -2,54 +2,416 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Patient Record - BDS Ayurvedic Physio Yoga Centre</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
-body{background:#f0f9f4;color:#333;}
-.navbar{background-color:#2AA06E;padding:12px 40px;position:relative;}
-.hamburger{display:none;flex-direction:column;cursor:pointer;gap:5px;width:30px;}
-.hamburger div{height:3px;background-color:white;border-radius:2px;}
-.nav-links{list-style:none;display:flex;justify-content:center;align-items:center;gap:25px;margin:0;padding:0;transition:max-height 0.3s ease;}
-.nav-links li{position:relative;}
-.nav-links a{text-decoration:none;color:white;font-weight:500;padding:10px 14px;display:block;transition:0.3s ease;}
-.nav-links a:hover{background-color:rgba(255,255,255,0.15);border-radius:5px;}
-.dropdown-menu{display:none;position:absolute;top:100%;left:0;background-color:#2AA06E;list-style:none;padding:0;margin:0;min-width:180px;border-radius:6px;}
-.dropdown-menu li a{padding:10px 15px;color:white;}
-.dropdown-menu li a:hover{background-color:rgba(255,255,255,0.15);}
-.dropdown:hover .dropdown-menu{display:block;}
-@media screen and (max-width:768px){
-  .hamburger{display:flex;}
-  .nav-links{flex-direction:column;max-height:0;overflow:hidden;width:100%;background-color:#2AA06E;gap:0;}
-  .nav-links li{width:100%;text-align:center;}
-  .nav-links li a{padding:12px 0;}
-  .dropdown:hover .dropdown-menu{display:none;}
-  .dropdown-menu{position:static;border-radius:0;}
-  .dropdown.active .dropdown-menu{display:block;}
-  .nav-links.show{max-height:1000px;}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.container{max-width:800px;margin:30px auto;padding:0 20px;}
-.card{background:white;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.05);padding:2rem;margin-bottom:2rem;}
-h2{color:#1f7a4f;margin-bottom:20px;}
-input{width:100%;padding:14px;margin:12px 0;border:1px solid #ddd;border-radius:8px;font-size:16px;}
-button{background:#1f7a4f;color:white;border:none;padding:12px 25px;border-radius:8px;cursor:pointer;font-size:16px;}
-button:hover{background:#166342;}
-.patient-detail{background:#f9fff9;border-radius:15px;padding:20px;border:1px solid #c8e0d4;margin-top:20px;}
-.image-gallery{display:flex;flex-wrap:wrap;gap:12px;margin-top:15px;}
-.image-gallery img{width:150px;height:150px;object-fit:cover;border-radius:12px;border:1px solid #ddd;cursor:pointer;transition:0.2s;}
-.image-gallery img:hover{transform:scale(1.03);}
-.back-link{display:block;text-align:center;margin-top:20px;color:#1f7a4f;text-decoration:none;}
-.back-link:hover{text-decoration:underline;}
-footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-top:2rem;}
-.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.9);justify-content:center;align-items:center;}
-.modal img{max-width:90%;max-height:90%;border-radius:10px;}
-.modal-close{position:absolute;top:20px;right:35px;color:white;font-size:40px;font-weight:bold;cursor:pointer;}
+
+body {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: #f0f9f4;
+  color: #1e3a2f;
+}
+
+/* ===== NAVBAR (exactly as provided, slightly tweaked for better mobile) ===== */
+.navbar {
+  background-color: #2AA06E;
+  padding: 12px 40px;
+  position: relative;
+}
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  width: 30px;
+}
+.hamburger div {
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+  transition: max-height 0.3s ease;
+}
+.nav-links li {
+  position: relative;
+}
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  padding: 10px 14px;
+  display: block;
+  transition: 0.3s ease;
+}
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2AA06E;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 180px;
+  border-radius: 6px;
+}
+.dropdown-menu li a {
+  padding: 10px 15px;
+  color: white;
+}
+.dropdown-menu li a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+@media screen and (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  .nav-links {
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    width: 100%;
+    background-color: #2AA06E;
+    gap: 0;
+  }
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+  .nav-links li a {
+    padding: 12px 0;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: none;
+  }
+  .dropdown-menu {
+    position: static;
+    border-radius: 0;
+  }
+  .dropdown.active .dropdown-menu {
+    display: block;
+  }
+  .nav-links.show {
+    max-height: 1000px;
+  }
+}
+
+/* Search card (initial view) */
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.search-card {
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+}
+.search-card h2 {
+  color: #1f7a4f;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.search-card p {
+  font-size: 1.1rem;
+  color: #4a6a5e;
+  margin-bottom: 1.5rem;
+}
+.input-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.search-input {
+  flex: 2;
+  min-width: 200px;
+  padding: 16px 20px;
+  font-size: 1.2rem;
+  border: 2px solid #c8e0d4;
+  border-radius: 60px;
+  outline: none;
+  transition: 0.2s;
+}
+.search-input:focus {
+  border-color: #2AA06E;
+}
+.search-btn {
+  background: #1f7a4f;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.search-btn:hover {
+  background: #134e36;
+  transform: scale(1.02);
+}
+.loading {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #2AA06E;
+}
+
+/* ========= FULLSCREEN MODAL (PATIENT DETAILS PAGE) ========= */
+.fullscreen-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f5fef8;
+  z-index: 2000;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.modal-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 32px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  position: relative;
+  animation: fadeInUp 0.4s ease;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 42px;
+  font-weight: bold;
+  color: #1f7a4f;
+  background: rgba(255,255,255,0.9);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.close-modal:hover {
+  background: #1f7a4f;
+  color: white;
+  transform: scale(1.05);
+}
+.patient-header {
+  background: linear-gradient(135deg, #1f7a4f, #2fb17c);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+.patient-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+.patient-header p {
+  font-size: 1.3rem;
+  opacity: 0.9;
+}
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 2rem;
+  background: #ffffff;
+}
+.detail-card {
+  background: #f9fff9;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+.detail-card h3 {
+  font-size: 1.8rem;
+  color: #1f7a4f;
+  margin-bottom: 12px;
+  border-left: 5px solid #2AA06E;
+  padding-left: 15px;
+}
+.detail-card p, .detail-card .note-text {
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: #2c3e2f;
+  margin-top: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.image-gallery {
+  grid-column: 1 / -1;
+  background: #fefdf5;
+  border-radius: 28px;
+  padding: 1.5rem;
+}
+.image-gallery h3 {
+  font-size: 1.8rem;
+  color: #1f7a4f;
+  margin-bottom: 20px;
+}
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.gallery-grid img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+}
+.gallery-grid img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+}
+/* Floating Action Buttons */
+.floating-actions {
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 2100;
+}
+.floating-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #1f7a4f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  transition: 0.2s;
+}
+.floating-btn:hover {
+  transform: scale(1.1);
+  background: #134e36;
+}
+.whatsapp {
+  background: #25D366;
+}
+.whatsapp:hover {
+  background: #128C7E;
+}
+.print-btn {
+  cursor: pointer;
+  background: #2c3e66;
+}
+.print-btn:hover {
+  background: #1e2a4a;
+}
+/* Modal for full-size image */
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  justify-content: center;
+  align-items: center;
+}
+.image-modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 20px;
+}
+.image-modal .close-img {
+  position: absolute;
+  top: 25px;
+  right: 35px;
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+  cursor: pointer;
+}
+footer {
+  background: #1e3a2f;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+@media (max-width: 700px) {
+  .detail-card p, .detail-card .note-text {
+    font-size: 1.1rem;
+  }
+  .patient-header h1 {
+    font-size: 1.8rem;
+  }
+  .gallery-grid img {
+    width: 130px;
+    height: 130px;
+  }
+  .floating-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
 </style>
 </head>
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar">
-  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div><div></div><div></div>
+  </div>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">About</a></li>
     <li class="dropdown">
@@ -70,24 +432,48 @@ footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-to
   </ul>
 </nav>
 
-<div class="container">
-  <div class="card">
-    <h2>🔍 View Your Health Details</h2>
-    <p>Please enter the Registration Number provided by our clinic.</p>
-    <input type="text" id="regNo" placeholder="Registration Number (e.g., BDS123)">
-    <button id="viewBtn">Show My Record</button>
-    <div id="result"></div>
+<!-- SEARCH SECTION -->
+<div class="container" id="searchContainer">
+  <div class="search-card">
+    <h2>🔍 Access Your Health Record</h2>
+    <p>Enter the Registration Number provided by our clinic</p>
+    <div class="input-group">
+      <input type="text" id="regNoInput" class="search-input" placeholder="e.g., BDS123" autocomplete="off">
+      <button id="searchBtn" class="search-btn">View My Details ➤</button>
+    </div>
+    <div id="searchMessage" class="loading"></div>
   </div>
-  <a href="index.html" class="back-link">← Back to Home</a>
 </div>
 
-<footer><p>© 2025 BDS Ayurvedic Physio Yoga Centre | Healing since 2010</p></footer>
+<!-- FULLSCREEN MODAL (patient details page) -->
+<div id="detailsModal" class="fullscreen-modal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeDetailsModal()">&times;</span>
+    <div id="modalDynamicContent"></div>
+  </div>
+</div>
 
-<div id="imageModal" class="modal"><span class="modal-close" onclick="closeModal()">&times;</span><img id="modalImg" src=""></div>
+<!-- Floating action buttons (visible only when modal is open) -->
+<div id="floatingActions" class="floating-actions" style="display: none;">
+  <a href="tel:+918221826243" class="floating-btn" title="Call Clinic">📞</a>
+  <a href="https://wa.me/918221826243?text=Hello%2C%20I%20want%20to%20know%20about%20my%20health%20record" target="_blank" class="floating-btn whatsapp" title="WhatsApp">💬</a>
+  <div class="floating-btn print-btn" onclick="window.print()" title="Print Details">🖨️</div>
+</div>
+
+<footer>
+  <p>© 2025 BDS Ayurvedic Physio Yoga Centre | Healing since 2010</p>
+</footer>
+
+<!-- Image fullscreen modal (for gallery) -->
+<div id="fullImageModal" class="image-modal">
+  <span class="close-img" onclick="closeFullImage()">&times;</span>
+  <img id="fullImageSrc" src="">
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
@@ -96,74 +482,134 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function openModal(imgSrc) {
-  document.getElementById('imageModal').style.display = 'flex';
-  document.getElementById('modalImg').src = imgSrc;
+// DOM elements
+const regInput = document.getElementById('regNoInput');
+const searchBtn = document.getElementById('searchBtn');
+const searchMsg = document.getElementById('searchMessage');
+const modal = document.getElementById('detailsModal');
+const modalContentDiv = document.getElementById('modalDynamicContent');
+const floatingActions = document.getElementById('floatingActions');
+
+// Show full image modal
+function openFullImage(src) {
+  const imgModal = document.getElementById('fullImageModal');
+  const fullImg = document.getElementById('fullImageSrc');
+  fullImg.src = src;
+  imgModal.style.display = 'flex';
 }
-function closeModal() {
-  document.getElementById('imageModal').style.display = 'none';
-}
-window.onclick = function(event) {
-  if (event.target === document.getElementById('imageModal')) closeModal();
+function closeFullImage() {
+  document.getElementById('fullImageModal').style.display = 'none';
 }
 
-document.getElementById('viewBtn').addEventListener('click', async () => {
-  const regNo = document.getElementById('regNo').value.trim();
-  const resultDiv = document.getElementById('result');
-  if(!regNo) {
-    resultDiv.innerHTML = '<div style="color:red;">❌ Please enter Registration Number</div>';
+// Close patient details modal
+function closeDetailsModal() {
+  modal.style.display = 'none';
+  floatingActions.style.display = 'none';
+  document.body.style.overflow = 'auto'; // restore scroll
+}
+
+// Render patient details inside modal (big letters, beautiful)
+function renderPatientDetails(regNo, data) {
+  // Generate gallery HTML if images exist
+  let galleryHtml = '';
+  if (data.images && data.images.length > 0) {
+    let imagesHtml = '';
+    data.images.forEach(base64 => {
+      imagesHtml += `<img src="${base64}" alt="Medical image" onclick="openFullImage('${base64}')">`;
+    });
+    galleryHtml = `
+      <div class="image-gallery">
+        <h3>🖼️ Medical Images / Reports</h3>
+        <div class="gallery-grid">
+          ${imagesHtml}
+        </div>
+      </div>
+    `;
+  } else if (data.photoURL) { // fallback for old single image (if any)
+    galleryHtml = `
+      <div class="image-gallery">
+        <h3>🖼️ Medical Image</h3>
+        <div class="gallery-grid">
+          <img src="${data.photoURL}" alt="Patient photo" onclick="openFullImage('${data.photoURL}')">
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="patient-header">
+      <h1>👤 ${escapeHtml(data.name || 'Patient')}</h1>
+      <p>Registration ID: ${escapeHtml(regNo)}</p>
+    </div>
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>📋 Personal</h3>
+        <p><strong>Age:</strong> ${escapeHtml(data.age || '—')}</p>
+        <p><strong>Sex:</strong> ${escapeHtml(data.sex || '—')}</p>
+        <p><strong>📞 Emergency Contact:</strong> Clinic: +91-8221826243</p>
+      </div>
+      <div class="detail-card">
+        <h3>🩺 Medical</h3>
+        <p><strong>Chief Problem:</strong><br> ${escapeHtml(data.problem || 'Not specified')}</p>
+        <p><strong>📦 Package:</strong> ${escapeHtml(data.package || '—')}</p>
+      </div>
+      <div class="detail-card">
+        <h3>📝 Doctor's Notes</h3>
+        <div class="note-text">${escapeHtml(data.diseaseNotes || 'No additional notes.').replace(/\n/g, '<br>')}</div>
+      </div>
+      ${galleryHtml ? galleryHtml : '<div class="detail-card"><h3>🖼️ Images</h3><p>No images uploaded.</p></div>'}
+    </div>
+  `;
+}
+
+// Simple escape to prevent injection
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+    return c;
+  });
+}
+
+// Search patient and open modal
+async function searchAndShowPatient() {
+  const regNo = regInput.value.trim();
+  if (!regNo) {
+    searchMsg.innerHTML = '<span style="color:#c0392b;">❌ Please enter Registration Number</span>';
     return;
   }
-  resultDiv.innerHTML = '<div>⏳ Loading...</div>';
+  searchMsg.innerHTML = '<span style="color:#2AA06E;">⏳ Fetching your record...</span>';
   try {
     const docSnap = await db.collection("patients").doc(regNo).get();
-    if(docSnap.exists) {
+    if (docSnap.exists) {
       const data = docSnap.data();
-      let galleryHtml = '';
-      if(data.images && data.images.length > 0) {
-        galleryHtml = '<div class="image-gallery">';
-        data.images.forEach(base64 => {
-          galleryHtml += `<img src="${base64}" alt="Patient photo" onclick="openModal('${base64}')">`;
-        });
-        galleryHtml += '</div>';
-      } else if(data.photoURLs && data.photoURLs.length > 0) { // old storage-based fallback
-        galleryHtml = '<div class="image-gallery">';
-        data.photoURLs.forEach(url => {
-          galleryHtml += `<img src="${url}" alt="Patient photo" onclick="openModal('${url}')">`;
-        });
-        galleryHtml += '</div>';
-      } else if(data.photoURL) {
-        galleryHtml = `<div class="image-gallery"><img src="${data.photoURL}" alt="Patient photo" onclick="openModal('${data.photoURL}')"></div>`;
-      }
-      resultDiv.innerHTML = `
-        <div class="patient-detail">
-          <div style="display:flex; flex-wrap:wrap; gap:20px;">
-            <div style="flex:2;">
-              <p><strong>🆔 Registration No:</strong> ${regNo}</p>
-              <p><strong>👤 Name:</strong> ${data.name || 'N/A'}</p>
-              <p><strong>🎂 Age:</strong> ${data.age || 'N/A'}</p>
-              <p><strong>⚥ Sex:</strong> ${data.sex || 'N/A'}</p>
-              <p><strong>🩺 Problem:</strong> ${data.problem || 'N/A'}</p>
-              <p><strong>📦 Package:</strong> ${data.package || 'N/A'}</p>
-              <p><strong>📝 Diseases / Notes:</strong><br> ${(data.diseaseNotes || 'N/A').replace(/\n/g,'<br>')}</p>
-            </div>
-            <div style="flex:1;">
-              ${galleryHtml}
-            </div>
-          </div>
-        </div>
-      `;
+      const htmlContent = renderPatientDetails(regNo, data);
+      modalContentDiv.innerHTML = htmlContent;
+      modal.style.display = 'block';
+      floatingActions.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; // prevent background scroll
+      searchMsg.innerHTML = ''; // clear message
+      // Clear input for next search after closing? Not necessary but fine
     } else {
-      resultDiv.innerHTML = `<div style="color:red;">❌ No record found for Registration Number: ${regNo}. Please contact the clinic.</div>`;
+      searchMsg.innerHTML = `<span style="color:#c0392b;">❌ No record found for Registration Number: ${regNo}. Please contact the clinic.</span>`;
     }
-  } catch(error) {
-    resultDiv.innerHTML = `<div style="color:red;">⚠️ Error: ${error.message}</div>`;
+  } catch (err) {
+    console.error(err);
+    searchMsg.innerHTML = `<span style="color:#c0392b;">⚠️ Error: ${err.message}</span>`;
   }
-});
-document.getElementById('regNo').addEventListener('keypress', (e) => {
-  if(e.key === 'Enter') document.getElementById('viewBtn').click();
+}
+
+// Event listeners
+searchBtn.addEventListener('click', searchAndShowPatient);
+regInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') searchAndShowPatient();
 });
 
+// Navbar scripts
 function toggleMenu() {
   document.getElementById('navLinks').classList.toggle('show');
 }
@@ -172,6 +618,14 @@ function toggleDropdown(event) {
     event.preventDefault();
     event.currentTarget.parentElement.classList.toggle('active');
   }
+}
+
+// Close image modal when clicking outside
+window.onclick = function(e) {
+  const imgModal = document.getElementById('fullImageModal');
+  if (e.target === imgModal) closeFullImage();
+  const detailsModal = document.getElementById('detailsModal');
+  if (e.target === detailsModal) closeDetailsModal();
 }
 </script>
 </body>
