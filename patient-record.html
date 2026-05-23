@@ -7,106 +7,27 @@
 <style>
 *{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
 body{background:#f0f9f4;color:#333;}
-
-/* ===== NAVBAR STYLE (same as provided) ===== */
-.navbar {
-  background-color: #2AA06E;
-  padding: 12px 40px;
-  position: relative;
+.navbar{background-color:#2AA06E;padding:12px 40px;position:relative;}
+.hamburger{display:none;flex-direction:column;cursor:pointer;gap:5px;width:30px;}
+.hamburger div{height:3px;background-color:white;border-radius:2px;}
+.nav-links{list-style:none;display:flex;justify-content:center;align-items:center;gap:25px;margin:0;padding:0;transition:max-height 0.3s ease;}
+.nav-links li{position:relative;}
+.nav-links a{text-decoration:none;color:white;font-weight:500;padding:10px 14px;display:block;transition:0.3s ease;}
+.nav-links a:hover{background-color:rgba(255,255,255,0.15);border-radius:5px;}
+.dropdown-menu{display:none;position:absolute;top:100%;left:0;background-color:#2AA06E;list-style:none;padding:0;margin:0;min-width:180px;border-radius:6px;}
+.dropdown-menu li a{padding:10px 15px;color:white;}
+.dropdown-menu li a:hover{background-color:rgba(255,255,255,0.15);}
+.dropdown:hover .dropdown-menu{display:block;}
+@media screen and (max-width:768px){
+  .hamburger{display:flex;}
+  .nav-links{flex-direction:column;max-height:0;overflow:hidden;width:100%;background-color:#2AA06E;gap:0;}
+  .nav-links li{width:100%;text-align:center;}
+  .nav-links li a{padding:12px 0;}
+  .dropdown:hover .dropdown-menu{display:none;}
+  .dropdown-menu{position:static;border-radius:0;}
+  .dropdown.active .dropdown-menu{display:block;}
+  .nav-links.show{max-height:1000px;}
 }
-.hamburger {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  gap: 5px;
-  width: 30px;
-}
-.hamburger div {
-  height: 3px;
-  background-color: white;
-  border-radius: 2px;
-}
-.nav-links {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin: 0;
-  padding: 0;
-  transition: max-height 0.3s ease;
-}
-.nav-links li {
-  position: relative;
-}
-.nav-links a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-  padding: 10px 14px;
-  display: block;
-  transition: 0.3s ease;
-}
-.nav-links a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 5px;
-}
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #2AA06E;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  min-width: 180px;
-  border-radius: 6px;
-}
-.dropdown-menu li a {
-  padding: 10px 15px;
-  color: white;
-}
-.dropdown-menu li a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-@media screen and (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-  .nav-links {
-    flex-direction: column;
-    max-height: 0;
-    overflow: hidden;
-    width: 100%;
-    background-color: #2AA06E;
-    gap: 0;
-  }
-  .nav-links li {
-    width: 100%;
-    text-align: center;
-  }
-  .nav-links li a {
-    padding: 12px 0;
-  }
-  .dropdown:hover .dropdown-menu {
-    display: none;
-  }
-  .dropdown-menu {
-    position: static;
-    border-radius: 0;
-  }
-  .dropdown.active .dropdown-menu {
-    display: block;
-  }
-  .nav-links.show {
-    max-height: 1000px;
-  }
-}
-/* Patient record styles */
 .container{max-width:800px;margin:30px auto;padding:0 20px;}
 .card{background:white;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.05);padding:2rem;margin-bottom:2rem;}
 h2{color:#1f7a4f;margin-bottom:20px;}
@@ -120,7 +41,6 @@ button:hover{background:#166342;}
 .back-link{display:block;text-align:center;margin-top:20px;color:#1f7a4f;text-decoration:none;}
 .back-link:hover{text-decoration:underline;}
 footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-top:2rem;}
-/* Modal for full-size image */
 .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.9);justify-content:center;align-items:center;}
 .modal img{max-width:90%;max-height:90%;border-radius:10px;}
 .modal-close{position:absolute;top:20px;right:35px;color:white;font-size:40px;font-weight:bold;cursor:pointer;}
@@ -129,11 +49,7 @@ footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-to
 <body>
 
 <nav class="navbar">
-  <div class="hamburger" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">About</a></li>
     <li class="dropdown">
@@ -165,19 +81,12 @@ footer{background:#1e3a2f;color:white;text-align:center;padding:1.5rem;margin-to
   <a href="index.html" class="back-link">← Back to Home</a>
 </div>
 
-<footer>
-  <p>© 2025 BDS Ayurvedic Physio Yoga Centre | Healing since 2010</p>
-</footer>
+<footer><p>© 2025 BDS Ayurvedic Physio Yoga Centre | Healing since 2010</p></footer>
 
-<!-- Modal for full-size image -->
-<div id="imageModal" class="modal">
-  <span class="modal-close" onclick="closeModal()">&times;</span>
-  <img id="modalImg" src="">
-</div>
+<div id="imageModal" class="modal"><span class="modal-close" onclick="closeModal()">&times;</span><img id="modalImg" src=""></div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
@@ -188,18 +97,14 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 function openModal(imgSrc) {
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImg');
-  modal.style.display = 'flex';
-  modalImg.src = imgSrc;
+  document.getElementById('imageModal').style.display = 'flex';
+  document.getElementById('modalImg').src = imgSrc;
 }
 function closeModal() {
   document.getElementById('imageModal').style.display = 'none';
 }
-// Click outside modal closes it
 window.onclick = function(event) {
-  const modal = document.getElementById('imageModal');
-  if (event.target === modal) closeModal();
+  if (event.target === document.getElementById('imageModal')) closeModal();
 }
 
 document.getElementById('viewBtn').addEventListener('click', async () => {
@@ -215,13 +120,19 @@ document.getElementById('viewBtn').addEventListener('click', async () => {
     if(docSnap.exists) {
       const data = docSnap.data();
       let galleryHtml = '';
-      if(data.photoURLs && data.photoURLs.length > 0) {
+      if(data.images && data.images.length > 0) {
+        galleryHtml = '<div class="image-gallery">';
+        data.images.forEach(base64 => {
+          galleryHtml += `<img src="${base64}" alt="Patient photo" onclick="openModal('${base64}')">`;
+        });
+        galleryHtml += '</div>';
+      } else if(data.photoURLs && data.photoURLs.length > 0) { // old storage-based fallback
         galleryHtml = '<div class="image-gallery">';
         data.photoURLs.forEach(url => {
           galleryHtml += `<img src="${url}" alt="Patient photo" onclick="openModal('${url}')">`;
         });
         galleryHtml += '</div>';
-      } else if(data.photoURL) { // fallback for old single-image records
+      } else if(data.photoURL) {
         galleryHtml = `<div class="image-gallery"><img src="${data.photoURL}" alt="Patient photo" onclick="openModal('${data.photoURL}')"></div>`;
       }
       resultDiv.innerHTML = `
@@ -253,16 +164,13 @@ document.getElementById('regNo').addEventListener('keypress', (e) => {
   if(e.key === 'Enter') document.getElementById('viewBtn').click();
 });
 
-// Navbar functions
 function toggleMenu() {
-  const nav = document.getElementById('navLinks');
-  nav.classList.toggle('show');
+  document.getElementById('navLinks').classList.toggle('show');
 }
 function toggleDropdown(event) {
   if (window.innerWidth <= 768) {
     event.preventDefault();
-    const dropdown = event.currentTarget.parentElement;
-    dropdown.classList.toggle('active');
+    event.currentTarget.parentElement.classList.toggle('active');
   }
 }
 </script>
