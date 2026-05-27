@@ -17,7 +17,7 @@ body {
   color: #1e3a2f;
 }
 
-/* ===== NAVBAR (exactly as provided, slightly tweaked for better mobile) ===== */
+/* ===== NAVBAR (exactly as provided) ===== */
 .navbar {
   background-color: #2AA06E;
   padding: 12px 40px;
@@ -505,12 +505,11 @@ function closeFullImage() {
 function closeDetailsModal() {
   modal.style.display = 'none';
   floatingActions.style.display = 'none';
-  document.body.style.overflow = 'auto'; // restore scroll
+  document.body.style.overflow = 'auto';
 }
 
 // Render patient details inside modal (big letters, beautiful)
 function renderPatientDetails(regNo, data) {
-  // Generate gallery HTML if images exist
   let galleryHtml = '';
   if (data.images && data.images.length > 0) {
     let imagesHtml = '';
@@ -525,7 +524,7 @@ function renderPatientDetails(regNo, data) {
         </div>
       </div>
     `;
-  } else if (data.photoURL) { // fallback for old single image (if any)
+  } else if (data.photoURL) {
     galleryHtml = `
       <div class="image-gallery">
         <h3>🖼️ Medical Image</h3>
@@ -562,7 +561,6 @@ function renderPatientDetails(regNo, data) {
   `;
 }
 
-// Simple escape to prevent injection
 function escapeHtml(str) {
   if (!str) return '';
   return str.replace(/[&<>]/g, function(m) {
@@ -570,18 +568,18 @@ function escapeHtml(str) {
     if (m === '<') return '&lt;';
     if (m === '>') return '&gt;';
     return m;
-  }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-    return c;
   });
 }
 
-// Search patient and open modal
+// SEARCH WITH CASE-INSENSITIVE (convert input to uppercase)
 async function searchAndShowPatient() {
-  const regNo = regInput.value.trim();
+  let regNo = regInput.value.trim();
   if (!regNo) {
     searchMsg.innerHTML = '<span style="color:#c0392b;">❌ Please enter Registration Number</span>';
     return;
   }
+  // Convert to uppercase for case‑insensitive match (Firestore doc IDs are case‑sensitive)
+  regNo = regNo.toUpperCase();
   searchMsg.innerHTML = '<span style="color:#2AA06E;">⏳ Fetching your record...</span>';
   try {
     const docSnap = await db.collection("patients").doc(regNo).get();
@@ -591,9 +589,8 @@ async function searchAndShowPatient() {
       modalContentDiv.innerHTML = htmlContent;
       modal.style.display = 'block';
       floatingActions.style.display = 'flex';
-      document.body.style.overflow = 'hidden'; // prevent background scroll
-      searchMsg.innerHTML = ''; // clear message
-      // Clear input for next search after closing? Not necessary but fine
+      document.body.style.overflow = 'hidden';
+      searchMsg.innerHTML = '';
     } else {
       searchMsg.innerHTML = `<span style="color:#c0392b;">❌ No record found for Registration Number: ${regNo}. Please contact the clinic.</span>`;
     }
@@ -620,7 +617,7 @@ function toggleDropdown(event) {
   }
 }
 
-// Close image modal when clicking outside
+// Close modals when clicking outside
 window.onclick = function(e) {
   const imgModal = document.getElementById('fullImageModal');
   if (e.target === imgModal) closeFullImage();
