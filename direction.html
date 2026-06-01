@@ -1,584 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <title>BDS – Directions</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-:root{
-  --green:#1f7a4f;
-  --green-light:#e9f7f0;
-  --green-dark:#134e36;
-  --shadow-sm:0 12px 30px rgba(0,0,0,0.06);
-  --shadow-md:0 18px 40px rgba(0,0,0,0.08);
-  --shadow-lg:0 20px 45px rgba(0,0,0,0.12);
-  --transition:all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-}
-
-*{
-  box-sizing:border-box;
-  font-family:"Segoe UI", "Poppins", system-ui, sans-serif;
-  margin:0;
-  padding:0;
-}
-
-body{
-  margin:0;
-  background:linear-gradient(135deg,#ecfff6 0%, #ffffff 100%);
-  color:#1e2a32;
-  line-height:1.5;
-}
-
-/* Header improvements */
-header{
-  background:linear-gradient(135deg, var(--green), #2fb17c);
-  color:white;
-  padding:45px 20px 50px;
-  text-align:center;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-  margin-bottom:20px;
-  box-shadow:var(--shadow-md);
-}
-
-header h1{
-  margin:0;
-  font-size:2.5rem;
-  letter-spacing:-0.5px;
-  font-weight:700;
-}
-
-header p{
-  margin-top:12px;
-  font-size:1.2rem;
-  opacity:0.9;
-}
-
-.container{
-  max-width:1200px;
-  margin:30px auto 60px;
-  padding:0 24px;
-}
-
-/* Section card */
-.section{
-  background:white;
-  padding:40px;
-  border-radius:32px;
-  box-shadow:var(--shadow-sm);
-  transition:var(--transition);
-  border:1px solid rgba(31,122,79,0.08);
-}
-
-.section:hover{
-  transform:translateY(-4px);
-  box-shadow:var(--shadow-lg);
-}
-
-.location-wrapper{
-  display:flex;
-  flex-wrap:wrap;
-  gap:35px;
-  align-items:stretch;
-  justify-content:center;
-}
-
-/* Info card styling */
-.info-card{
-  flex:1;
-  min-width:280px;
-  background:linear-gradient(145deg, #f3fff7, #ffffff);
-  padding:35px 30px;
-  border-radius:28px;
-  box-shadow:var(--shadow-sm);
-  transition:var(--transition);
-  border:1px solid rgba(31,122,79,0.1);
-}
-
-.info-card:hover{
-  transform:translateY(-5px);
-  box-shadow:var(--shadow-lg);
-}
-
-.info-card h2{
-  color:var(--green);
-  margin-top:0;
-  margin-bottom:20px;
-  font-size:1.8rem;
-  font-weight:600;
-  border-left:5px solid var(--green);
-  padding-left:18px;
-}
-
-.info-card p{
-  font-size:1.05rem;
-  line-height:1.7;
-  margin-bottom:25px;
-  color:#2c3e2f;
-}
-
-/* Button styling */
-.button{
-  display:inline-block;
-  background:linear-gradient(135deg, var(--green), #3fcf94);
-  color:white;
-  padding:14px 28px;
-  border-radius:50px;
-  text-decoration:none;
-  font-weight:600;
-  transition:var(--transition);
-  box-shadow:0 4px 12px rgba(31,122,79,0.2);
-}
-
-.button:hover{
-  background:var(--green-dark);
-  transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(31,122,79,0.3);
-}
-
-/* Map box */
-.map-box{
-  flex:1;
-  min-width:300px;
-  border-radius:28px;
-  overflow:hidden;
-  box-shadow:var(--shadow-lg);
-  transition:var(--transition);
-}
-
-.map-box:hover{
-  transform:scale(1.01);
-  box-shadow:0 25px 45px rgba(0,0,0,0.15);
-}
-
-.map-box iframe{
-  width:100%;
-  height:450px;
-  border:0;
-  display:block;
-}
-
-/* Footer */
-footer{
-  margin-top:50px;
-  background:var(--green-dark);
-  color:white;
-  text-align:center;
-  padding:28px 20px;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  font-size:0.95rem;
-}
-
-/* Mobile adjustments */
-@media(max-width:768px){
-  .container{
-    margin:20px auto 40px;
-    padding:0 20px;
-  }
-  .section{
-    padding:28px 20px;
-  }
-  .location-wrapper{
-    flex-direction:column;
-    gap:25px;
-  }
-  .info-card h2{
-    font-size:1.5rem;
-  }
-  .map-box iframe{
-    height:300px;
-  }
-  header h1{
-    font-size:1.8rem;
-  }
-}
-
-/* Navbar enhancements (same structure, improved looks) */
-.navbar {
-  background-color: #2AA06E;
-  padding: 12px 40px;
-  position: relative;
-  box-shadow:0 4px 12px rgba(0,0,0,0.05);
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  gap: 5px;
-  width: 30px;
-}
-
-.hamburger div {
-  height: 3px;
-  background-color: white;
-  border-radius: 2px;
-  transition:0.2s;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin: 0;
-  padding: 0;
-  transition: max-height 0.3s ease;
-}
-
-.nav-links li {
-  position: relative;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-  padding: 10px 14px;
-  display: block;
-  transition: 0.2s ease;
-  border-radius: 40px;
-}
-
-.nav-links a:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #2AA06E;
-  list-style: none;
-  padding: 8px 0;
-  margin: 0;
-  min-width: 180px;
-  border-radius: 20px;
-  box-shadow:0 12px 25px rgba(0,0,0,0.1);
-  z-index:100;
-}
-
-.dropdown-menu li a {
-  padding: 10px 20px;
-  color: white;
-}
-
-.dropdown-menu li a:hover {
-  background-color: rgba(255,255,255,0.25);
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-@media screen and (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-  .navbar {
-    padding: 12px 20px;
-  }
-  .nav-links {
-    flex-direction: column;
-    max-height: 0;
-    overflow: hidden;
-    width: 100%;
-    background-color: #2AA06E;
-    gap: 0;
-    border-radius: 20px;
-    margin-top: 12px;
-  }
-  .nav-links li {
-    width: 100%;
-    text-align: center;
-  }
-  .nav-links li a {
-    padding: 14px 0;
-  }
-  .dropdown:hover .dropdown-menu {
-    display: none;
-  }
-  .dropdown-menu {
-    position: static;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  .dropdown.active .dropdown-menu {
-    display: block;
-  }
-  .nav-links.show {
-    max-height: 600px;
-  }
-}
-
-/* Call button improvements */
-.call-float{
-  position:fixed;
-  bottom:140px;
-  right:24px;
-  background:linear-gradient(145deg, #1f7a4f, #16633f);
-  color:white;
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  text-decoration:none;
-  box-shadow:0 10px 25px rgba(0,0,0,0.25);
-  z-index:1000;
-  transition:0.25s;
-}
-
-.call-float:hover{
-  transform:scale(1.1) rotate(5deg);
-  background:#134e36;
-  box-shadow:0 15px 30px rgba(0,0,0,0.3);
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<header>
-<h1>📍 Visit Us – Get Directions</h1>
-<p>Baba Deep Singh Ji Ayurvedic, Physiotherapy & Yoga Centre</p>
-</header>
-
-<style>
-/* ===== NAVBAR STYLE (preserved, enhanced above) ===== */
-.navbar {
-  background-color: #2AA06E;
-  padding: 12px 40px;
-  position: relative;
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  gap: 5px;
-  width: 30px;
-}
-
-.hamburger div {
-  height: 3px;
-  background-color: white;
-  border-radius: 2px;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin: 0;
-  padding: 0;
-  transition: max-height 0.3s ease;
-}
-
-.nav-links li {
-  position: relative;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-  padding: 10px 14px;
-  display: block;
-  transition: 0.3s ease;
-}
-
-.nav-links a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 5px;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #2AA06E;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  min-width: 180px;
-  border-radius: 6px;
-}
-
-.dropdown-menu li a {
-  padding: 10px 15px;
-  color: white;
-}
-
-.dropdown-menu li a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-@media screen and (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-  .nav-links {
-    flex-direction: column;
-    max-height: 0;
-    overflow: hidden;
-    width: 100%;
-    background-color: #2AA06E;
-    gap: 0;
-  }
-  .nav-links li {
-    width: 100%;
-    text-align: center;
-  }
-  .nav-links li a {
-    padding: 12px 0;
-  }
-  .dropdown:hover .dropdown-menu {
-    display: none;
-  }
-  .dropdown-menu {
-    position: static;
-    border-radius: 0;
-  }
-  .dropdown.active .dropdown-menu {
-    display: block;
-  }
-  .nav-links.show {
-    max-height: 1000px;
-  }
-}
-</style>
+<div class="emergency-banner" data-i18n="emergency">📞 Emergency: +91-8221826243</div>
+<div class="top-bar">
+  <div class="lang-switch">
+    <button id="langEn">English</button>
+    <button id="langPa">ਪੰਜਾਬੀ</button>
+    <button id="langHi">हिंदी</button>
+  </div>
+  <button id="darkModeToggle">🌓 Dark Mode</button>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search...">
+    <div id="searchResults" class="search-results"></div>
+  </div>
+</div>
 
 <nav class="navbar">
-  <div class="hamburger" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
+  <div class="logo-area">BDS Ayurvedic Physio & Yoga</div>
+  <div class="hamburger" onclick="toggleMenu()"><div></div><div></div><div></div></div>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">About</a></li>
-
-    <li class="dropdown">
-      <a href="javascript:void(0)" onclick="toggleDropdown(event)">Services ▼</a>
+    <li class="dropdown"><a href="#">Services ▼</a>
       <ul class="dropdown-menu">
         <li><a href="yoga.html">Yoga</a></li>
         <li><a href="physiotherapy.html">Physiotherapy</a></li>
         <li><a href="ayurvedic.html">Ayurvedic</a></li>
         <li><a href="diet.html">Diet</a></li>
-        <li><a href="paient-record.html">Patient Records</a></li>
       </ul>
     </li>
-
     <li><a href="about-doctor.html">Doctors</a></li>
     <li><a href="equipment.html">Physiotherapy Equipment</a></li>
     <li><a href="testimonials.html">Testimonials</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="direction.html">Directions</a></li>
+    <li><a href="patient-record.html">Patient Records</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="appointment.html">Book Now</a></li>
   </ul>
 </nav>
 
-<script>
-// Toggle mobile menu
-function toggleMenu() {
-  const nav = document.getElementById('navLinks');
-  nav.classList.toggle('show');
-}
-
-// Toggle dropdown menu on mobile
-function toggleDropdown(event) {
-  if (window.innerWidth <= 768) {
-    event.preventDefault();
-    const dropdown = event.currentTarget.parentElement;
-    dropdown.classList.toggle('active');
-  }
-}
-</script>
+<header style="background:linear-gradient(135deg,#1f7a4f,#2fb17c); color:white; padding:45px 20px 50px; text-align:center; border-bottom-left-radius:30px; border-bottom-right-radius:30px;">
+  <h1>📍 Visit Us – Get Directions</h1>
+  <p>Baba Deep Singh Ji Ayurvedic, Physiotherapy & Yoga Centre</p>
+</header>
 
 <div class="container">
-<div class="section">
-
-<div class="location-wrapper">
-
-<div class="info-card">
-<h2>Clinic Address</h2>
-<p>
-Punjab, India <br><br>
-📞 +91 8221826243
-</p>
-
-<a href="https://www.google.com/maps/dir/?api=1&destination=31.667654639850785,74.89851645000002"
-target="_blank"
-class="button">
-🧭 Get Directions
-</a>
+  <div class="section">
+    <div style="display:flex; flex-wrap:wrap; gap:35px; align-items:stretch;">
+      <div style="flex:1; min-width:280px; background:#f3fff7; padding:35px; border-radius:28px;">
+        <h2>Clinic Address</h2>
+        <p>Punjab, India <br><br>📞 +91 8221826243</p>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=31.667654639850785,74.89851645000002" target="_blank" style="display:inline-block; background:#1f7a4f; color:white; padding:12px 28px; border-radius:50px; text-decoration:none; margin-top:15px;">🧭 Get Directions</a>
+      </div>
+      <div style="flex:1; min-width:300px; border-radius:28px; overflow:hidden; box-shadow:0 20px 45px rgba(0,0,0,0.1);">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3395.7647746090333!2d74.89594187547544!3d31.667654639850785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391963872fedf5b5%3A0x6aa780bdba26539d!2sBaba%20Deep%20Singh%20Ji%20Ayurvedic%2C%20Physiotherapy%20And%20Yoga%20Centre!5e0!3m2!1sen!2sin!4v1771583794846!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="map-box">
-<iframe 
-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3395.7647746090333!2d74.89594187547544!3d31.667654639850785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391963872fedf5b5%3A0x6aa780bdba26539d!2sBaba%20Deep%20Singh%20Ji%20Ayurvedic%2C%20Physiotherapy%20And%20Yoga%20Centre!5e0!3m2!1sen!2sin!4v1771583794846!5m2!1sen!2sin"
-width="100%" 
-height="450"
-style="border:0;"
-allowfullscreen=""
-loading="lazy">
-</iframe>
+<footer>© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center</footer>
+
+<div class="float-buttons">
+  <a href="tel:+918221826243" class="float-btn">📞</a>
+  <a href="https://wa.me/918221826243?text=Hello%20BDS%20Center" class="float-btn whatsapp">💬</a>
 </div>
 
-</div>
-</div>
-</div>
-
-<footer>
-© 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
-</footer>
-
-<!-- TIDIO CHATBOT -->
-<script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async>
-</script>
-
-<!-- Floating Call Button -->
-<a href="tel:+918221826243" class="call-float">
-📞
-</a>
-
-<style>
-.call-float{
-position:fixed;
-bottom:140px;
-right:20px;
-background:#1f7a4f;
-color:white;
-width:60px;
-height:60px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:26px;
-text-decoration:none;
-box-shadow:0 8px 20px rgba(0,0,0,0.25);
-z-index:1000;
-transition:0.3s;
-}
-
-.call-float:hover{
-transform:scale(1.1);
-background:#134e36;
-}
-</style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
