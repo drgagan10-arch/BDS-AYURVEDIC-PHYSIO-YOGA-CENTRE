@@ -13,14 +13,24 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --green: #1f7a4f;
+      --green-light: #e9f7f0;
+      --green-dark: #134e36;
+      --shadow-sm: 0 10px 25px -5px rgba(0,0,0,0.05);
+      --shadow-md: 0 20px 30px -12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 25px 35px -12px rgba(0,0,0,0.15);
+      --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
     body {
       font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      background-color: #f9fafb;
+      background: linear-gradient(135deg, #ecfff6 0%, #ffffff 100%);
       color: #1e2a3e;
       line-height: 1.5;
     }
 
-    /* ===== NAVBAR STYLES (matches your existing site) ===== */
+    /* ===== NAVBAR STYLES (Enhanced) ===== */
     .navbar {
       background-color: #2AA06E;
       padding: 12px 40px;
@@ -29,9 +39,9 @@
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
-    /* Logo / brand area (optional, but consistent) */
     .logo-area {
       color: white;
       font-weight: bold;
@@ -43,7 +53,6 @@
       font-size: 0.9rem;
     }
 
-    /* Hamburger button for mobile */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -58,7 +67,6 @@
       transition: 0.2s;
     }
 
-    /* Nav links */
     .nav-links {
       list-style: none;
       display: flex;
@@ -78,15 +86,15 @@
       font-weight: 500;
       padding: 10px 14px;
       display: block;
-      transition: 0.3s ease;
+      transition: 0.2s ease;
       font-size: 1rem;
+      border-radius: 40px;
     }
     .nav-links a:hover {
-      background-color: rgba(255, 255, 255, 0.15);
-      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
     }
 
-    /* Dropdown */
     .dropdown-menu {
       display: none;
       position: absolute;
@@ -94,24 +102,24 @@
       left: 0;
       background-color: #2AA06E;
       list-style: none;
-      padding: 0;
+      padding: 8px 0;
       margin: 0;
       min-width: 180px;
-      border-radius: 6px;
+      border-radius: 20px;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.1);
       z-index: 100;
     }
     .dropdown-menu li a {
-      padding: 10px 15px;
+      padding: 10px 20px;
       color: white;
     }
     .dropdown-menu li a:hover {
-      background-color: rgba(255, 255, 255, 0.15);
+      background-color: rgba(255, 255, 255, 0.25);
     }
     .dropdown:hover .dropdown-menu {
       display: block;
     }
 
-    /* Mobile styles */
     @media screen and (max-width: 768px) {
       .navbar {
         padding: 12px 20px;
@@ -127,27 +135,29 @@
         background-color: #2AA06E;
         gap: 0;
         margin-top: 12px;
+        border-radius: 20px;
       }
       .nav-links li {
         width: 100%;
         text-align: center;
       }
       .nav-links li a {
-        padding: 12px 0;
+        padding: 14px 0;
       }
       .dropdown:hover .dropdown-menu {
-        display: none; /* Disable hover on mobile */
+        display: none;
       }
       .dropdown-menu {
         position: static;
         border-radius: 0;
         background-color: #1e7a52;
+        box-shadow: none;
       }
       .dropdown.active .dropdown-menu {
         display: block;
       }
       .nav-links.show {
-        max-height: 1000px;
+        max-height: 600px;
       }
     }
 
@@ -164,12 +174,14 @@
     }
     .page-header h1 {
       font-size: 2.4rem;
-      color: #1f5e3a;
+      color: var(--green-dark);
       margin-bottom: 12px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
     .page-header p {
       font-size: 1.2rem;
-      color: #2c3e50;
+      color: #2c5a42;
       max-width: 700px;
       margin: 0 auto;
     }
@@ -183,24 +195,29 @@
     }
     .equipment-card {
       background: white;
-      border-radius: 24px;
+      border-radius: 28px;
       overflow: hidden;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      border: 1px solid rgba(31,122,79,0.08);
     }
     .equipment-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-md);
     }
     .card-img {
-      background-color: #eef2f0;
+      background: linear-gradient(145deg, #eef2f0, #ffffff);
       height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 4rem;
       color: #2AA06E;
-      transition: 0.2s;
+      transition: var(--transition);
+    }
+    .equipment-card:hover .card-img {
+      transform: scale(1.02);
+      background: #e8f3ed;
     }
     .card-content {
       padding: 20px 20px 24px;
@@ -214,32 +231,52 @@
     .card-content p {
       color: #4a5b6e;
       margin-bottom: 20px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     .equip-badge {
       display: inline-block;
-      background: #e6f4ea;
-      color: #2c6e49;
-      padding: 4px 12px;
-      border-radius: 30px;
+      background: linear-gradient(135deg, #e6f4ea, #d4eadb);
+      color: var(--green-dark);
+      padding: 5px 14px;
+      border-radius: 40px;
       font-size: 0.75rem;
       font-weight: 600;
       letter-spacing: 0.3px;
       margin-bottom: 12px;
     }
 
+    /* Intro text */
+    .intro-text {
+      text-align: center;
+      background: linear-gradient(135deg, #eef4f0, #ffffff);
+      padding: 24px 28px;
+      border-radius: 48px;
+      margin: 30px 0 20px;
+      font-size: 1.05rem;
+      color: var(--green-dark);
+      border: 1px solid rgba(31,122,79,0.1);
+      box-shadow: var(--shadow-sm);
+    }
+
     /* CTA Section */
     .equipment-cta {
       background: linear-gradient(135deg, #1f5e3a 0%, #2AA06E 100%);
-      border-radius: 32px;
+      border-radius: 40px;
       padding: 48px 32px;
       text-align: center;
       margin-top: 40px;
       color: white;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+    .equipment-cta:hover {
+      transform: scale(1.01);
+      box-shadow: var(--shadow-lg);
     }
     .equipment-cta h2 {
       font-size: 2rem;
       margin-bottom: 12px;
+      font-weight: 700;
     }
     .equipment-cta p {
       font-size: 1.1rem;
@@ -261,7 +298,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .btn-buy i {
       font-size: 1.3rem;
@@ -269,26 +306,40 @@
     .btn-buy:hover {
       background-color: #ffa01e;
       transform: scale(1.02);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
     }
 
-    /* Section description intro */
-    .intro-text {
-      text-align: center;
-      background: #eef4f0;
-      padding: 20px 24px;
-      border-radius: 48px;
+    /* Additional info box */
+    .info-box {
+      background: #ffffff;
+      border-left: 6px solid #2AA06E;
+      padding: 22px 28px;
+      border-radius: 28px;
       margin: 30px 0 20px;
-      font-size: 1.05rem;
-      color: #1e4d2e;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .info-box:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .info-box p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #2c3e2f;
+    }
+    .info-box i {
+      color: #2AA06E;
     }
 
     footer {
       text-align: center;
-      padding: 30px 20px;
-      background-color: #eef2ef;
-      color: #2c5a42;
-      font-size: 0.85rem;
+      padding: 32px 20px;
+      background: linear-gradient(135deg, #eef2ef, #e4eae6);
+      color: #1f5e3a;
+      font-size: 0.9rem;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      margin-top: 40px;
     }
 
     @media (max-width: 640px) {
@@ -302,12 +353,15 @@
         padding: 12px 24px;
         font-size: 1rem;
       }
+      .equipment-cta h2 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== NAVBAR (exactly matching your design + dropdown) ===== -->
+  <!-- ===== NAVBAR (exactly matching your design + enhanced styling) ===== -->
   <nav class="navbar">
     <div class="logo-area">
       BDS Ayurvedic Physio & Yoga
@@ -389,13 +443,13 @@
           </div>
         </div>
         
-        <!-- Card 4 -->
+        <!-- Card 4 - fixed missing quote -->
         <div class="equipment-card">
           <div class="card-img">
             <i class="fas fa-hand-sparkles"></i>
           </div>
           <div class="card-content">
-            <span class="equip-badge>Shockwave Therapy</span>
+            <span class="equip-badge">Shockwave Therapy</span>
             <h3>Radial Shockwave</h3>
             <p>Highly effective for plantar fasciitis, tennis elbow, calcific tendinitis and chronic muscle trigger points — stimulates tissue regeneration and pain relief.</p>
           </div>
@@ -427,8 +481,8 @@
       </div>
 
       <!-- Additional paragraph (your requested custom lines) -->
-      <div style="background: #ffffff; border-left: 6px solid #2AA06E; padding: 20px 28px; border-radius: 20px; margin: 30px 0 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-        <p style="font-size: 1rem; line-height: 1.6;"><strong>✔️ Why our physiotherapy equipment stands out:</strong> Every machine – from interferential therapy (IFT) units to cervical traction devices – is regularly calibrated and used under expert supervision. We blend traditional hands‑on therapy with modern medical technology to restore function, reduce pain, and improve quality of life. Dr. Kirti (Physiotherapy Specialist) customizes protocols using tools like the shoulder pulley, foam rollers, and balance boards to achieve optimal outcomes.</p>
+      <div class="info-box">
+        <p><strong>✔️ Why our physiotherapy equipment stands out:</strong> Every machine – from interferential therapy (IFT) units to cervical traction devices – is regularly calibrated and used under expert supervision. We blend traditional hands‑on therapy with modern medical technology to restore function, reduce pain, and improve quality of life. Dr. Kirti (Physiotherapy Specialist) customizes protocols using tools like the shoulder pulley, foam rollers, and balance boards to achieve optimal outcomes.</p>
         <p style="margin-top: 14px;"><i class="fas fa-check-circle" style="color:#2AA06E;"></i> Conditions treated: Cervical & Lumbar Spondylosis, Knee Osteoarthritis, Paralysis rehabilitation, Sports Injuries, Post‑fracture stiffness, and more.</p>
       </div>
 
