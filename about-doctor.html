@@ -13,41 +13,314 @@
   --green:#1f7a4f;
   --green-light:#e9f7f0;
   --green-dark:#134e36;
-}
-*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
-body{background:linear-gradient(135deg,#ecfff6,#ffffff);color:#333;}
-header{
-  background:linear-gradient(135deg,#1f7a4f,#2fb17c);
-  color:white;
-  padding:35px 20px;
-  text-align:center;
-}
-.container{
-  max-width:1100px;
-  margin:45px auto;
-  padding:0 20px;
+  --shadow-sm:0 10px 20px rgba(0,0,0,0.05);
+  --shadow-md:0 20px 30px rgba(0,0,0,0.08);
+  --shadow-lg:0 25px 40px rgba(0,0,0,0.12);
+  --transition:all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
+*{
+  box-sizing:border-box;
+  font-family:"Segoe UI", "Poppins", system-ui, -apple-system, sans-serif;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:linear-gradient(135deg,#ecfff6 0%, #ffffff 100%);
+  color:#1e2a32;
+  line-height:1.5;
+}
+
+/* Header improvements */
+header{
+  background:linear-gradient(135deg, #1f7a4f, #2fb17c);
+  color:white;
+  padding:45px 20px 50px;
+  text-align:center;
+  position:relative;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow-md);
+}
+
+header h1{
+  font-size:2.8rem;
+  letter-spacing:-0.5px;
+  margin-bottom:10px;
+  font-weight:700;
+}
+
+header p{
+  font-size:1.2rem;
+  opacity:0.9;
+  max-width:600px;
+  margin:0 auto;
+}
+
+/* Container */
+.container{
+  max-width:1200px;
+  margin:30px auto 60px;
+  padding:0 24px;
+}
+
+/* Section cards */
 .section{
   background:white;
-  padding:35px;
-  border-radius:25px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.08);
+  padding:40px;
+  border-radius:32px;
+  box-shadow:var(--shadow-sm);
+  transition:var(--transition);
+  margin-bottom:40px;
+  border:1px solid rgba(31,122,79,0.08);
 }
-  .section h2{color:var(--green);font-size:32px;margin-bottom:15px;}
-.section p{font-size:17px;line-height:1.7;margin-bottom:15px;}
+
+.section:hover{
+  transform:translateY(-5px);
+  box-shadow:var(--shadow-lg);
+}
+
+.section h2{
+  color:var(--green);
+  font-size:2rem;
+  margin-bottom:20px;
+  font-weight:600;
+  letter-spacing:-0.3px;
+  border-left:5px solid var(--green);
+  padding-left:18px;
+}
+
+.section p{
+  font-size:1.05rem;
+  line-height:1.7;
+  margin-bottom:18px;
+  color:#2c3e2f;
+}
+
+/* Doctor card styling */
 .doctor-card{
-  display:flex;flex-wrap:wrap;align-items:center;gap:25px;margin-top:25px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:35px;
+  margin-top:25px;
+  padding:10px 0;
 }
+
 .doctor-card img{
-  width:200px;border-radius:15px;flex-shrink:0;
+  width:220px;
+  border-radius:28px;
+  flex-shrink:0;
+  object-fit:cover;
+  box-shadow:0 15px 30px rgba(0,0,0,0.1);
+  transition:var(--transition);
+  border:3px solid white;
 }
+
+.doctor-card img:hover{
+  transform:scale(1.02);
+  box-shadow:0 20px 35px rgba(0,0,0,0.15);
+}
+
 .doctor-card div{
   flex:1;
 }
+
+.doctor-card p strong{
+  color:var(--green-dark);
+  font-weight:600;
+  display:inline-block;
+  background:var(--green-light);
+  padding:4px 12px;
+  border-radius:40px;
+  font-size:0.9rem;
+  margin-bottom:12px;
+}
+
+/* Footer */
 footer{
-  margin-top:70px;background:var(--green-dark);
-  color:white;text-align:center;padding:22px;
+  margin-top:50px;
+  background:var(--green-dark);
+  color:white;
+  text-align:center;
+  padding:28px 20px;
+  font-size:0.95rem;
+  letter-spacing:0.3px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+}
+
+/* NAVBAR ENHANCEMENTS */
+.navbar {
+  background-color: #2AA06E;
+  padding: 12px 40px;
+  position: relative;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+  backdrop-filter: blur(2px);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  width: 30px;
+}
+
+.hamburger div {
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition:0.2s;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+  transition: max-height 0.4s ease-in-out;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  padding: 10px 14px;
+  display: block;
+  transition: 0.2s ease;
+  border-radius: 40px;
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2AA06E;
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  min-width: 190px;
+  border-radius: 20px;
+  box-shadow:0 12px 25px rgba(0,0,0,0.1);
+  z-index:100;
+}
+
+.dropdown-menu li a {
+  padding: 10px 20px;
+  color: white;
+  font-weight:400;
+}
+
+.dropdown-menu li a:hover {
+  background-color: rgba(255,255,255,0.25);
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Mobile responsive */
+@media screen and (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+  .navbar {
+    padding: 12px 20px;
+  }
+  .nav-links {
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    width: 100%;
+    background-color: #2AA06E;
+    gap: 0;
+    border-radius: 20px;
+    margin-top: 12px;
+  }
+  .nav-links li {
+    width: 100%;
+    text-align: center;
+  }
+  .nav-links li a {
+    padding: 14px 0;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: none;
+  }
+  .dropdown-menu {
+    position: static;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: #258f60;
+  }
+  .dropdown.active .dropdown-menu {
+    display: block;
+  }
+  .nav-links.show {
+    max-height: 600px;
+  }
+  header h1 {
+    font-size: 2rem;
+  }
+  .section {
+    padding: 28px 20px;
+  }
+  .section h2 {
+    font-size: 1.7rem;
+  }
+  .doctor-card {
+    gap: 20px;
+  }
+  .doctor-card img {
+    width: 140px;
+  }
+}
+
+/* Call button improvements */
+.call-float{
+  position:fixed;
+  bottom:140px;
+  right:24px;
+  background:linear-gradient(145deg, #1f7a4f, #16633f);
+  color:white;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  text-decoration:none;
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
+  z-index:1000;
+  transition:0.25s;
+}
+
+.call-float:hover{
+  transform:scale(1.1) rotate(5deg);
+  background:#134e36;
+  box-shadow:0 15px 30px rgba(0,0,0,0.3);
+}
+
+/* Additional micro-interactions */
+.container .section:last-child {
+  margin-bottom: 0;
 }
 </style>
 </head>
@@ -58,15 +331,15 @@ footer{
   <h1>About the Doctors</h1>
   <p>Meet Our Experts at BDS Center, Amritsar</p>
 </header>
+
 <style>
-/* ===== NAVBAR STYLE ===== */
+/* ===== NAVBAR STYLE ===== (Enhanced but same structure) */
 .navbar {
   background-color: #2AA06E;
   padding: 12px 40px;
   position: relative;
 }
 
-/* Hamburger button for mobile */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -81,7 +354,6 @@ footer{
   border-radius: 2px;
 }
 
-/* Nav links */
 .nav-links {
   list-style: none;
   display: flex;
@@ -111,7 +383,6 @@ footer{
   border-radius: 5px;
 }
 
-/* ===== DROPDOWN ===== */
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -138,7 +409,6 @@ footer{
   display: block;
 }
 
-/* ===== MOBILE STYLES ===== */
 @media screen and (max-width: 768px) {
   .hamburger {
     display: flex;
@@ -159,7 +429,7 @@ footer{
     padding: 12px 0;
   }
   .dropdown:hover .dropdown-menu {
-    display: none; /* Disable hover on mobile */
+    display: none;
   }
   .dropdown-menu {
     position: static;
@@ -169,7 +439,7 @@ footer{
     display: block;
   }
   .nav-links.show {
-    max-height: 1000px; /* Large enough to show all links */
+    max-height: 1000px;
   }
 }
 </style>
@@ -218,6 +488,7 @@ function toggleDropdown(event) {
   }
 }
 </script>
+
 <div class="container">
 
   <div class="section">
@@ -245,6 +516,7 @@ function toggleDropdown(event) {
 <footer>
 © 2026 BDS Physiotherapy, Yoga & Ayurvedic Center
 </footer>
+
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -261,42 +533,44 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Handle form submission
-document.getElementById('queryForm').onsubmit = function(e) {
-  e.preventDefault();
-  
-  const name = document.getElementById('qName').value;
-  const mobile = document.getElementById('qMobile').value;
-  const message = document.getElementById('qMessage').value;
-  
-  // Show sending message
-  document.getElementById("queryMessage").textContent = "Sending your query...";
-  document.getElementById("queryMessage").style.color = "blue";
-  
-  // Save to Firebase
-  db.collection("patientQueries").add({
-    name: name,
-    mobile: mobile,
-    message: message,
-    time: new Date()
-  })
-  .then(() => {
-    document.getElementById("queryMessage").textContent = "✅ Thanks for sending your query! Our experts will contact you soon.";
-    document.getElementById("queryMessage").style.color = "green";
-    document.getElementById('queryForm').reset();
-  })
-  .catch(error => {
-    document.getElementById("queryMessage").textContent = "❌ Error sending query. Please try again.";
-    document.getElementById("queryMessage").style.color = "red";
-    console.error("Error:", error);
-  });
-};
+// Handle form submission only if form exists (prevents errors on pages without queryForm)
+const queryForm = document.getElementById('queryForm');
+if (queryForm) {
+  queryForm.onsubmit = function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('qName').value;
+    const mobile = document.getElementById('qMobile').value;
+    const message = document.getElementById('qMessage').value;
+    
+    document.getElementById("queryMessage").textContent = "Sending your query...";
+    document.getElementById("queryMessage").style.color = "blue";
+    
+    db.collection("patientQueries").add({
+      name: name,
+      mobile: mobile,
+      message: message,
+      time: new Date()
+    })
+    .then(() => {
+      document.getElementById("queryMessage").textContent = "✅ Thanks for sending your query! Our experts will contact you soon.";
+      document.getElementById("queryMessage").style.color = "green";
+      queryForm.reset();
+    })
+    .catch(error => {
+      document.getElementById("queryMessage").textContent = "❌ Error sending query. Please try again.";
+      document.getElementById("queryMessage").style.color = "red";
+      console.error("Error:", error);
+    });
+  };
+}
 </script>
 
 <!-- TIDIO CHATBOT -->
 <script src="//code.tidio.co/qfondiy3ictfph0r1mnsikpn5wc7ocal.js" async>
 </script>
-  <!-- Floating Call Button -->
+
+<!-- Floating Call Button -->
 <a href="tel:+918221826243" class="call-float">
 📞
 </a>
