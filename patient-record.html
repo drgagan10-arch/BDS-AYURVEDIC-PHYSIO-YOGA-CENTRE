@@ -11,17 +11,29 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  background: #f0f9f4;
-  color: #1e3a2f;
+:root {
+  --green: #1f7a4f;
+  --green-light: #e9f7f0;
+  --green-dark: #134e36;
+  --shadow-sm: 0 12px 30px rgba(0,0,0,0.06);
+  --shadow-md: 0 18px 40px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 45px rgba(0,0,0,0.12);
+  --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-/* ===== NAVBAR (exactly as provided) ===== */
+body {
+  font-family: 'Segoe UI', 'Poppins', Roboto, 'Helvetica Neue', sans-serif;
+  background: linear-gradient(135deg, #ecfff6 0%, #ffffff 100%);
+  color: #1e3a2f;
+  line-height: 1.5;
+}
+
+/* ===== NAVBAR (enhanced but identical structure) ===== */
 .navbar {
   background-color: #2AA06E;
   padding: 12px 40px;
   position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 .hamburger {
   display: none;
@@ -34,6 +46,7 @@ body {
   height: 3px;
   background-color: white;
   border-radius: 2px;
+  transition: var(--transition);
 }
 .nav-links {
   list-style: none;
@@ -54,11 +67,12 @@ body {
   font-weight: 500;
   padding: 10px 14px;
   display: block;
-  transition: 0.3s ease;
+  transition: var(--transition);
+  border-radius: 40px;
 }
 .nav-links a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
 }
 .dropdown-menu {
   display: none;
@@ -67,17 +81,19 @@ body {
   left: 0;
   background-color: #2AA06E;
   list-style: none;
-  padding: 0;
+  padding: 8px 0;
   margin: 0;
   min-width: 180px;
-  border-radius: 6px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  z-index: 100;
 }
 .dropdown-menu li a {
-  padding: 10px 15px;
+  padding: 10px 20px;
   color: white;
 }
 .dropdown-menu li a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255,255,255,0.25);
 }
 .dropdown:hover .dropdown-menu {
   display: block;
@@ -86,6 +102,9 @@ body {
   .hamburger {
     display: flex;
   }
+  .navbar {
+    padding: 12px 20px;
+  }
   .nav-links {
     flex-direction: column;
     max-height: 0;
@@ -93,13 +112,15 @@ body {
     width: 100%;
     background-color: #2AA06E;
     gap: 0;
+    border-radius: 20px;
+    margin-top: 12px;
   }
   .nav-links li {
     width: 100%;
     text-align: center;
   }
   .nav-links li a {
-    padding: 12px 0;
+    padding: 14px 0;
   }
   .dropdown:hover .dropdown-menu {
     display: none;
@@ -107,16 +128,18 @@ body {
   .dropdown-menu {
     position: static;
     border-radius: 0;
+    box-shadow: none;
+    background-color: #1e7a52;
   }
   .dropdown.active .dropdown-menu {
     display: block;
   }
   .nav-links.show {
-    max-height: 1000px;
+    max-height: 600px;
   }
 }
 
-/* Search card (initial view) */
+/* Search card */
 .container {
   max-width: 800px;
   margin: 40px auto;
@@ -124,15 +147,22 @@ body {
 }
 .search-card {
   background: white;
-  border-radius: 28px;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  border-radius: 32px;
+  box-shadow: var(--shadow-md);
   padding: 2rem;
   text-align: center;
+  transition: var(--transition);
+  border: 1px solid rgba(31,122,79,0.08);
+}
+.search-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 .search-card h2 {
-  color: #1f7a4f;
+  color: var(--green);
   font-size: 2rem;
   margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 .search-card p {
   font-size: 1.1rem;
@@ -153,13 +183,15 @@ body {
   border: 2px solid #c8e0d4;
   border-radius: 60px;
   outline: none;
-  transition: 0.2s;
+  transition: var(--transition);
+  background: #fefefe;
 }
 .search-input:focus {
-  border-color: #2AA06E;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(31,122,79,0.1);
 }
 .search-btn {
-  background: #1f7a4f;
+  background: linear-gradient(135deg, var(--green), #3fcf94);
   color: white;
   border: none;
   padding: 16px 32px;
@@ -167,19 +199,22 @@ body {
   font-weight: bold;
   border-radius: 60px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(31,122,79,0.2);
 }
 .search-btn:hover {
-  background: #134e36;
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(31,122,79,0.3);
+  background: var(--green-dark);
 }
 .loading {
   margin-top: 20px;
   font-size: 1.1rem;
-  color: #2AA06E;
+  color: var(--green);
+  font-weight: 500;
 }
 
-/* ========= FULLSCREEN MODAL (PATIENT DETAILS PAGE) ========= */
+/* Fullscreen modal (patient details) */
 .fullscreen-modal {
   display: none;
   position: fixed;
@@ -187,7 +222,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #f5fef8;
+  background-color: rgba(0,0,0,0.85);
+  backdrop-filter: blur(4px);
   z-index: 2000;
   overflow-y: auto;
   padding: 20px;
@@ -195,10 +231,10 @@ body {
 }
 .modal-content {
   max-width: 1000px;
-  margin: 0 auto;
+  margin: 20px auto;
   background: white;
-  border-radius: 32px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  border-radius: 40px;
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
   position: relative;
   animation: fadeInUp 0.4s ease;
@@ -217,10 +253,10 @@ body {
   position: absolute;
   top: 20px;
   right: 25px;
-  font-size: 42px;
+  font-size: 36px;
   font-weight: bold;
-  color: #1f7a4f;
-  background: rgba(255,255,255,0.9);
+  color: white;
+  background: rgba(31,122,79,0.85);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -229,16 +265,16 @@ body {
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  transition: 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(2px);
 }
 .close-modal:hover {
-  background: #1f7a4f;
-  color: white;
-  transform: scale(1.05);
+  background: var(--green-dark);
+  transform: scale(1.05) rotate(90deg);
 }
 .patient-header {
-  background: linear-gradient(135deg, #1f7a4f, #2fb17c);
+  background: linear-gradient(135deg, var(--green), #2fb17c);
   color: white;
   padding: 2rem;
   text-align: center;
@@ -247,6 +283,8 @@ body {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   word-break: break-word;
+  font-weight: 700;
+  letter-spacing: -0.3px;
 }
 .patient-header p {
   font-size: 1.3rem;
@@ -260,22 +298,28 @@ body {
   background: #ffffff;
 }
 .detail-card {
-  background: #f9fff9;
-  border-radius: 24px;
+  background: linear-gradient(145deg, #f9fff9, #ffffff);
+  border-radius: 28px;
   padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: 0.2s;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid rgba(31,122,79,0.08);
+}
+.detail-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
 }
 .detail-card h3 {
   font-size: 1.8rem;
-  color: #1f7a4f;
-  margin-bottom: 12px;
-  border-left: 5px solid #2AA06E;
+  color: var(--green);
+  margin-bottom: 15px;
+  border-left: 5px solid var(--green);
   padding-left: 15px;
+  font-weight: 600;
 }
 .detail-card p, .detail-card .note-text {
-  font-size: 1.3rem;
-  line-height: 1.4;
+  font-size: 1.15rem;
+  line-height: 1.5;
   color: #2c3e2f;
   margin-top: 8px;
   white-space: pre-wrap;
@@ -283,14 +327,17 @@ body {
 }
 .image-gallery {
   grid-column: 1 / -1;
-  background: #fefdf5;
+  background: linear-gradient(145deg, #fefdf5, #ffffff);
   border-radius: 28px;
   padding: 1.5rem;
+  border: 1px solid rgba(31,122,79,0.08);
 }
 .image-gallery h3 {
   font-size: 1.8rem;
-  color: #1f7a4f;
+  color: var(--green);
   margin-bottom: 20px;
+  border-left: 5px solid var(--green);
+  padding-left: 15px;
 }
 .gallery-grid {
   display: flex;
@@ -302,20 +349,22 @@ body {
   width: 180px;
   height: 180px;
   object-fit: cover;
-  border-radius: 20px;
+  border-radius: 24px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  border: 2px solid white;
 }
 .gallery-grid img:hover {
   transform: scale(1.05);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+  box-shadow: var(--shadow-lg);
 }
+
 /* Floating Action Buttons */
 .floating-actions {
   position: fixed;
   bottom: 30px;
-  right: 20px;
+  right: 24px;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -325,34 +374,37 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: #1f7a4f;
+  background: linear-gradient(145deg, var(--green), #16633f);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
   text-decoration: none;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  transition: 0.2s;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  transition: var(--transition);
 }
 .floating-btn:hover {
-  transform: scale(1.1);
-  background: #134e36;
+  transform: scale(1.1) rotate(5deg);
+  background: var(--green-dark);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3);
 }
 .whatsapp {
-  background: #25D366;
+  background: linear-gradient(145deg, #25D366, #128C7E);
 }
 .whatsapp:hover {
   background: #128C7E;
+  transform: scale(1.1);
 }
 .print-btn {
   cursor: pointer;
-  background: #2c3e66;
+  background: linear-gradient(145deg, #2c3e66, #1e2a4a);
 }
 .print-btn:hover {
   background: #1e2a4a;
 }
-/* Modal for full-size image */
+
+/* Image fullscreen modal */
 .image-modal {
   display: none;
   position: fixed;
@@ -364,11 +416,13 @@ body {
   background-color: rgba(0, 0, 0, 0.95);
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(5px);
 }
 .image-modal img {
   max-width: 90%;
   max-height: 90%;
-  border-radius: 20px;
+  border-radius: 28px;
+  box-shadow: var(--shadow-lg);
 }
 .image-modal .close-img {
   position: absolute;
@@ -378,17 +432,28 @@ body {
   font-size: 45px;
   font-weight: bold;
   cursor: pointer;
+  transition: var(--transition);
 }
+.image-modal .close-img:hover {
+  transform: scale(1.1);
+  color: #ff8888;
+}
+
+/* Footer */
 footer {
-  background: #1e3a2f;
+  background: linear-gradient(135deg, #1e3a2f, var(--green-dark));
   color: white;
   text-align: center;
-  padding: 1.5rem;
-  margin-top: 2rem;
+  padding: 28px 20px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  margin-top: 60px;
+  font-size: 0.95rem;
 }
+
 @media (max-width: 700px) {
   .detail-card p, .detail-card .note-text {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   .patient-header h1 {
     font-size: 1.8rem;
@@ -402,12 +467,19 @@ footer {
     height: 50px;
     font-size: 24px;
   }
+  .search-card h2 {
+    font-size: 1.6rem;
+  }
+  .search-input, .search-btn {
+    padding: 12px 18px;
+    font-size: 1rem;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- NAVBAR (exactly as provided) -->
 <nav class="navbar">
   <div class="hamburger" onclick="toggleMenu()">
     <div></div><div></div><div></div>
@@ -473,7 +545,7 @@ footer {
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-// Firebase config
+// Firebase config (unchanged)
 const firebaseConfig = {
   apiKey: "AIzaSyDwVp7Pn3WWezbBnWC0Ps7P3OppYrWQ5Jo",
   authDomain: "bdss-671d8.firebaseapp.com",
