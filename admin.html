@@ -40,6 +40,10 @@ button:hover{background:#166342;}
 .patient-table tr:nth-child(even){background:#f9f9f9;}
 .action-buttons button{margin:0 5px;padding:6px 12px;font-size:13px;}
 .pdf-export-btn{background:#6c757d;margin-left:10px;}
+.print-btn{background:#2c3e66;color:white;border:none;padding:8px 16px;border-radius:40px;cursor:pointer;margin-bottom:15px;}
+.print-btn:hover{background:#1e2a4a;}
+.instructions-box{background:#fff9e0;border-left:5px solid #f5b50a;padding:15px;margin-bottom:20px;border-radius:12px;}
+.instructions-box p{margin:5px 0;}
 </style>
 </head>
 <body>
@@ -72,9 +76,10 @@ button:hover{background:#166342;}
       <button onclick="openTab('reviewsTab')">Reviews</button>
       <button onclick="openTab('patientsTab')">Manage Patients</button>
       <button onclick="openTab('allPatientsTab')">All Patients</button>
+      <button onclick="openTab('patientListTab')">Patient List</button>
     </div>
 
-    <!-- Queries Tab (same as original) -->
+    <!-- Queries Tab -->
     <div id="queriesTab" class="tab-content"><div id="queryList">Loading...</div></div>
     <!-- Reviews Tab -->
     <div id="reviewsTab" class="tab-content"><div id="reviewList">Loading...</div></div>
@@ -111,13 +116,39 @@ button:hover{background:#166342;}
       </div>
     </div>
 
-    <!-- All Patients List with Edit/Delete/PDF -->
+    <!-- All Patients Table (existing) -->
     <div id="allPatientsTab" class="tab-content">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3>📋 All Registered Patients</h3>
         <button onclick="exportAllPatientsPDF()" class="pdf-export-btn">📄 Export All as PDF</button>
       </div>
       <div id="patientsListTable" style="overflow-x:auto;">Loading patients...</div>
+    </div>
+
+    <!-- NEW: Patient List Tab (simple name + reg no for reference) -->
+    <div id="patientListTab" class="tab-content">
+      <div class="instructions-box">
+        <h3>📌 Instructions for Patients</h3>
+        <p><strong>🏥 BDS Ayurvedic Physio Yoga Centre</strong></p>
+        <p>1. Go to our website: <a href="https://drgagan10-arch.github.io/BDS-AYURVEDIC-PHYSIO-YOGA-CENTRE/" target="_blank">https://drgagan10-arch.github.io/BDS-AYURVEDIC-PHYSIO-YOGA-CENTRE/</a></p>
+        <p>2. Click on <strong>"Patient Records"</strong> in the menu.</p>
+        <p>3. Enter your <strong>Registration Number</strong> from the table below.</p>
+        <p>4. View your personal details, medical notes, and images.</p>
+        <p style="margin-top:8px;">✅ You can print this page or take a photo for future reference.</p>
+      </div>
+      <div style="text-align:right;">
+        <button class="print-btn" onclick="printPatientList()">🖨️ Print / Save as PDF</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="patient-table" id="simplePatientTable">
+          <thead>
+            <tr><th>Patient Name</th><th>Registration Number</th></tr>
+          </thead>
+          <tbody id="simpleTableBody">
+            <tr><td colspan="2" style="text-align:center;">Loading patient list...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -161,17 +192,18 @@ document.getElementById('patPhotos').addEventListener('change', function(e) {
   });
 });
 
-// LOGIN / LOGOUT (unchanged)
+// LOGIN / LOGOUT
 function login(){
   const username = document.getElementById('adminUser').value.trim();
   const password = document.getElementById('adminPass').value.trim();
-  if(username==="admin" && password==="123"){
+  if(username==="admin" && password==="bds123"){
     document.getElementById('loginSection').style.display="none";
     document.getElementById('adminPanel').style.display="block";
     openTab('queriesTab');
     loadQueriesRealtime();
     loadReviewsRealtime();
-    loadAllPatients(); // load patient list
+    loadAllPatients();
+    loadSimplePatientList(); // load the new patient list
   } else alert("Incorrect credentials!");
 }
 function logout(){
@@ -183,9 +215,10 @@ function openTab(tabId){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
   if(tabId === 'allPatientsTab') loadAllPatients();
+  if(tabId === 'patientListTab') loadSimplePatientList();
 }
 
-// ========== QUERIES & REVIEWS (original functions - shortened for brevity) ==========
+// ========== QUERIES & REVIEWS (unchanged) ==========
 function loadQueriesRealtime(){
   const queryList = document.getElementById('queryList');
   queryList.innerHTML="<p>⌛ Loading queries...</p>";
@@ -219,12 +252,10 @@ function deleteReview(id){ if(confirm("Delete?")) db.collection("reviews").doc(i
 
 // ========== PATIENT CRUD ==========
 let currentEditRegNo = null;
-
 async function savePatient() {
   const msgDiv = document.getElementById('adminPatientMsg');
-  let regNo = document.getElementById('regNo').value.trim().toUpperCase(); // store uppercase for case-insensitive
+  let regNo = document.getElementById('regNo').value.trim().toUpperCase();
   if(!regNo) { msgDiv.innerHTML = '<div class="error-msg">❌ Registration Number required</div>'; return; }
-  
   const name = document.getElementById('patName').value;
   const age = document.getElementById('patAge').value;
   const sex = document.getElementById('patSex').value;
@@ -232,41 +263,37 @@ async function savePatient() {
   const packageVal = document.getElementById('patPackage').value;
   const diseaseNotes = document.getElementById('patDiseaseNotes').value;
   const files = document.getElementById('patPhotos').files;
-  
   let imagesBase64 = [];
   if(files.length > 0) {
     try { imagesBase64 = await filesToBase64(files); } 
     catch(err) { msgDiv.innerHTML = `<div class="error-msg">❌ Error reading images: ${err.message}</div>`; return; }
   }
-  
   const patientData = {
     name, age, sex, problem, package: packageVal, diseaseNotes,
     lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
   };
   if(imagesBase64.length) patientData.images = imagesBase64;
-  
   try {
     await db.collection("patients").doc(regNo).set(patientData, { merge: true });
     msgDiv.innerHTML = `<div class="success-msg">✅ Patient ${regNo} saved successfully!</div>`;
     clearForm();
     loadAllPatients();
+    loadSimplePatientList(); // refresh simple list
     setTimeout(() => msgDiv.innerHTML = '', 3000);
   } catch(err) { msgDiv.innerHTML = `<div class="error-msg">❌ Error: ${err.message}</div>`; }
 }
-
 async function deletePatient(regNo) {
   if(confirm(`Delete patient ${regNo} permanently?`)) {
     try {
       await db.collection("patients").doc(regNo).delete();
       loadAllPatients();
+      loadSimplePatientList();
       document.getElementById('adminPatientMsg').innerHTML = `<div class="success-msg">✅ Patient ${regNo} deleted.</div>`;
       setTimeout(() => document.getElementById('adminPatientMsg').innerHTML = '', 2000);
     } catch(err) { alert(err.message); }
   }
 }
-
 async function editPatient(regNo) {
-  // Load patient data into the add/edit form
   const doc = await db.collection("patients").doc(regNo).get();
   if(doc.exists) {
     const data = doc.data();
@@ -280,21 +307,17 @@ async function editPatient(regNo) {
     document.getElementById('editMode').value = 'true';
     document.getElementById('cancelEditBtn').style.display = 'inline-block';
     document.getElementById('formTitle').innerHTML = '✏️ Edit Patient';
-    // Clear image preview
     document.getElementById('imagePreview').innerHTML = '';
     document.getElementById('patPhotos').value = '';
-    // Switch to patients tab
     openTab('patientsTab');
   } else { alert("Patient not found"); }
 }
-
 function cancelEdit() {
   clearForm();
   document.getElementById('editMode').value = 'false';
   document.getElementById('cancelEditBtn').style.display = 'none';
   document.getElementById('formTitle').innerHTML = '➕ Add New Patient';
 }
-
 function clearForm() {
   document.getElementById('regNo').value = '';
   document.getElementById('patName').value = '';
@@ -306,86 +329,84 @@ function clearForm() {
   document.getElementById('patPhotos').value = '';
   document.getElementById('imagePreview').innerHTML = '';
 }
-
-// Load all patients into table with actions
 async function loadAllPatients() {
   const container = document.getElementById('patientsListTable');
   container.innerHTML = '<p>Loading patients...</p>';
   try {
     const snapshot = await db.collection("patients").orderBy("lastUpdated", "desc").get();
     if(snapshot.empty) { container.innerHTML = '<p>No patients added yet.</p>'; return; }
-    let html = `<table class="patient-table">
-      <thead><tr><th>Reg No</th><th>Name</th><th>Age/Sex</th><th>Package</th><th>Last Updated</th><th>Actions</th></tr></thead><tbody>`;
+    let html = `<table class="patient-table"><thead><tr><th>Reg No</th><th>Name</th><th>Age/Sex</th><th>Package</th><th>Last Updated</th><th>Actions</th></tr></thead><tbody>`;
     snapshot.forEach(doc => {
       const data = doc.data();
       const ageSex = `${data.age || '?'} / ${data.sex || '?'}`;
       const lastUp = data.lastUpdated ? new Date(data.lastUpdated.toDate()).toLocaleDateString() : '—';
-      html += `<tr>
-        <td>${doc.id}</td>
-        <td>${data.name || '—'}</td>
-        <td>${ageSex}</td>
-        <td>${data.package || '—'}</td>
-        <td>${lastUp}</td>
-        <td class="action-buttons">
-          <button class="edit-btn" onclick="editPatient('${doc.id}')">✏️ Edit</button>
-          <button class="delete-btn" onclick="deletePatient('${doc.id}')">🗑️ Delete</button>
-          <button class="pdf-export-btn" onclick="exportSinglePatientPDF('${doc.id}')">📄 PDF</button>
-        </td>
-      </tr>`;
+      html += `<tr><td>${doc.id}</td><td>${data.name || '—'}</td><td>${ageSex}</td><td>${data.package || '—'}</td><td>${lastUp}</td><td class="action-buttons"><button class="edit-btn" onclick="editPatient('${doc.id}')">✏️ Edit</button><button class="delete-btn" onclick="deletePatient('${doc.id}')">🗑️ Delete</button><button class="pdf-export-btn" onclick="exportSinglePatientPDF('${doc.id}')">📄 PDF</button></td></tr>`;
     });
     html += `</tbody></table>`;
     container.innerHTML = html;
   } catch(err) { container.innerHTML = `<div class="error-msg">Error: ${err.message}</div>`; }
 }
-
-// PDF Export for single patient
+// Simple patient list for the new tab (Name + Reg No only)
+async function loadSimplePatientList() {
+  const tbody = document.getElementById('simpleTableBody');
+  tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;">Loading...</td></tr>';
+  try {
+    const snapshot = await db.collection("patients").orderBy("name").get();
+    if(snapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;">No patients registered yet.</td></tr>';
+      return;
+    }
+    let rows = '';
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const name = data.name || '—';
+      rows += `<tr><td>${escapeHtml(name)}</td><td><strong>${escapeHtml(doc.id)}</strong></td></tr>`;
+    });
+    tbody.innerHTML = rows;
+  } catch(err) {
+    tbody.innerHTML = `<tr><td colspan="2" style="color:red;">Error: ${err.message}</td></tr>`;
+  }
+}
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+// Print function for the simple patient list
+function printPatientList() {
+  const instructions = document.querySelector('#patientListTab .instructions-box').cloneNode(true);
+  const table = document.querySelector('#simplePatientTable').cloneNode(true);
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <html>
+      <head><title>Patient Reference List - BDS Centre</title>
+      <style>
+        body{font-family: 'Segoe UI', sans-serif; padding:20px;}
+        h1{color:#1f7a4f;}
+        .instructions{background:#fff9e0; padding:15px; border-left:5px solid #f5b50a; margin-bottom:20px;}
+        table{width:100%; border-collapse:collapse;}
+        th,td{border:1px solid #ddd; padding:8px; text-align:left;}
+        th{background:#1f7a4f; color:white;}
+      </style>
+      </head>
+      <body>
+        <h1>🏥 BDS Ayurvedic Physio Yoga Centre</h1>
+        ${instructions.outerHTML}
+        ${table.outerHTML}
+        <p style="margin-top:20px;">Generated on ${new Date().toLocaleString()}</p>
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.print();
+}
 async function exportSinglePatientPDF(regNo) {
   const docSnap = await db.collection("patients").doc(regNo).get();
   if(!docSnap.exists) { alert("Patient not found"); return; }
   const data = docSnap.data();
   const imagesHtml = (data.images || []).map(img => `<img src="${img}" style="width:150px; margin:5px;">`).join('');
-  const content = `
-    <div style="font-family: sans-serif; padding:20px;">
-      <h1 style="color:#1f7a4f;">BDS Ayurvedic Physio Yoga Centre</h1>
-      <h2>Patient Health Record</h2>
-      <p><strong>Registration No:</strong> ${regNo}</p>
-      <p><strong>Name:</strong> ${data.name || '—'}</p>
-      <p><strong>Age:</strong> ${data.age || '—'}</p>
-      <p><strong>Sex:</strong> ${data.sex || '—'}</p>
-      <p><strong>Chief Problem:</strong> ${data.problem || '—'}</p>
-      <p><strong>Package:</strong> ${data.package || '—'}</p>
-      <p><strong>Doctor's Notes:</strong><br>${(data.diseaseNotes || '—').replace(/\n/g,'<br>')}</p>
-      <h3>Images</h3>
-      ${imagesHtml || '<p>No images uploaded.</p>'}
-      <hr>
-      <p>Generated on ${new Date().toLocaleString()}</p>
-    </div>
-  `;
-  const opt = { margin: 0.5, filename: `Patient_${regNo}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
-  html2pdf().set(opt).from(content).save();
-}
-
-async function exportAllPatientsPDF() {
-  const snapshot = await db.collection("patients").get();
-  if(snapshot.empty) { alert("No patients to export"); return; }
-  let allHtml = `<div style="font-family: sans-serif; padding:20px;"><h1>BDS Centre - All Patients List</h1><p>Generated: ${new Date().toLocaleString()}</p>`;
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    allHtml += `<div style="border:1px solid #ccc; margin-bottom:20px; padding:15px; page-break-inside:avoid;">
-      <h3>${data.name || 'No Name'} (${doc.id})</h3>
-      <p><strong>Age/Sex:</strong> ${data.age || '?'}/${data.sex || '?'}</p>
-      <p><strong>Problem:</strong> ${data.problem || '—'}</p>
-      <p><strong>Package:</strong> ${data.package || '—'}</p>
-      <p><strong>Notes:</strong> ${data.diseaseNotes || '—'}</p>
-    </div>`;
-  });
-  allHtml += `</div>`;
-  const opt = { margin: 0.5, filename: `All_Patients.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
-  html2pdf().set(opt).from(allHtml).save();
-}
-
-document.getElementById('savePatientBtn').addEventListener('click', savePatient);
-document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
-</script>
-</body>
-</html>
+  const content = `<div style="font-family:sans-serif; padding:20px;"><h1 style="color:#1f7a4f;">BDS Ayurvedic Physio Yoga
