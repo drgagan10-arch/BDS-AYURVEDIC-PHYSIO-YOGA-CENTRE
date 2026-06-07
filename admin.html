@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Admin Panel - BDS Center (Full CRUD)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *{box-sizing:border-box;font-family:"Segoe UI",sans-serif;margin:0;padding:0;}
 body{background:#f0f9f4;color:#333;}
@@ -60,7 +60,7 @@ button:hover{background:#166342;}
     <h2>🔐 Admin Login</h2>
     <input id="adminUser" placeholder="Username">
     <input id="adminPass" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
+    <button id="loginBtn">Login</button>
     <a href="index.html" class="back-link">← Back to Home</a>
   </div>
 
@@ -68,7 +68,7 @@ button:hover{background:#166342;}
   <div id="adminPanel" class="admin-content" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
       <h2>📋 Admin Dashboard</h2>
-      <button onclick="logout()" class="logout-btn">Logout</button>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
     </div>
 
     <div class="tab-buttons">
@@ -116,7 +116,7 @@ button:hover{background:#166342;}
       </div>
     </div>
 
-    <!-- All Patients Table (existing) -->
+    <!-- All Patients Table -->
     <div id="allPatientsTab" class="tab-content">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3>📋 All Registered Patients</h3>
@@ -125,7 +125,7 @@ button:hover{background:#166342;}
       <div id="patientsListTable" style="overflow-x:auto;">Loading patients...</div>
     </div>
 
-    <!-- NEW: Patient List Tab (simple name + reg no for reference) -->
+    <!-- Patient List Tab (simple name + reg no) -->
     <div id="patientListTab" class="tab-content">
       <div class="instructions-box">
         <h3>📌 Instructions for Patients</h3>
@@ -141,12 +141,8 @@ button:hover{background:#166342;}
       </div>
       <div style="overflow-x:auto;">
         <table class="patient-table" id="simplePatientTable">
-          <thead>
-            <tr><th>Patient Name</th><th>Registration Number</th></tr>
-          </thead>
-          <tbody id="simpleTableBody">
-            <tr><td colspan="2" style="text-align:center;">Loading patient list...</td></tr>
-          </tbody>
+          <thead><tr><th>Patient Name</th><th>Registration Number</th></tr></thead>
+          <tbody id="simpleTableBody"><tr><td colspan="2">Loading...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -165,7 +161,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Helper: convert files to Base64
+// Helper: files to Base64
 async function filesToBase64(files) {
   return Promise.all(Array.from(files).map(file => {
     return new Promise((resolve, reject) => {
@@ -177,9 +173,10 @@ async function filesToBase64(files) {
   }));
 }
 
-// Preview images
-document.getElementById('patPhotos').addEventListener('change', function(e) {
+// Image preview
+document.getElementById('patPhotos')?.addEventListener('change', function(e) {
   const preview = document.getElementById('imagePreview');
+  if (!preview) return;
   preview.innerHTML = '';
   Array.from(e.target.files).forEach(file => {
     const reader = new FileReader();
@@ -192,70 +189,85 @@ document.getElementById('patPhotos').addEventListener('change', function(e) {
   });
 });
 
-// LOGIN / LOGOUT
-function login(){
+// ========== LOGIN FIX (using event listener) ==========
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', login);
+  }
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', logout);
+  }
+});
+
+function login() {
   const username = document.getElementById('adminUser').value.trim();
   const password = document.getElementById('adminPass').value.trim();
-  if(username==="admin" && password==="bds123"){
-    document.getElementById('loginSection').style.display="none";
-    document.getElementById('adminPanel').style.display="block";
+  if (username === "admin" && password === "bds123") {
+    document.getElementById('loginSection').style.display = "none";
+    document.getElementById('adminPanel').style.display = "block";
     openTab('queriesTab');
     loadQueriesRealtime();
     loadReviewsRealtime();
     loadAllPatients();
-    loadSimplePatientList(); // load the new patient list
-  } else alert("Incorrect credentials!");
+    loadSimplePatientList();
+  } else {
+    alert("Incorrect username or password!");
+  }
 }
-function logout(){
-  document.getElementById('adminPanel').style.display="none";
-  document.getElementById('loginSection').style.display="block";
-  document.getElementById('adminPass').value="";
+
+function logout() {
+  document.getElementById('adminPanel').style.display = "none";
+  document.getElementById('loginSection').style.display = "block";
+  document.getElementById('adminPass').value = "";
 }
-function openTab(tabId){
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+
+function openTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
-  if(tabId === 'allPatientsTab') loadAllPatients();
-  if(tabId === 'patientListTab') loadSimplePatientList();
+  if (tabId === 'allPatientsTab') loadAllPatients();
+  if (tabId === 'patientListTab') loadSimplePatientList();
 }
 
-// ========== QUERIES & REVIEWS (unchanged) ==========
-function loadQueriesRealtime(){
+// Queries & Reviews (simplified but functional)
+function loadQueriesRealtime() {
   const queryList = document.getElementById('queryList');
-  queryList.innerHTML="<p>⌛ Loading queries...</p>";
-  db.collection("patientQueries").orderBy("time","desc").onSnapshot(snapshot=>{
-    if(snapshot.empty){ queryList.innerHTML="<p>No patient queries yet.</p>"; return; }
-    let html=`<p><strong>Total Queries: ${snapshot.size}</strong></p>`;
-    snapshot.forEach(doc=>{
-      const data=doc.data();
-      const time=data.time ? new Date(data.time.toDate()).toLocaleString() : "Unknown";
-      html+=`<div class="query-card"><h3>👤 ${data.name||'No Name'}</h3><p><strong>📱 Phone:</strong> ${data.mobile||'Not provided'}</p><p><strong>💬 Query:</strong> ${data.message||'No message'}</p><p><strong>📅 Submitted:</strong> ${time}</p><button class="delete-btn" onclick="deleteQuery('${doc.id}')">Delete</button></div>`;
+  queryList.innerHTML = "<p>⌛ Loading queries...</p>";
+  db.collection("patientQueries").orderBy("time", "desc").onSnapshot(snapshot => {
+    if (snapshot.empty) { queryList.innerHTML = "<p>No patient queries yet.</p>"; return; }
+    let html = `<p><strong>Total Queries: ${snapshot.size}</strong></p>`;
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const time = data.time ? new Date(data.time.toDate()).toLocaleString() : "Unknown";
+      html += `<div class="query-card"><h3>👤 ${data.name || 'No Name'}</h3><p><strong>📱 Phone:</strong> ${data.mobile || 'Not provided'}</p><p><strong>💬 Query:</strong> ${data.message || 'No message'}</p><p><strong>📅 Submitted:</strong> ${time}</p><button class="delete-btn" onclick="deleteQuery('${doc.id}')">Delete</button></div>`;
     });
-    queryList.innerHTML=html;
-  },error=>{ queryList.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`; });
+    queryList.innerHTML = html;
+  }, error => { queryList.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`; });
 }
-function deleteQuery(id){ if(confirm("Delete?")) db.collection("patientQueries").doc(id).delete(); }
-function loadReviewsRealtime(){
+function deleteQuery(id) { if (confirm("Delete?")) db.collection("patientQueries").doc(id).delete(); }
+function loadReviewsRealtime() {
   const reviewList = document.getElementById('reviewList');
-  reviewList.innerHTML="<p>⌛ Loading reviews...</p>";
-  db.collection("reviews").orderBy("time","desc").onSnapshot(snapshot=>{
-    if(snapshot.empty){ reviewList.innerHTML="<p>No reviews yet.</p>"; return; }
-    let html=`<p><strong>Total Reviews: ${snapshot.size}</strong></p>`;
-    snapshot.forEach(doc=>{
-      const data=doc.data();
-      const time=data.time ? new Date(data.time.toDate()).toLocaleString() : "Unknown";
-      html+=`<div class="query-card"><h3>👤 ${data.name||'No Name'}</h3><div class="stars">${'★'.repeat(data.rating)}${'☆'.repeat(5-data.rating)}</div><p>${data.review||'No review text'}</p><p><strong>📅 Submitted:</strong> ${time}</p><button class="delete-btn" onclick="deleteReview('${doc.id}')">Delete</button></div>`;
+  reviewList.innerHTML = "<p>⌛ Loading reviews...</p>";
+  db.collection("reviews").orderBy("time", "desc").onSnapshot(snapshot => {
+    if (snapshot.empty) { reviewList.innerHTML = "<p>No reviews yet.</p>"; return; }
+    let html = `<p><strong>Total Reviews: ${snapshot.size}</strong></p>`;
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const time = data.time ? new Date(data.time.toDate()).toLocaleString() : "Unknown";
+      html += `<div class="query-card"><h3>👤 ${data.name || 'No Name'}</h3><div class="stars">${'★'.repeat(data.rating)}${'☆'.repeat(5 - data.rating)}</div><p>${data.review || 'No review text'}</p><p><strong>📅 Submitted:</strong> ${time}</p><button class="delete-btn" onclick="deleteReview('${doc.id}')">Delete</button></div>`;
     });
-    reviewList.innerHTML=html;
-  },error=>{ reviewList.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`; });
+    reviewList.innerHTML = html;
+  }, error => { reviewList.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`; });
 }
-function deleteReview(id){ if(confirm("Delete?")) db.collection("reviews").doc(id).delete(); }
+function deleteReview(id) { if (confirm("Delete?")) db.collection("reviews").doc(id).delete(); }
 
-// ========== PATIENT CRUD ==========
+// Patient CRUD (same as before, but ensure functions are global)
 let currentEditRegNo = null;
 async function savePatient() {
   const msgDiv = document.getElementById('adminPatientMsg');
   let regNo = document.getElementById('regNo').value.trim().toUpperCase();
-  if(!regNo) { msgDiv.innerHTML = '<div class="error-msg">❌ Registration Number required</div>'; return; }
+  if (!regNo) { msgDiv.innerHTML = '<div class="error-msg">❌ Registration Number required</div>'; return; }
   const name = document.getElementById('patName').value;
   const age = document.getElementById('patAge').value;
   const sex = document.getElementById('patSex').value;
@@ -264,38 +276,34 @@ async function savePatient() {
   const diseaseNotes = document.getElementById('patDiseaseNotes').value;
   const files = document.getElementById('patPhotos').files;
   let imagesBase64 = [];
-  if(files.length > 0) {
-    try { imagesBase64 = await filesToBase64(files); } 
-    catch(err) { msgDiv.innerHTML = `<div class="error-msg">❌ Error reading images: ${err.message}</div>`; return; }
+  if (files.length > 0) {
+    try { imagesBase64 = await filesToBase64(files); } catch (err) { msgDiv.innerHTML = `<div class="error-msg">❌ Error reading images: ${err.message}</div>`; return; }
   }
-  const patientData = {
-    name, age, sex, problem, package: packageVal, diseaseNotes,
-    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-  };
-  if(imagesBase64.length) patientData.images = imagesBase64;
+  const patientData = { name, age, sex, problem, package: packageVal, diseaseNotes, lastUpdated: firebase.firestore.FieldValue.serverTimestamp() };
+  if (imagesBase64.length) patientData.images = imagesBase64;
   try {
     await db.collection("patients").doc(regNo).set(patientData, { merge: true });
     msgDiv.innerHTML = `<div class="success-msg">✅ Patient ${regNo} saved successfully!</div>`;
     clearForm();
     loadAllPatients();
-    loadSimplePatientList(); // refresh simple list
+    loadSimplePatientList();
     setTimeout(() => msgDiv.innerHTML = '', 3000);
-  } catch(err) { msgDiv.innerHTML = `<div class="error-msg">❌ Error: ${err.message}</div>`; }
+  } catch (err) { msgDiv.innerHTML = `<div class="error-msg">❌ Error: ${err.message}</div>`; }
 }
 async function deletePatient(regNo) {
-  if(confirm(`Delete patient ${regNo} permanently?`)) {
+  if (confirm(`Delete patient ${regNo} permanently?`)) {
     try {
       await db.collection("patients").doc(regNo).delete();
       loadAllPatients();
       loadSimplePatientList();
       document.getElementById('adminPatientMsg').innerHTML = `<div class="success-msg">✅ Patient ${regNo} deleted.</div>`;
       setTimeout(() => document.getElementById('adminPatientMsg').innerHTML = '', 2000);
-    } catch(err) { alert(err.message); }
+    } catch (err) { alert(err.message); }
   }
 }
 async function editPatient(regNo) {
   const doc = await db.collection("patients").doc(regNo).get();
-  if(doc.exists) {
+  if (doc.exists) {
     const data = doc.data();
     document.getElementById('regNo').value = regNo;
     document.getElementById('patName').value = data.name || '';
@@ -334,7 +342,7 @@ async function loadAllPatients() {
   container.innerHTML = '<p>Loading patients...</p>';
   try {
     const snapshot = await db.collection("patients").orderBy("lastUpdated", "desc").get();
-    if(snapshot.empty) { container.innerHTML = '<p>No patients added yet.</p>'; return; }
+    if (snapshot.empty) { container.innerHTML = '<p>No patients added yet.</p>'; return; }
     let html = `<table class="patient-table"><thead><tr><th>Reg No</th><th>Name</th><th>Age/Sex</th><th>Package</th><th>Last Updated</th><th>Actions</th></tr></thead><tbody>`;
     snapshot.forEach(doc => {
       const data = doc.data();
@@ -344,18 +352,14 @@ async function loadAllPatients() {
     });
     html += `</tbody></table>`;
     container.innerHTML = html;
-  } catch(err) { container.innerHTML = `<div class="error-msg">Error: ${err.message}</div>`; }
+  } catch (err) { container.innerHTML = `<div class="error-msg">Error: ${err.message}</div>`; }
 }
-// Simple patient list for the new tab (Name + Reg No only)
 async function loadSimplePatientList() {
   const tbody = document.getElementById('simpleTableBody');
-  tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;">Loading...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="2">Loading...</td></tr>';
   try {
     const snapshot = await db.collection("patients").orderBy("name").get();
-    if(snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;">No patients registered yet.</td></tr>';
-      return;
-    }
+    if (snapshot.empty) { tbody.innerHTML = '<tr><td colspan="2">No patients registered yet.</td></tr>'; return; }
     let rows = '';
     snapshot.forEach(doc => {
       const data = doc.data();
@@ -363,50 +367,32 @@ async function loadSimplePatientList() {
       rows += `<tr><td>${escapeHtml(name)}</td><td><strong>${escapeHtml(doc.id)}</strong></td></tr>`;
     });
     tbody.innerHTML = rows;
-  } catch(err) {
-    tbody.innerHTML = `<tr><td colspan="2" style="color:red;">Error: ${err.message}</td></tr>`;
-  }
+  } catch (err) { tbody.innerHTML = `<tr><td colspan="2" style="color:red;">Error: ${err.message}</td></tr>`; }
 }
 function escapeHtml(str) {
   if (!str) return '';
-  return str.replace(/[&<>]/g, function(m) {
+  return str.replace(/[&<>]/g, function (m) {
     if (m === '&') return '&amp;';
     if (m === '<') return '&lt;';
     if (m === '>') return '&gt;';
     return m;
   });
 }
-// Print function for the simple patient list
 function printPatientList() {
   const instructions = document.querySelector('#patientListTab .instructions-box').cloneNode(true);
   const table = document.querySelector('#simplePatientTable').cloneNode(true);
   const printWindow = window.open('', '_blank');
   printWindow.document.write(`
-    <html>
-      <head><title>Patient Reference List - BDS Centre</title>
-      <style>
-        body{font-family: 'Segoe UI', sans-serif; padding:20px;}
-        h1{color:#1f7a4f;}
-        .instructions{background:#fff9e0; padding:15px; border-left:5px solid #f5b50a; margin-bottom:20px;}
-        table{width:100%; border-collapse:collapse;}
-        th,td{border:1px solid #ddd; padding:8px; text-align:left;}
-        th{background:#1f7a4f; color:white;}
-      </style>
-      </head>
-      <body>
-        <h1>🏥 BDS Ayurvedic Physio Yoga Centre</h1>
-        ${instructions.outerHTML}
-        ${table.outerHTML}
-        <p style="margin-top:20px;">Generated on ${new Date().toLocaleString()}</p>
-      </body>
-    </html>
+    <html><head><title>Patient Reference List - BDS Centre</title>
+    <style>body{font-family:'Segoe UI',sans-serif;padding:20px;} h1{color:#1f7a4f;} .instructions{background:#fff9e0;padding:15px;border-left:5px solid #f5b50a;margin-bottom:20px;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ddd;padding:8px;text-align:left;} th{background:#1f7a4f;color:white;}</style>
+    </head><body><h1>🏥 BDS Ayurvedic Physio Yoga Centre</h1>${instructions.outerHTML}${table.outerHTML}<p style="margin-top:20px;">Generated on ${new Date().toLocaleString()}</p></body></html>
   `);
   printWindow.document.close();
   printWindow.print();
 }
 async function exportSinglePatientPDF(regNo) {
   const docSnap = await db.collection("patients").doc(regNo).get();
-  if(!docSnap.exists) { alert("Patient not found"); return; }
+  if (!docSnap.exists) { alert("Patient not found"); return; }
   const data = docSnap.data();
   const imagesHtml = (data.images || []).map(img => `<img src="${img}" style="width:150px; margin:5px;">`).join('');
-  const content = `<div style="font-family:sans-serif; padding:20px;"><h1 style="color:#1f7a4f;">BDS Ayurvedic Physio Yoga
+  const content = `<div style="font-family:sans-serif; padding:20px;"><h1 style="color:#1f7a4f;">BDS Ayurvedic Physio Yoga Centre</h1><h2>Patient Health Record</h2><p><strong>Registration No:</strong> ${regNo}</p><p><strong>Name:</strong> ${data.name || '—'}</p><p><stro
